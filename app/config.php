@@ -47,7 +47,7 @@ return [
     'DB_HOST' => 'localhost', // Database host address (e.g., 'localhost' or IP address).
     'DB_NAME' => 'y1d13', // Name of the database to connect to.
     'DB_USER' => 'y1d13', // Database username.
-    'DB_PASS' => 'y1d13y1d13!', // Database password.
+    'DB_PASS' => 'y1d13y1d13', // Database password.
 
     // --- Security and Authentication ---
     'AUTH_TIMEOUT' => 3600, // Session timeout in seconds for authenticated users (1 hour).
