@@ -14,27 +14,9 @@
 define('BASE_PATH', dirname(__DIR__));
 
 // --- Define Base URL ---
-// Dynamically determine the base URL (scheme, host, and path)
-// More robust HTTPS detection (consider X-Forwarded-Proto)
-$scheme = "http";
-if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) === 'on') {
-    $scheme = "https";
-} elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') {
-    $scheme = "https";
-} elseif (!empty($_SERVER['HTTP_FRONT_END_HTTPS']) && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) === 'on') {
-    // Some proxies use this
-    $scheme = "https";
-}
-
-$host = $_SERVER['HTTP_HOST'];
-// Get the directory path of the script's *parent* directory (app root)
-$script_parent_dir = str_replace('\\\\', '/', dirname(dirname($_SERVER['SCRIPT_NAME'])));
-// Normalize the path to always end with a single slash (e.g., / or /subdir/)
-$base_path_url = rtrim($script_parent_dir, '/') . '/';
-// Construct the full base URL
-$base_url = $scheme . '://' . $host . $base_path_url;
-// Define the constant, making it available globally
-define('BASE_URL', $base_url);
+// Hardcoded Base URL for the university server environment.
+// Ensure this path ends with a slash '/'.
+define('BASE_URL', '/prin/y1d13/advanced-web-technologies/grocery-store/');
 // --- End Base URL Definition ---
 
 // Include the Composer autoloader.

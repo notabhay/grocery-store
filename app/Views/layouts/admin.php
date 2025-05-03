@@ -36,7 +36,7 @@ use App\Core\Registry;
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Main application stylesheet -->
-    <link rel="stylesheet" href="<?= BASE_URL ?>public/assets/css/styles.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/styles.css">
 
     <!-- Inline Styles specific to the Admin Layout -->
     <style>
@@ -239,7 +239,7 @@ use App\Core\Registry;
                 </li>
                 <li>
                     <!-- Link to view the live store front -->
-                    <a href="/" target="_blank">
+                    <a href="<?= BASE_URL ?>" target="_blank">
                         <i class="fas fa-home"></i> View Store
                     </a>
                 </li>
