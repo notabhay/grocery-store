@@ -128,7 +128,7 @@ class CaptchaHelper
      * @param string $text The CAPTCHA text to render in the image.
      * @return string|false The raw PNG image data as a string, or false on failure (e.g., image creation failed).
      */
-    public function generateImageData(string $text): string|false
+    public function generateImageData(string $text)
     {
         // Create the base image canvas.
         $image = imagecreatetruecolor($this->width, $this->height);

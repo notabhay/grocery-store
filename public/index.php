@@ -132,7 +132,6 @@ try {
     $captchaHelper = new CaptchaHelper($session);
     // Bind the CaptchaHelper instance to the Registry.
     Registry::bind('captchaHelper', $captchaHelper);
-    die('DEBUG: CaptchaHelper initialized and bound successfully!');
 
     // --- Request Object Setup ---
     // Instantiate the Request object, which encapsulates the current HTTP request data (URI, method, POST/GET data).
