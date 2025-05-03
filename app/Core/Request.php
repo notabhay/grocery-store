@@ -109,20 +109,20 @@ class Request
      */
     public function uri(): string
     {
-        // Define the known base path where the application is hosted on the server.
-        // IMPORTANT: Ensure this matches the actual deployment path exactly, including trailing slash.
-        $basePath = '/grocery-store/';
+        // Use the globally defined BASE_URL constant.
+        // Ensure BASE_URL is defined (should be in public/index.php).
+        $baseUrlPath = defined('BASE_URL') ? BASE_URL : '/'; // Fallback to root if not defined
 
         // Get the full request URI path component from the server variable.
         $fullUri = parse_url($this->server['REQUEST_URI'] ?? '', PHP_URL_PATH);
 
-        // Check if the full URI starts with the defined base path.
-        if ($fullUri !== null && strpos($fullUri, $basePath) === 0) {
-            // If it does, remove the base path to get the relative URI.
-            // Use substr() starting from the length of the base path.
-            $relativePath = substr($fullUri, strlen($basePath));
+        // Check if the full URI starts with the defined base URL path.
+        if ($fullUri !== null && $baseUrlPath !== '/' && strpos($fullUri, $baseUrlPath) === 0) {
+            // If it does, remove the base URL path to get the relative URI.
+            // Use substr() starting from the length of the base URL path.
+            $relativePath = substr($fullUri, strlen($baseUrlPath));
         } else {
-            // If it doesn't start with the base path (e.g., running locally at root),
+            // If it doesn't start with the base URL path (e.g., running locally at root or BASE_URL is '/'),
             // use the full URI as the relative path.
             $relativePath = $fullUri;
         }

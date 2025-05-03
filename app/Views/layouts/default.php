@@ -130,7 +130,3 @@ use App\Core\Registry;
 </body>
 
 </html>
-<!-- Make Base URL available to JavaScript -->
-<script>
-    window.baseUrl = '<?= Registry::get('config')['SITE_URL'] ?>';
-</script>

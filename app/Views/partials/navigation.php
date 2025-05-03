@@ -52,7 +52,7 @@
 
     <!-- CSS Links -->
     <!-- Main application stylesheet -->
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/css/styles.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/styles.css">
     <!-- Google Fonts (Poppins) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
