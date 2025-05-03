@@ -126,13 +126,13 @@ try {
     $session = new Session($sessionConfig);
     // Bind the session instance to the Registry.
     Registry::bind('session', $session);
-    die('DEBUG: Session initialized and bound successfully!');
 
     // --- CAPTCHA Helper Setup ---
     // Instantiate the CaptchaHelper, passing the session instance for storing CAPTCHA codes.
     $captchaHelper = new CaptchaHelper($session);
     // Bind the CaptchaHelper instance to the Registry.
     Registry::bind('captchaHelper', $captchaHelper);
+    die('DEBUG: CaptchaHelper initialized and bound successfully!');
 
     // --- Request Object Setup ---
     // Instantiate the Request object, which encapsulates the current HTTP request data (URI, method, POST/GET data).
