@@ -80,7 +80,6 @@ try {
     $logger->pushHandler(new StreamHandler($logFilePath, $logLevel));
     // Bind the logger instance to the Registry.
     Registry::bind('logger', $logger);
-    die('DEBUG: Logger initialized successfully!');
 
     // --- Database Setup ---
     // Instantiate the Database connection handler using credentials from the config.
@@ -94,6 +93,7 @@ try {
     if ($db->getConnection()) {
         // Bind the database instance to the Registry if connection is successful.
         Registry::bind('database', $db);
+        die('DEBUG: Database initialized and bound successfully!');
     } else {
         // Handle database connection failure gracefully.
         $errorMessage = "Database Connection Error: Sorry, we couldn't connect to the database. Please try again later.";
