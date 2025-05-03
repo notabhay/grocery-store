@@ -1,8 +1,4 @@
 <?php
-
-
-
-
 $categories = $categories ?? [];
 $products = $products ?? [];
 $logged_in = $logged_in ?? false;
@@ -15,7 +11,6 @@ $activeFilter = $activeFilter ?? null;
         <p>Browse our wide selection of fresh groceries by category</p>
     </div>
 </section>
-
 <!
 <div class="products-wrapper">
     <!
@@ -54,18 +49,14 @@ $activeFilter = $activeFilter ?? null;
             <small>Selecting a main category will load products here.</small>
         </div>
     </aside>
-
     <!
     <section id="product-display-area" class="products-grid">
         <?php 
         ?>
         <?php if (!empty($products)): ?>
             <?php
-            
             $total_products = count($products);
             $rows = ceil($total_products / 4); 
-
-            
             for ($i = 0; $i < $rows; $i++):
                 $start_index = $i * 4; 
                 $end_index = min($start_index + 4, $total_products); 
@@ -76,7 +67,6 @@ $activeFilter = $activeFilter ?? null;
                     ?>
                     <?php for ($j = $start_index; $j < $end_index; $j++):
                         $prod = $products[$j];
-                        
                         if (!isset($prod['product_id'], $prod['name'], $prod['price'], $prod['image_path']))
                             continue; 
                     ?>

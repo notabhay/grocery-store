@@ -1,5 +1,3 @@
-
-
 <!
 <div class="admin-content-header">
     <h2>Product Management</h2>
@@ -10,7 +8,6 @@
         </a>
     </div>
 </div>
-
 <?php 
 ?>
 <?php if (isset($_SESSION['flash_success'])): ?>
@@ -29,7 +26,6 @@
     <?php 
     ?>
 <?php endif; ?>
-
 <!
 <div class="filter-container">
     <!
@@ -73,7 +69,6 @@
         </div>
     </form>
 </div>
-
 <!
 <div class="table-responsive">
     <table class="table table-striped">
@@ -159,7 +154,6 @@
         </tbody>
     </table>
 </div>
-
 <?php 
 ?>
 <?php if (!empty($pagination) && $pagination['total_pages'] > 1): ?>
@@ -180,7 +174,6 @@
                         </a>
                     </li>
                 <?php endif; ?>
-
                 <?php 
                 ?>
                 <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
@@ -194,7 +187,6 @@
                         </a>
                     </li>
                 <?php endfor; ?>
-
                 <?php 
                 ?>
                 <?php if ($pagination['has_next']): ?>
@@ -213,94 +205,60 @@
     </div>
 <?php endif; 
 ?>
-
 <!
 <style>
-    
     body {
         margin: 0;
         padding: 0;
     }
-
-    
     .admin-content-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1.5rem;
     }
-
-    
     .filter-container {
         background-color: #f8f9fa;
-        
         padding: 1rem;
         border-radius: 4px;
         margin-bottom: 1.5rem;
     }
-
-    
     .filter-form {
         display: flex;
         flex-wrap: wrap;
-        
         gap: 1rem;
-        
         align-items: flex-end;
-        
     }
-
-    
     .filter-group {
         display: flex;
         flex-direction: column;
-        
         min-width: 200px;
-        
     }
-
-    
     .product-thumbnail {
         object-fit: cover;
-        
         border-radius: 4px;
-        
     }
-
-    
     .badge {
         padding: 0.5em 0.75em;
         border-radius: 4px;
         font-weight: normal;
-        
         font-size: 0.85em;
-        
     }
-
-    
     .badge-success {
         background-color: #28a745;
         color: white;
     }
-
-    
     .badge-danger {
         background-color: #dc3545;
         color: white;
     }
-
-    
     .pagination-container {
         display: flex;
         justify-content: center;
         margin-top: 1.5rem;
     }
-
-    
     .btn-group {
         display: flex;
-        
         gap: 0.5rem;
-        
     }
 </style>

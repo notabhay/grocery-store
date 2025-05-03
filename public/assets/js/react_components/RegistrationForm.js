@@ -1,4 +1,3 @@
-
 const FormInput = ({ id, label, type, value, onChange, onBlur, error, success, isRequired = true }) => {
     return (
         <div className="form-group">
@@ -28,36 +27,21 @@ const FormInput = ({ id, label, type, value, onChange, onBlur, error, success, i
         </div>
     );
 };
-
-
 const PasswordStrengthMeter = ({ password }) => {
-    
     const getPasswordStrength = (password) => {
         if (!password) return { strength: "", label: "" }; 
-
-        
         const hasLetter = /[a-zA-Z]/.test(password);
         const hasNumber = /\d/.test(password);
         const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
         const isLongEnough = password.length >= 8;
-
-        
         const criteria = [hasLetter, hasNumber, hasSpecial, isLongEnough];
         const metCriteria = criteria.filter(Boolean).length;
-
-        
         if (metCriteria <= 2) return { strength: "weak", label: "Weak" };
         if (metCriteria === 3) return { strength: "medium", label: "Medium" };
         return { strength: "strong", label: "Strong" }; 
     };
-
-    
     const { strength, label } = getPasswordStrength(password);
-
-    
     if (!password) return null;
-
-    
     return (
         <div className="password-strength">
             <div className="strength-meter">
@@ -69,46 +53,31 @@ const PasswordStrengthMeter = ({ password }) => {
         </div>
     );
 };
-
-
 const RegistrationForm = ({ csrfToken }) => {
-    
     const [formData, setFormData] = React.useState({
         name: "",
         phone: "",
         email: "",
         password: ""
     });
-
-    
     const [errors, setErrors] = React.useState({
         name: "",
         phone: "",
         email: "",
         password: ""
     });
-
-    
     const [touched, setTouched] = React.useState({
         name: false,
         phone: false,
         email: false,
         password: false
     });
-
-    
     const [isSubmitting, setIsSubmitting] = React.useState(false); 
     const [submitError, setSubmitError] = React.useState(""); 
     const [submitSuccess, setSubmitSuccess] = React.useState(false); 
-
-    
     const [isCheckingEmail, setIsCheckingEmail] = React.useState(false); 
     const [emailExists, setEmailExists] = React.useState(false); 
-
-    
     const emailCheckTimeout = React.useRef(null);
-
-    
     const validate = {
         name: (value) => {
             if (!value.trim()) return "Name is required";
@@ -117,86 +86,60 @@ const RegistrationForm = ({ csrfToken }) => {
         },
         phone: (value) => {
             if (!value.trim()) return "Phone number is required";
-            
             if (!/^\d{10}$/.test(value)) return "Phone number must be 10 digits";
             return ""; 
         },
         email: (value) => {
             if (!value.trim()) return "Email is required";
-            
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Invalid email format";
-            
             if (emailExists) return "Email already exists";
             return ""; 
         },
         password: (value) => {
             if (!value) return "Password is required";
             if (value.length < 8) return "Password must be at least 8 characters";
-            
             return ""; 
         }
     };
-
-    
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        
         setFormData(prevData => ({
             ...prevData,
             [name]: value
         }));
-
-        
         if (touched[name]) {
             setErrors(prevErrors => ({
                 ...prevErrors,
                 [name]: validate[name](value)
             }));
         }
-
-        
-        
         if (name === 'email' && value.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-            
             if (emailCheckTimeout.current) {
                 clearTimeout(emailCheckTimeout.current);
             }
-            
             emailCheckTimeout.current = setTimeout(() => {
                 checkEmailExists(value);
             }, 500);
         } else if (name === 'email') {
-            
             if (emailCheckTimeout.current) {
                 clearTimeout(emailCheckTimeout.current);
             }
             setEmailExists(false);
-            
             if (errors.email === "Email already exists") {
                 setErrors(prevErrors => ({ ...prevErrors, email: "" }));
             }
         }
     };
-
-    
     const handleBlur = (e) => {
         const { name } = e.target;
-
-        
         setTouched(prevTouched => ({
             ...prevTouched,
             [name]: true
         }));
-
-        
         setErrors(prevErrors => ({
             ...prevErrors,
             [name]: validate[name](formData[name])
         }));
-
-        
-        
         if (name === 'email' && formData.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
             if (emailCheckTimeout.current) {
                 clearTimeout(emailCheckTimeout.current); 
@@ -204,16 +147,11 @@ const RegistrationForm = ({ csrfToken }) => {
             checkEmailExists(formData.email);
         }
     };
-
-    
     const checkEmailExists = (email) => {
         setIsCheckingEmail(true); 
         setEmailExists(false); 
-
-        
         const data = new FormData();
         data.append('email', email);
-
         fetch('ajax/check-email', { 
             method: 'POST',
             body: data
@@ -223,14 +161,11 @@ const RegistrationForm = ({ csrfToken }) => {
                 setIsCheckingEmail(false); 
                 if (data.exists) {
                     setEmailExists(true); 
-                    
                     setErrors(prevErrors => ({
                         ...prevErrors,
                         email: "Email already exists"
                     }));
                 } else {
-                    
-                    
                     if (errors.email === "Email already exists") {
                         setErrors(prevErrors => ({ ...prevErrors, email: "" }));
                     }
@@ -239,21 +174,13 @@ const RegistrationForm = ({ csrfToken }) => {
             .catch(error => {
                 console.error('Error checking email:', error);
                 setIsCheckingEmail(false); 
-                
             });
     };
-
-    
     const handleSubmit = (e) => {
         e.preventDefault(); 
-
-        
-        
         const allTouched = {};
         Object.keys(formData).forEach(key => { allTouched[key] = true; });
         setTouched(allTouched);
-
-        
         const newErrors = {};
         let hasErrors = false;
         Object.keys(formData).forEach(key => {
@@ -262,62 +189,43 @@ const RegistrationForm = ({ csrfToken }) => {
             if (error) hasErrors = true;
         });
         setErrors(newErrors); 
-
-        
         if (hasErrors) return;
-
-        
         setIsSubmitting(true); 
         setSubmitError(""); 
-
-        
         const data = new FormData();
         Object.keys(formData).forEach(key => {
             data.append(key, formData[key]);
         });
         data.append('csrf_token', csrfToken); 
-
-        
         fetch('register', { 
             method: 'POST',
             headers: {
-                
                 'X-Requested-With': 'XMLHttpRequest'
             },
             body: data
         })
             .then(response => {
-                
                 if (!response.ok) {
-                    
                     throw new Error(`HTTP error! status: ${response.status} ${response.statusText || ''}`);
                 }
-                
                 return response.json();
             })
             .then(data => {
                 setIsSubmitting(false); 
                 if (data.success) {
-                    
                     setSubmitSuccess(true); 
-                    
                     setFormData({ name: "", phone: "", email: "", password: "" });
-                    
                     setTouched({ name: false, phone: false, email: false, password: false });
-                    
                     setTimeout(() => {
                         window.location.href = window.baseUrl + 'login'; 
                     }, 2000); 
                 } else {
-                    
                     setSubmitError(data.message || "Registration failed. Please try again.");
                 }
             })
             .catch(error => {
-                
                 console.error('Error during registration:', error);
                 setIsSubmitting(false); 
-                
                 if (error.message.includes('403')) {
                     setSubmitError("Security token validation failed. Please refresh the page and try again.");
                 } else {
@@ -325,18 +233,14 @@ const RegistrationForm = ({ csrfToken }) => {
                 }
             });
     };
-
-    
     return (
         <div className="register-form-container">
             {}
             {submitSuccess ? (
-                
                 <div className="alert alert-success">
                     <p>Registration successful! Redirecting to login page...</p>
                 </div>
             ) : (
-                
                 <React.Fragment>
                     {}
                     {submitError && (
@@ -375,7 +279,6 @@ const RegistrationForm = ({ csrfToken }) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             error={touched.email ? errors.email : ""}
-                            
                             success={touched.email && !errors.email && !isCheckingEmail}
                         />
                         {}
@@ -396,7 +299,6 @@ const RegistrationForm = ({ csrfToken }) => {
                         />
                         {}
                         <PasswordStrengthMeter password={formData.password} />
-
                         {}
                         <div className="form-group">
                             <button
@@ -405,12 +307,10 @@ const RegistrationForm = ({ csrfToken }) => {
                                 disabled={isSubmitting} 
                             >
                                 {isSubmitting ? (
-                                    
                                     <React.Fragment>
                                         <i className="fas fa-spinner fa-spin"></i> Registering...
                                     </React.Fragment>
                                 ) : (
-                                    
                                     "Register"
                                 )}
                             </button>

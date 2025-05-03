@@ -1,21 +1,14 @@
 <?php
-
-
-
-
 $page_title = $page_title ?? 'Contact Us';
 $csrf_token = $csrf_token ?? '';
 $flash_message = $flash_message ?? null; 
 $form_errors = $form_errors ?? []; 
 $old_input = $old_input ?? []; 
-
-
 $page_title_safe = htmlspecialchars($page_title);
 $csrf_token_safe = htmlspecialchars($csrf_token);
 ?>
 <!
 <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/contact.css">
-
 <!
 <main>
     <!
@@ -27,7 +20,6 @@ $csrf_token_safe = htmlspecialchars($csrf_token);
                     ?></h2>
                 <p>We're here to help! Get in touch with us.</p>
             </div>
-
             <?php 
             ?>
             <?php 
@@ -39,7 +31,6 @@ $csrf_token_safe = htmlspecialchars($csrf_token);
                     ?>
                 </div>
             <?php endif; ?>
-
             <!
             <div class="contact-content">
                 <!
@@ -83,7 +74,6 @@ $csrf_token_safe = htmlspecialchars($csrf_token);
                         </div>
                     </div>
                 </address>
-
                 <!
                 <div class="contact-form-wrapper">
                     <h3>Send Us a Message</h3>
@@ -92,7 +82,6 @@ $csrf_token_safe = htmlspecialchars($csrf_token);
                         <!
                         <input type="hidden" name="csrf_token" value="<?= $csrf_token_safe 
                                                                         ?>">
-
                         <!
                         <div class="form-group">
                             <label for="name">Your Name</label>
@@ -104,7 +93,6 @@ $csrf_token_safe = htmlspecialchars($csrf_token);
                                 <span class="error-message"><?= htmlspecialchars($form_errors['name']) ?></span>
                             <?php endif; ?>
                         </div>
-
                         <!
                         <div class="form-group">
                             <label for="email">Your Email</label>
@@ -116,7 +104,6 @@ $csrf_token_safe = htmlspecialchars($csrf_token);
                                 <span class="error-message"><?= htmlspecialchars($form_errors['email']) ?></span>
                             <?php endif; ?>
                         </div>
-
                         <!
                         <div class="form-group">
                             <label for="message">Message</label>
@@ -128,13 +115,11 @@ $csrf_token_safe = htmlspecialchars($csrf_token);
                                 <span class="error-message"><?= htmlspecialchars($form_errors['message']) ?></span>
                             <?php endif; ?>
                         </div>
-
                         <!
                         <button type="submit" class="btn btn-primary">Send Message</button>
                     </form>
                 </div> <!
             </div> <!
-
             <!
             <section class="location-map">
                 <h3>Find Us</h3>

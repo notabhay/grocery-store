@@ -1,5 +1,3 @@
-
-
 <!
 <div class="users-container">
     <!
@@ -7,7 +5,6 @@
         <h2>User Management</h2>
         <p>View and manage all registered users.</p>
     </div>
-
     <?php 
     ?>
     <?php if (isset($_SESSION['_flash']['success'])): ?>
@@ -26,7 +23,6 @@
         <?php 
         ?>
     <?php endif; ?>
-
     <!
     <div class="users-table-container">
         <!
@@ -104,7 +100,6 @@
             </tbody>
         </table>
     </div> <!
-
     <?php 
     ?>
     <?php if ($pagination['total_pages'] > 1): ?>
@@ -118,12 +113,9 @@
                     class="pagination-link">&lsaquo;
                     Previous</a>
             <?php endif; ?>
-
             <?php
-            
             $startPage = max(1, $pagination['current_page'] - 2);
             $endPage = min($pagination['total_pages'], $pagination['current_page'] + 2);
-            
             for ($i = $startPage; $i <= $endPage; $i++):
             ?>
                 <a href="<?= BASE_URL ?>admin/users?page=<?php echo $i; ?>" class="pagination-link <?php echo $i === $pagination['current_page'] ? 'active' : ''; 
@@ -131,7 +123,6 @@
                     <?php echo $i; ?>
                 </a>
             <?php endfor; ?>
-
             <?php 
             ?>
             <?php if ($pagination['current_page'] < $pagination['total_pages']): ?>
@@ -145,101 +136,67 @@
     <?php endif; 
     ?>
 </div> <!
-
 <!
 <style>
-    
     body {
         margin: 0;
         padding: 0;
     }
-
-    
     .users-container {
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
-        
     }
-
-    
     .users-header {
         margin-bottom: 1rem;
     }
-
     .users-header h2 {
         margin-top: 0;
         margin-bottom: 0.5rem;
         color: var(--admin-secondary, #343a40);
-        
     }
-
     .users-header p {
         margin: 0;
         color: #6c757d;
-        
     }
-
-    
     .alert {
         padding: 0.75rem 1.25rem;
         margin-bottom: 1rem;
         border: 1px solid transparent;
         border-radius: 0.25rem;
     }
-
-    
     .alert-success {
         color: #155724;
         background-color: #d4edda;
         border-color: #c3e6cb;
     }
-
-    
     .alert-danger {
         color: #721c24;
         background-color: #f8d7da;
         border-color: #f5c6cb;
     }
-
-    
     .users-table-container {
         overflow-x: auto;
     }
-
-    
     .users-table {
         width: 100%;
         border-collapse: collapse;
-        
     }
-
-    
     .users-table th,
     .users-table td {
         padding: 0.75rem;
         text-align: left;
         border-bottom: 1px solid #e9ecef;
-        
         vertical-align: middle;
-        
     }
-
-    
     .users-table th {
         background-color: #f8f9fa;
-        
         font-weight: 600;
         color: var(--admin-secondary, #495057);
     }
-
-    
     .users-table tbody tr:hover {
         background-color: rgba(0, 0, 0, 0.02);
-        
     }
-
-    
     .badge {
         display: inline-block;
         padding: 0.25em 0.6em;
@@ -251,40 +208,25 @@
         vertical-align: baseline;
         border-radius: 0.25rem;
     }
-
-    
     .badge-admin {
         color: white;
         background-color: var(--admin-primary, #007bff);
     }
-
-    
     .badge-customer {
         color: white;
         background-color: #6c757d;
-        
     }
-
-    
     .badge-active {
         color: white;
         background-color: #28a745;
-        
     }
-
-    
     .badge-inactive {
         color: white;
         background-color: #dc3545;
-        
     }
-
-    
     .actions {
         white-space: nowrap;
     }
-
-    
     .btn {
         display: inline-block;
         font-weight: 400;
@@ -300,58 +242,41 @@
         transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         text-decoration: none;
         margin: 0 0.1rem;
-        
     }
-
-    
     .btn-sm {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
         line-height: 1.5;
         border-radius: 0.2rem;
     }
-
-    
     .btn-view {
         color: var(--admin-primary, #007bff);
         background-color: transparent;
         border: 1px solid var(--admin-primary, #007bff);
     }
-
     .btn-view:hover {
         color: white;
         background-color: var(--admin-primary, #007bff);
     }
-
-    
     .btn-edit {
         color: #ffc107;
-        
         background-color: transparent;
         border: 1px solid #ffc107;
     }
-
     .btn-edit:hover {
         color: #212529;
-        
         background-color: #ffc107;
     }
-
-    
     .pagination {
         display: flex;
         justify-content: center;
         margin-top: 1.5rem;
         flex-wrap: wrap;
-        
     }
-
-    
     .pagination-link {
         display: inline-block;
         padding: 0.5rem 0.75rem;
         margin: 0 0.25rem 0.5rem 0.25rem;
-        
         color: var(--admin-primary, #007bff);
         background-color: white;
         border: 1px solid #dee2e6;
@@ -359,24 +284,16 @@
         text-decoration: none;
         transition: all 0.2s ease;
     }
-
-    
     .pagination-link:hover {
         background-color: #e9ecef;
         border-color: #dee2e6;
     }
-
-    
     .pagination-link.active {
         color: white;
         background-color: var(--admin-primary, #007bff);
         border-color: var(--admin-primary, #007bff);
     }
-
-    
     @media (max-width: 992px) {
-
-        
         .users-table th:nth-child(4),
         .users-table td:nth-child(4),
         .users-table th:nth-child(7),
@@ -384,19 +301,13 @@
             display: none;
         }
     }
-
     @media (max-width: 768px) {
-
-        
         .users-table th:nth-child(3),
         .users-table td:nth-child(3) {
             display: none;
         }
     }
-
     @media (max-width: 576px) {
-
-        
         .pagination-link {
             padding: 0.4rem 0.6rem;
             margin: 0 0.1rem 0.4rem 0.1rem;

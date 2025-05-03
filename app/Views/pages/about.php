@@ -1,4 +1,3 @@
-
 <main>
     <!
     <section class="about-section">

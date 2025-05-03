@@ -1,5 +1,3 @@
-
-
 <!
 <div class="container-fluid">
     <!
@@ -13,7 +11,6 @@
             <a href="<?= BASE_URL ?>admin/dashboard" class="btn btn-secondary">Back to Dashboard</a>
         </div>
     </div>
-
     <!
     <div class="card mb-4">
         <div class="card-header">
@@ -63,7 +60,6 @@
             </form>
         </div>
     </div>
-
     <!
     <div class="card">
         <div class="card-header">
@@ -133,7 +129,6 @@
                         </tbody>
                     </table>
                 </div>
-
                 <?php 
                 ?>
                 <?php if (isset($pagination) && $pagination['total_pages'] > 1): ?>
@@ -158,32 +153,22 @@
                                     <span class="page-link">&laquo;</span>
                                 </li>
                             <?php endif; ?>
-
                             <?php
-                            
                             $startPage = max(1, $pagination['current_page'] - 2);
                             $endPage = min($pagination['total_pages'], $pagination['current_page'] + 2);
-
-                            
                             if ($startPage > 1) {
                                 echo '<li class="page-item"><a class="page-link" href="?page=1' . buildFilterQueryString($filters) . '">1</a></li>';
                                 if ($startPage > 2) {
                                     echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
                                 }
                             }
-
-                            
                             for ($i = $startPage; $i <= $endPage; $i++) {
                                 if ($i == $pagination['current_page']) {
-                                    
                                     echo '<li class="page-item active"><span class="page-link">' . $i . '</span></li>';
                                 } else {
-                                    
                                     echo '<li class="page-item"><a class="page-link" href="?page=' . $i . buildFilterQueryString($filters) . '">' . $i . '</a></li>';
                                 }
                             }
-
-                            
                             if ($endPage < $pagination['total_pages']) {
                                 if ($endPage < $pagination['total_pages'] - 1) {
                                     echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
@@ -191,7 +176,6 @@
                                 echo '<li class="page-item"><a class="page-link" href="?page=' . $pagination['total_pages'] . buildFilterQueryString($filters) . '">' . $pagination['total_pages'] . '</a></li>';
                             }
                             ?>
-
                             <?php 
                             ?>
                             <?php if ($pagination['current_page'] < $pagination['total_pages']): ?>
@@ -219,9 +203,7 @@
         </div> <!
     </div> <!
 </div> <!
-
 <?php
-
 function getStatusBadgeClass($status)
 {
     switch ($status) {
@@ -237,23 +219,16 @@ function getStatusBadgeClass($status)
             return 'secondary'; 
     }
 }
-
-
 function buildFilterQueryString($filters)
 {
     $queryString = '';
-    
     if (!empty($filters)) {
-        
         foreach ($filters as $key => $value) {
-            
             if (!empty($value)) {
-                
                 $queryString .= "&{$key}=" . urlencode($value);
             }
         }
     }
-    
     return $queryString;
 }
 ?>

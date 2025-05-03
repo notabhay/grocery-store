@@ -1,15 +1,10 @@
 <?php
-
-
-
-
 $page_title = $page_title ?? 'GhibliGroceries';
 $meta_description = $meta_description ?? 'Fresh groceries delivered.';
 $meta_keywords = $meta_keywords ?? 'grocery, online shopping';
 $random_products = $random_products ?? []; 
 $logged_in = $logged_in ?? false; 
 ?>
-
 <!
 <section class="hero">
     <!
@@ -43,7 +38,6 @@ $logged_in = $logged_in ?? false;
     <div class="hero-visual">
         <img src="<?= BASE_URL ?>assets/images/hero_image.png" alt="Delivery person with groceries" class="hero-image">
     </div>
-
     <!
     <section class="product-showcase">
         <h2 class="featured-items-title">Today's Featured Items</h2>
@@ -86,7 +80,6 @@ $logged_in = $logged_in ?? false;
         ?>
     </section> <!
 </section> <!
-
 <!
 <section class="category-section">
     <!

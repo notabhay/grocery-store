@@ -1,8 +1,4 @@
 <?php
-
-
-
-
 $page_title = $page_title ?? 'Login - GhibliGroceries';
 $meta_description = $meta_description ?? 'Login to GhibliGroceries - Access your account to place orders.';
 $meta_keywords = $meta_keywords ?? 'login, grocery, online shopping, account access';
@@ -22,7 +18,6 @@ $csrf_token = $csrf_token ?? '';
                 <h2>Login to Your Account</h2>
                 <p>Enter your credentials to access your account</p>
             </div>
-
             <?php 
             ?>
             <?php if (!empty($login_error)): ?>
@@ -30,21 +25,18 @@ $csrf_token = $csrf_token ?? '';
                     <p><?php echo htmlspecialchars($login_error); ?></p>
                 </div>
             <?php endif; ?>
-
             <!
             <div class="login-form-container">
                 <!
                 <form action="<?= BASE_URL ?>login" method="post" class="login-form">
                     <!
                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
-
                     <!
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <input type="email" name="email" id="email" value="<?php echo htmlspecialchars($email); 
                                                                             ?>" required>
                     </div>
-
                     <!
                     <div class="form-group">
                         <label for="password">Password</label>
@@ -56,7 +48,6 @@ $csrf_token = $csrf_token ?? '';
                             </span>
                         </div>
                     </div>
-
                     <!
                     <div class="form-group captcha-group">
                         <label for="captcha">Verification Code</label>
@@ -80,7 +71,6 @@ $csrf_token = $csrf_token ?? '';
                             </div>
                         <?php endif; ?>
                     </div>
-
                     <!
                     <div class="form-group remember-me">
                         <label>
@@ -88,13 +78,11 @@ $csrf_token = $csrf_token ?? '';
                         </label>
                         <a href="<?= BASE_URL ?>forgot-password" class="forgot-password">Forgot Password?</a>
                     </div>
-
                     <!
                     <div class="form-group">
                         <button type="submit" name="login_submit" class="btn btn-primary">Login</button>
                     </div>
                 </form>
-
                 <!
                 <aside class="register-link">
                     <p>Don't have an account? <a href="<?= BASE_URL ?>register">Register here</a></p>
@@ -103,18 +91,14 @@ $csrf_token = $csrf_token ?? '';
         </div> <!
     </section> <!
 </main> <!
-
 <!
 <script>
-    
     document.addEventListener('DOMContentLoaded', function() {
-        
         const togglePassword = document.querySelector('.toggle-password');
         if (togglePassword) { 
             togglePassword.addEventListener('click', function() {
                 const passwordInput = document.getElementById('password');
                 const icon = this.querySelector('i'); 
-                
                 if (passwordInput.type === 'password') {
                     passwordInput.type = 'text'; 
                     icon.classList.remove('fa-eye');
@@ -126,14 +110,11 @@ $csrf_token = $csrf_token ?? '';
                 }
             });
         }
-
-        
         const refreshCaptcha = document.querySelector('.refresh-captcha');
         const captchaImage = document.getElementById('captcha-img');
         if (refreshCaptcha && captchaImage) { 
             refreshCaptcha.addEventListener('click', function(e) {
                 e.preventDefault(); 
-                
                 captchaImage.src = '<?= BASE_URL ?>captcha?' + new Date().getTime();
             });
         }

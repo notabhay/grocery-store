@@ -1,46 +1,24 @@
 <?php
-
-
-
-
 $page_title = $page_title ?? 'Order Details';
-
 $order = $order ?? [];
-
 $csrfToken = $csrfToken ?? '';
-
 $page_title_safe = htmlspecialchars($page_title);
-
 $csrfToken_safe = htmlspecialchars($csrfToken);
-
 $session = App\Core\Registry::get('session');
-
-
-
 if (empty($order) || !isset($order['order_id'])) {
     echo "<div class='container'><div class='alert alert-error'>Error: Order data is missing or invalid. Cannot display details.</div></div>";
-    
     return;
 }
-
-
-
 $order_id_safe = htmlspecialchars($order['order_id']);
 $status_class_safe = htmlspecialchars($order['status_class'] ?? 'status-unknown');
 $status_text_safe = htmlspecialchars($order['status_text'] ?? 'Unknown');
 $order_date_formatted_safe = htmlspecialchars($order['order_date_formatted'] ?? 'N/A');
 $total_amount_formatted_safe = htmlspecialchars($order['total_amount_formatted'] ?? '$0.00');
-
-
 $user_name_safe = htmlspecialchars($order['user_name'] ?? 'N/A');
 $user_email_safe = htmlspecialchars($order['user_email'] ?? 'N/A');
 $user_phone_safe = htmlspecialchars($order['user_phone'] ?? 'N/A'); 
-
-
 $notes_safe = isset($order['notes']) ? nl2br(htmlspecialchars($order['notes'])) : '';
 $shipping_address_safe = isset($order['shipping_address']) ? nl2br(htmlspecialchars($order['shipping_address'])) : '';
-
-
 $items = $order['items'] ?? [];
 ?>
 <!
@@ -51,7 +29,6 @@ $items = $order['items'] ?? [];
         <h1 class="page-title"><?= $page_title_safe ?></h1>
         <!
         <p class="page-subtitle">Order #<?= $order_id_safe ?></p>
-
         <!
         <?php if ($session->hasFlash('success')): ?>
             <div class="alert alert-success" role="alert">
@@ -68,7 +45,6 @@ $items = $order['items'] ?? [];
                 <?= htmlspecialchars($session->getFlash('info')); ?>
             </div>
         <?php endif; ?>
-
         <!
         <div class="details-container">
             <!
@@ -104,7 +80,6 @@ $items = $order['items'] ?? [];
                     </button>
                 </div>
             </div> <!
-
             <!
             <div class="order-summary-grid">
                 <!
@@ -131,7 +106,6 @@ $items = $order['items'] ?? [];
                         </div>
                     </div>
                 </div> <!
-
                 <!
                 <div class="summary-block">
                     <h3>Customer Information</h3>
@@ -151,7 +125,6 @@ $items = $order['items'] ?? [];
                     </div>
                 </div> <!
             </div> <!
-
             <!
             <?php if (!empty($shipping_address_safe)): ?>
                 <div class="summary-block">
@@ -162,7 +135,6 @@ $items = $order['items'] ?? [];
                     </div>
                 </div>
             <?php endif; ?>
-
             <!
             <div class="order-items-section">
                 <h3>Order Items</h3>
@@ -185,11 +157,8 @@ $items = $order['items'] ?? [];
                             <tbody>
                                 <!
                                 <?php foreach ($items as $item):
-                                    
                                     if (!is_array($item) || !isset($item['image_url'], $item['product_name'], $item['price_formatted'], $item['quantity'], $item['subtotal_formatted'], $item['product_id']))
                                         continue; 
-
-                                    
                                     $item_image_url_safe = htmlspecialchars($item['image_url']);
                                     $item_name_safe = htmlspecialchars($item['product_name']);
                                     $item_id_safe = htmlspecialchars($item['product_id']);
@@ -235,7 +204,6 @@ $items = $order['items'] ?? [];
                 <?php endif; 
                 ?>
             </div> <!
-
             <!
             <?php if (!empty($notes_safe)): ?>
                 <div class="summary-block">
@@ -246,7 +214,6 @@ $items = $order['items'] ?? [];
                     </div>
                 </div>
             <?php endif; ?>
-
             <!
             <div class="order-timeline">
                 <h3>Order Timeline</h3>
@@ -260,7 +227,6 @@ $items = $order['items'] ?? [];
                             <p class="timeline-description">Your order has been received and is being processed.</p>
                         </div>
                     </div>
-
                     <!
                     <?php if (isset($order['status']) && ($order['status'] === 'processing' || $order['status'] === 'completed')): ?>
                         <div class="timeline-item active">
@@ -273,7 +239,6 @@ $items = $order['items'] ?? [];
                             </div>
                         </div>
                     <?php endif; ?>
-
                     <!
                     <?php if (isset($order['status']) && $order['status'] === 'completed'): ?>
                         <div class="timeline-item active terminal-status">
@@ -284,7 +249,6 @@ $items = $order['items'] ?? [];
                             </div>
                         </div>
                     <?php endif; ?>
-
                     <!
                     <?php if (isset($order['status']) && $order['status'] === 'cancelled'): ?>
                         <div class="timeline-item active cancelled terminal-status">
@@ -323,134 +287,88 @@ $items = $order['items'] ?? [];
 <!
 <!
 <style>
-    
     .btn-sm {
         padding: 6px 12px;
         font-size: 14px;
     }
-
-    
     .btn-danger {
         background-color: var(--tomato-red);
-        
         color: white;
         border: none;
-        
     }
-
     .btn-danger:hover {
         background-color: var(--dark-tomato-red);
-        
     }
-
-    
     .product-id {
         display: block;
         font-size: 0.8em;
         color: #666;
     }
-
-    
     @media print {
-
-        
         header,
         footer,
         .order-actions,
-        
         .mobile-menu-toggle,
-        
         .details-actions,
-        
         .modal,
-        
         .modal-backdrop {
-            
             display: none !important;
         }
-
-        
         .container {
             width: 100% !important;
             padding: 0 !important;
             margin: 0 !important;
             max-width: none !important;
         }
-
-        
         .details-container {
             box-shadow: none !important;
             border: 1px solid #ccc !important;
-            
             padding: 10px !important;
             margin-top: 0 !important;
         }
-
-        
         body {
             font-size: 10pt !important;
             color: #000 !important;
             background-color: #fff !important;
         }
-
-        
         .order-table {
             font-size: 9pt !important;
         }
-
         .order-table th,
         .order-table td {
             border: 1px solid #ccc !important;
             padding: 4px 6px !important;
-            
         }
-
-        
         .product-thumbnail {
             max-width: 40px !important;
             height: auto !important;
             vertical-align: middle;
         }
-
-        
         .timeline::before,
-        
         .timeline-icon {
-            
             display: none !important;
         }
-
         .timeline-item {
             padding-left: 0 !important;
-            
             margin-bottom: 10px !important;
             page-break-inside: avoid !important;
-            
         }
-
         .timeline-content {
             padding-left: 0 !important;
         }
-
         .timeline-date {
             font-size: 0.9em;
             color: #555;
         }
-
-        
         .summary-block {
             border: 1px solid #eee !important;
             padding: 10px !important;
             margin-bottom: 15px !important;
             page-break-inside: avoid !important;
         }
-
         .order-summary-grid {
             display: block !important;
-            
         }
-
-        
         .badge {
             background-color: transparent !important;
             color: #000 !important;

@@ -1,20 +1,10 @@
 <?php
-
-
-
-
 $page_title = $page_title ?? 'Place Your Order';
-
 $cartItems = $cartItems ?? [];
-
 $totalAmount = $totalAmount ?? 0;
-
 $csrfToken = $csrfToken ?? '';
-
 $page_title_safe = htmlspecialchars($page_title);
-
 $csrfToken_safe = htmlspecialchars($csrfToken);
-
 $session = App\Core\Registry::get('session');
 ?>
 <!
@@ -25,7 +15,6 @@ $session = App\Core\Registry::get('session');
         <h1 class="page-title"><?= $page_title_safe ?></h1>
         <!
         <p class="page-subtitle">Review your cart and complete your purchase</p>
-
         <!
         <?php if ($session->hasFlash('warning')): ?>
             <div class="alert alert-warning" role="alert">
@@ -42,7 +31,6 @@ $session = App\Core\Registry::get('session');
                 <?= htmlspecialchars($session->getFlash('info')); ?>
             </div>
         <?php endif; ?>
-
         <!
         <?php if (empty($cartItems)): ?>
             <!
@@ -77,14 +65,10 @@ $session = App\Core\Registry::get('session');
                             <tbody>
                                 <!
                                 <?php foreach ($cartItems as $item):
-                                    
                                     if (!is_array($item) || !isset($item['image_url'], $item['name'], $item['price'], $item['quantity'], $item['subtotal']))
                                         continue; 
-
-                                    
                                     $item_image_url_safe = htmlspecialchars($item['image_url']);
                                     $item_name_safe = htmlspecialchars($item['name']);
-                                    
                                     $item_price_formatted = '$' . number_format($item['price'], 2);
                                     $item_quantity_safe = htmlspecialchars($item['quantity']);
                                     $item_subtotal_formatted = '$' . number_format($item['subtotal'], 2);
@@ -119,7 +103,6 @@ $session = App\Core\Registry::get('session');
                         </table>
                     </div> <!
                 </section> <!
-
                 <!
                 <section class="shipping-payment-section">
                     <h2>Shipping & Payment Details</h2>
@@ -127,7 +110,6 @@ $session = App\Core\Registry::get('session');
                     <form action="<?= BASE_URL ?>order/process" method="POST" id="order-form">
                         <!
                         <input type="hidden" name="csrf_token" value="<?= $csrfToken_safe ?>">
-
                         <!
                         <div class="form-group">
                             <label for="shipping_address" class="form-label">Shipping Address</label>
@@ -135,14 +117,12 @@ $session = App\Core\Registry::get('session');
                                 placeholder="Enter your shipping address" required></textarea>
                             <!
                         </div>
-
                         <!
                         <div class="form-group">
                             <label for="order_notes" class="form-label">Order Notes (Optional)</label>
                             <textarea class="form-control" id="order_notes" name="order_notes" rows="3"
                                 placeholder="Add any special instructions here..."></textarea>
                         </div>
-
                         <!
                         <div class="payment-methods">
                             <h3>Payment Method</h3>
@@ -153,7 +133,6 @@ $session = App\Core\Registry::get('session');
                                 <!
                             </div>
                         </div>
-
                         <!
                         <div class="form-actions">
                             <!

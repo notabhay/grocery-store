@@ -1,5 +1,3 @@
-
-
 <!
 <div class="admin-content-header">
     <h2>Category Management</h2>
@@ -11,7 +9,6 @@
     </div>
 </div>
 <!
-
 <!
 <?php 
 ?>
@@ -21,7 +18,6 @@
         ?>
     </div>
 <?php endif; ?>
-
 <?php 
 ?>
 <?php if (isset($_SESSION['flash_error'])): ?>
@@ -31,7 +27,6 @@
     </div>
 <?php endif; ?>
 <!
-
 <!
 <div class="table-responsive">
     <table class="table table-striped">
@@ -89,7 +84,6 @@
     </table>
 </div>
 <!
-
 <!
 <?php 
 ?>
@@ -108,7 +102,6 @@
                         </a>
                     </li>
                 <?php endif; ?>
-
                 <?php 
                 ?>
                 <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
@@ -119,7 +112,6 @@
                         </a>
                     </li>
                 <?php endfor; ?>
-
                 <?php 
                 ?>
                 <?php if ($pagination['has_next']): ?>
@@ -136,38 +128,27 @@
     </div>
 <?php endif; ?>
 <!
-
 <!
 <style>
-    
     body {
         margin: 0;
         padding: 0;
     }
-
-    
     .admin-content-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1.5rem;
     }
-
-    
     .pagination-container {
         display: flex;
         justify-content: center;
         margin-top: 1.5rem;
     }
-
-    
     .btn-group {
         display: flex;
         gap: 0.5rem;
-        
     }
-
-    
     .text-muted {
         color: #6c757d;
     }

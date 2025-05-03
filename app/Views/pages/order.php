@@ -1,28 +1,9 @@
 <?php
-
-
-
-
 use App\Core\Session;
 use App\Core\Registry;
-
-
-
-
-
-
 if (!isset($product) || !is_array($product)) {
-    
-    
-    
-    
 }
-
-
 if (!isset($csrfToken)) {
-    
-    
-    
     $csrfToken = ''; 
 }
 ?>
@@ -36,25 +17,19 @@ if (!isset($csrfToken)) {
         <p class="page-subtitle">Review and confirm your order details for
             <strong><?php echo htmlspecialchars($product['name']); ?></strong>
         </p>
-
         <!
         <?php
-        
         $session = Registry::get('session');
-        
         if ($session->hasFlash('error')) {
             echo '<div class="alert alert-error">' . htmlspecialchars($session->getFlash('error')) . '</div>';
         }
-        
         if ($session->hasFlash('success')) {
             echo '<div class="alert alert-success">' . htmlspecialchars($session->getFlash('success')) . '</div>';
         }
-        
         if ($session->hasFlash('info')) {
             echo '<div class="alert alert-info">' . htmlspecialchars($session->getFlash('info')) . '</div>';
         }
         ?>
-
         <!
         <div class="order-content">
             <!
@@ -102,7 +77,6 @@ if (!isset($csrfToken)) {
                     </div>
                 </div>
             </section> <!
-
             <!
             <section class="shipping-payment-section">
                 <h2>Order Details</h2>
@@ -114,7 +88,6 @@ if (!isset($csrfToken)) {
                     <!
                     <input type="hidden" name="product_id"
                         value="<?php echo htmlspecialchars($product['product_id']); ?>">
-
                     <!
                     <div class="form-group">
                         <label for="quantity">Quantity:</label>
@@ -134,7 +107,6 @@ if (!isset($csrfToken)) {
                             </button>
                         </div>
                     </div>
-
                     <!
                     <div class="form-group">
                         <label for="shipping_address" class="form-label">Shipping Address</label>
@@ -142,14 +114,12 @@ if (!isset($csrfToken)) {
                             placeholder="Enter your shipping address" required></textarea>
                         <!
                     </div>
-
                     <!
                     <div class="form-group">
                         <label for="notes">Order Notes (Optional):</label>
                         <textarea id="notes" name="notes" class="form-control" rows="3"
                             placeholder="Add any special instructions for your order"></textarea>
                     </div>
-
                     <!
                     <div class="payment-methods">
                         <h3>Payment Method</h3>
@@ -159,7 +129,6 @@ if (!isset($csrfToken)) {
                             <label for="payment_cash">Cash on Delivery</label>
                         </div>
                     </div>
-
                     <!
                     <div class="form-actions">
                         <!
@@ -174,9 +143,7 @@ if (!isset($csrfToken)) {
 </main> <!
 <!
 <script>
-    
     document.addEventListener('DOMContentLoaded', function() {
-        
         const quantityInput = document.getElementById('quantity');
         const decreaseBtn = document.querySelector('.quantity-btn.decrease-btn');
         const increaseBtn = document.querySelector('.quantity-btn.increase-btn');
@@ -184,12 +151,8 @@ if (!isset($csrfToken)) {
         const totalPriceSpan = document.getElementById('total-price'); 
         const productPrice = parseFloat(quantityInput.getAttribute('data-price')); 
         const maxQuantity = parseInt(quantityInput.max, 10); 
-
-        
         function updateTotal() {
             let quantity = parseInt(quantityInput.value, 10);
-
-            
             if (isNaN(quantity) || quantity < 1) {
                 quantity = 1; 
                 quantityInput.value = 1;
@@ -198,16 +161,10 @@ if (!isset($csrfToken)) {
                 quantity = maxQuantity; 
                 quantityInput.value = maxQuantity;
             }
-
-            
             const total = (productPrice * quantity).toFixed(2); 
-
-            
             quantityValueSpan.textContent = quantity; 
             totalPriceSpan.textContent = '$' + total; 
         }
-
-        
         decreaseBtn.addEventListener('click', function() {
             let currentQuantity = parseInt(quantityInput.value, 10);
             if (currentQuantity > 1) { 
@@ -215,8 +172,6 @@ if (!isset($csrfToken)) {
                 updateTotal(); 
             }
         });
-
-        
         increaseBtn.addEventListener('click', function() {
             let currentQuantity = parseInt(quantityInput.value, 10);
             if (currentQuantity < maxQuantity) { 
@@ -224,11 +179,7 @@ if (!isset($csrfToken)) {
                 updateTotal(); 
             }
         });
-
-        
         quantityInput.addEventListener('input', updateTotal);
-
-        
         updateTotal();
     });
 </script>

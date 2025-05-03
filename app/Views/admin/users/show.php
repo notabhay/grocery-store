@@ -1,5 +1,3 @@
-
-
 <!
 <div class="user-details-container">
     <!
@@ -15,7 +13,6 @@
             </a>
         </div>
     </div>
-
     <?php 
     ?>
     <?php if (isset($_SESSION['_flash']['success'])): ?>
@@ -34,7 +31,6 @@
         <?php 
         ?>
     <?php endif; ?>
-
     <!
     <div class="user-details-card">
         <!
@@ -92,7 +88,6 @@
                 </div>
             </div> <!
         </div> <!
-
         <!
         <div class="user-details-section">
             <h3>Password Management</h3>
@@ -110,127 +105,84 @@
         </div> <!
     </div> <!
 </div> <!
-
 <!
 <style>
-    
     body {
         margin: 0;
         padding: 0;
     }
-
-    
     .user-details-container {
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
-        
     }
-
-    
     .user-details-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1rem;
     }
-
     .user-details-header h2 {
         margin: 0;
         color: var(--admin-secondary, #343a40);
-        
     }
-
-    
     .user-actions {
         display: flex;
         gap: 0.5rem;
     }
-
-    
     .alert {
         padding: 0.75rem 1.25rem;
         margin-bottom: 1rem;
         border: 1px solid transparent;
         border-radius: 0.25rem;
     }
-
-    
     .alert-success {
         color: #155724;
         background-color: #d4edda;
         border-color: #c3e6cb;
     }
-
-    
     .alert-danger {
         color: #721c24;
         background-color: #f8d7da;
         border-color: #f5c6cb;
     }
-
-    
     .user-details-card {
         background-color: white;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        
         overflow: hidden;
-        
     }
-
-    
     .user-details-section {
         padding: 1.5rem;
         border-bottom: 1px solid #e9ecef;
-        
     }
-
-    
     .user-details-section:last-child {
         border-bottom: none;
     }
-
-    
     .user-details-section h3 {
         margin-top: 0;
         margin-bottom: 1rem;
         color: var(--admin-secondary, #495057);
         font-size: 1.25rem;
     }
-
-    
     .user-details-grid {
         display: grid;
-        
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 1rem;
-        
     }
-
-    
     .detail-item {
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
-        
     }
-
-    
     .detail-label {
         font-weight: 600;
         color: #6c757d;
-        
         font-size: 0.875rem;
-        
     }
-
-    
     .detail-value {
         font-size: 1rem;
     }
-
-    
     .badge {
         display: inline-block;
         padding: 0.25em 0.6em;
@@ -242,37 +194,25 @@
         vertical-align: baseline;
         border-radius: 0.25rem;
     }
-
-    
     .badge-admin {
         color: white;
         background-color: var(--admin-primary, #007bff);
     }
-
-    
     .badge-customer {
         color: white;
         background-color: #6c757d;
     }
-
-    
     .badge-active {
         color: white;
         background-color: #28a745;
     }
-
-    
     .badge-inactive {
         color: white;
         background-color: #dc3545;
     }
-
-    
     .reset-password-form {
         margin-top: 1rem;
     }
-
-    
     .btn {
         display: inline-block;
         font-weight: 400;
@@ -289,56 +229,39 @@
         text-decoration: none;
         cursor: pointer;
     }
-
-    
     .btn-primary {
         color: white;
         background-color: var(--admin-primary, #007bff);
         border-color: var(--admin-primary, #007bff);
     }
-
     .btn-primary:hover {
         background-color: #0056b3;
         border-color: #0056b3;
     }
-
-    
     .btn-secondary {
         color: white;
         background-color: #6c757d;
         border-color: #6c757d;
     }
-
     .btn-secondary:hover {
         background-color: #5a6268;
         border-color: #5a6268;
     }
-
-    
     .btn-warning {
         color: #212529;
-        
         background-color: #ffc107;
         border-color: #ffc107;
     }
-
     .btn-warning:hover {
         background-color: #e0a800;
-        
         border-color: #e0a800;
     }
-
-    
     @media (max-width: 768px) {
-
-        
         .user-details-header {
             flex-direction: column;
             align-items: flex-start;
             gap: 1rem;
         }
-
-        
         .user-details-grid {
             grid-template-columns: 1fr;
         }

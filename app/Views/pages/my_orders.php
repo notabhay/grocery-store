@@ -1,14 +1,7 @@
 <?php
-
-
-
-
 $page_title = $page_title ?? 'My Orders';
-
 $orders = $orders ?? [];
-
 $page_title_safe = htmlspecialchars($page_title);
-
 $session = App\Core\Registry::get('session');
 ?>
 <!
@@ -19,7 +12,6 @@ $session = App\Core\Registry::get('session');
         <h1 class="page-title"><?= $page_title_safe ?></h1>
         <!
         <p class="page-subtitle">View and track your order history</p>
-
         <!
         <?php if ($session->hasFlash('success')): ?>
             <div class="alert alert-success" role="alert">
@@ -36,7 +28,6 @@ $session = App\Core\Registry::get('session');
                 <?= htmlspecialchars($session->getFlash('info')); ?>
             </div>
         <?php endif; ?>
-
         <!
         <?php if (!empty($orders)): ?>
             <!
@@ -75,17 +66,13 @@ $session = App\Core\Registry::get('session');
                             <tbody>
                                 <!
                                 <?php foreach ($orders as $order):
-                                    
                                     if (!is_array($order) || !isset($order['order_id'], $order['order_date_formatted'], $order['total_amount_formatted'], $order['status_class'], $order['status_text']))
                                         continue; 
-
-                                    
                                     $order_id_safe = htmlspecialchars($order['order_id']);
                                     $order_date_safe = htmlspecialchars($order['order_date_formatted']);
                                     $total_amount_safe = htmlspecialchars($order['total_amount_formatted']);
                                     $status_class_safe = htmlspecialchars($order['status_class']);
                                     $status_text_safe = htmlspecialchars($order['status_text']);
-                                    
                                     $status_value = strtolower($order['status'] ?? 'unknown');
                                 ?>
                                     <!
@@ -137,30 +124,17 @@ $session = App\Core\Registry::get('session');
 </main> <!
 <!
 <script>
-    
     document.addEventListener('DOMContentLoaded', function() {
-        
         const statusFilter = document.getElementById('order-status-filter');
         const orderRows = document.querySelectorAll('.order-row');
-
-        
         if (statusFilter) {
-            
             statusFilter.addEventListener('change', function() {
-                
                 const selectedStatus = this.value;
-
-                
                 orderRows.forEach(row => {
-                    
                     const rowStatus = row.getAttribute('data-status');
-
-                    
                     if (selectedStatus === 'all' || selectedStatus === rowStatus) {
-                        
                         row.style.display = ''; 
                     } else {
-                        
                         row.style.display = 'none';
                     }
                 });
@@ -170,13 +144,8 @@ $session = App\Core\Registry::get('session');
 </script>
 <!
 <style>
-    
     .btn-sm {
         padding: 6px 12px;
-        
         font-size: 14px;
-        
     }
-
-    
 </style>

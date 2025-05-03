@@ -1,30 +1,17 @@
 <?php
-
 namespace App\Core;
-
 use PDO; 
 use PDOException; 
 use App\Core\Registry; 
-
-
 class Database
 {
-    
     private $host;
-    
     private $db_name;
-    
     private $username;
-    
     private $password;
-    
     private $charset = 'utf8';
-    
     private $conn;
-    
     private $error = '';
-
-    
     public function __construct($host, $db_name, $username, $password, $charset = 'utf8')
     {
         $this->host = $host;
@@ -34,38 +21,26 @@ class Database
         $this->charset = $charset;
         $this->connect(); 
     }
-
-    
     public function getConnection(): ?PDO
     {
         if ($this->conn) {
             return $this->conn;
         }
-        
         return $this->connect();
     }
-
-    
     private function connect(): ?PDO
     {
-        
         if ($this->conn) {
             return $this->conn;
         }
-
-        
         $this->conn = null;
-        
         $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=" . $this->charset;
-
         try {
-            
             $this->conn = new PDO(
                 $dsn,
                 $this->username,
                 $this->password,
                 [
-                    
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, 
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, 
                     PDO::ATTR_EMULATE_PREPARES => false, 
@@ -73,25 +48,18 @@ class Database
             );
             $this->error = ''; 
         } catch (PDOException $e) {
-            
             $this->error = "Connection Error: " . $e->getMessage();
-            
             if (Registry::has('logger')) {
                 Registry::get('logger')->critical("Database connection error: " . $e->getMessage(), ['exception' => $e]);
             }
             $this->conn = null; 
         }
-
         return $this->conn;
     }
-
-    
     public function getError(): string
     {
         return $this->error;
     }
-
-    
     public function select($query, $params = [])
     {
         if (!$this->conn) {
@@ -101,7 +69,6 @@ class Database
             }
             return false;
         }
-
         try {
             $stmt = $this->conn->prepare($query); 
             $stmt->execute($params); 
@@ -119,8 +86,6 @@ class Database
             return false; 
         }
     }
-
-    
     public function execute($query, $params = [])
     {
         if (!$this->conn) {
@@ -130,7 +95,6 @@ class Database
             }
             return false;
         }
-
         try {
             $stmt = $this->conn->prepare($query); 
             $stmt->execute($params); 
@@ -148,8 +112,6 @@ class Database
             return false; 
         }
     }
-
-    
     public function beginTransaction(): bool
     {
         if (!$this->conn) {
@@ -159,7 +121,6 @@ class Database
             }
             return false;
         }
-
         try {
             $this->error = '';
             return $this->conn->beginTransaction();
@@ -171,8 +132,6 @@ class Database
             return false;
         }
     }
-
-    
     public function commit(): bool
     {
         if (!$this->conn || !$this->conn->inTransaction()) {
@@ -182,7 +141,6 @@ class Database
             }
             return false;
         }
-
         try {
             $this->error = '';
             return $this->conn->commit();
@@ -191,13 +149,10 @@ class Database
             if (Registry::has('logger')) {
                 Registry::get('logger')->error("Transaction commit error: " . $e->getMessage(), ['exception' => $e]);
             }
-            
             $this->rollback();
             return false;
         }
     }
-
-    
     public function rollback(): bool
     {
         if (!$this->conn || !$this->conn->inTransaction()) {
@@ -207,7 +162,6 @@ class Database
             }
             return false;
         }
-
         try {
             $this->error = '';
             return $this->conn->rollBack();
@@ -219,8 +173,6 @@ class Database
             return false;
         }
     }
-
-    
     public function lastInsertId($name = null)
     {
         if (!$this->conn) {
@@ -230,10 +182,8 @@ class Database
             }
             return false;
         }
-
         try {
             $this->error = '';
-            
             return $this->conn->lastInsertId($name);
         } catch (PDOException $e) {
             $this->error = "LastInsertId Error: " . $e->getMessage();
@@ -243,14 +193,10 @@ class Database
             return false;
         }
     }
-
-    
     public function closeConnection(): void
     {
         $this->conn = null;
     }
-
-    
     public function __destruct()
     {
         $this->closeConnection();

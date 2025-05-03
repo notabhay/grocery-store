@@ -1,5 +1,3 @@
-
-
 <!
 <div class="container-fluid">
     <!
@@ -14,7 +12,6 @@
             <a href="<?= BASE_URL ?>admin/orders" class="btn btn-secondary">Back to Orders</a>
         </div>
     </div>
-
     <?php 
     ?>
     <?php if (isset($_SESSION['flash_success'])): ?>
@@ -35,7 +32,6 @@
         <?php 
         ?>
     <?php endif; ?>
-
     <!
     <div class="row">
         <!
@@ -95,7 +91,6 @@
                 </div>
             </div>
         </div>
-
         <!
         <div class="col-md-4 mb-4">
             <div class="card h-100">
@@ -131,7 +126,6 @@
                 </div>
             </div>
         </div>
-
         <!
         <div class="col-md-4 mb-4">
             <div class="card h-100">
@@ -153,7 +147,6 @@
             </div>
         </div>
     </div> <!
-
     <!
     <div class="card mt-4">
         <div class="card-header">
@@ -182,13 +175,9 @@
                         <!
                         <tbody>
                             <?php
-                            
                             $calculatedTotal = 0;
-                            
                             foreach ($order['items'] as $item):
-                                
                                 $lineTotal = $item['price'] * $item['quantity'];
-                                
                                 $calculatedTotal += $lineTotal;
                             ?>
                                 <tr>
@@ -246,9 +235,7 @@
         </div> <!
     </div> <!
 </div> <!
-
 <?php
-
 function getStatusBadgeClass($status)
 {
     switch ($status) {

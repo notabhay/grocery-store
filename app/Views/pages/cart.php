@@ -1,7 +1,5 @@
-
 <div class="cart-container">
     <h1>Your Shopping Cart</h1>
-
     <?php 
     ?>
     <?php if ($is_empty): ?>
