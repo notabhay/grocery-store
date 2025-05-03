@@ -3,8 +3,8 @@
     "description": "PHP Based online grocery store application for Advanced Web Technologies module.",
     "type": "project",
     "require": {
-        "php": "^7.0",
-        "monolog/monolog": "^2.0"
+        "php": "~7.2.24",
+        "monolog/monolog": "2.10.0"
     },
     "autoload": {
         "psr-4": {

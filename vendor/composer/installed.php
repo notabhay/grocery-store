@@ -3,7 +3,7 @@
         'name' => 'abhay/grocery-store',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8b672314c4456f41159e3a5713d8b7334d02226b',
+        'reference' => 'eff1ebe7257aa83e8844a62e70d8c1f1f36dd119',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'abhay/grocery-store' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8b672314c4456f41159e3a5713d8b7334d02226b',
+            'reference' => 'eff1ebe7257aa83e8844a62e70d8c1f1f36dd119',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
