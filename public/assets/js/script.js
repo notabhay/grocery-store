@@ -1057,7 +1057,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         try {
             // Fetch count from API
-            const response = await fetch(`${window.baseUrl}/api/cart/count`, {
+            const response = await fetch(`${window.baseUrl}api/cart/count`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'
