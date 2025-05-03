@@ -4,16 +4,34 @@
     # Set the base path for rewrite rules relative to the domain root
     RewriteBase /prin/y1d13/advanced-web-technologies/grocery-store/
 
+    # Prevent direct access to .php files except index.php in public
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^?]*)\.php [NC]
+    RewriteCond %{REQUEST_URI} !/public/index\.php$
+    RewriteRule \.php$ - [F,L]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301] # %1 captures the path without the trailing slash
+    RewriteRule ^ %1 [L,R=301]
 
-    # If the request is NOT for an existing file or directory
-    RewriteCond %{REQUEST_FILENAME} !-d
+    # --- Main Routing Rule ---
+    # If the request is NOT for an existing file in the root
+    RewriteCond %{DOCUMENT_ROOT}/prin/y1d13/advanced-web-technologies/grocery-store/$1 !-f
+    # And the request is NOT for an existing directory in the root
+    RewriteCond %{DOCUMENT_ROOT}/prin/y1d13/advanced-web-technologies/grocery-store/$1 !-d
+    # And the request does NOT already start with /public/
+    RewriteCond %{REQUEST_URI} !^/prin/y1d13/advanced-web-technologies/grocery-store/public/
+    # Then rewrite the request to prepend public/
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # --- Front Controller for requests already targeting public ---
+    # If the request is for a file/directory within public/ that doesn't exist
     RewriteCond %{REQUEST_FILENAME} !-f
-    # Rewrite the request to public/index.php (relative to RewriteBase)
-    RewriteRule ^(.*)$ public/index.php [L]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    # And the request URI starts with the public path
+    RewriteCond %{REQUEST_URI} ^/prin/y1d13/advanced-web-technologies/grocery-store/public/
+    # Route it to public/index.php
+    RewriteRule ^public/(.*)$ public/index.php [L]
 
 </IfModule>
 
