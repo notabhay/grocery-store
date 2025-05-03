@@ -226,7 +226,7 @@ class SecurityHelper
         // Allow fonts from self and specific CDNs.
         $csp .= "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; ";
         // Allow connections (XHR, WebSockets) only to self.
-        $csp .= "connect-src 'self'; ";
+        $csp .= "connect-src 'self' " . rtrim(BASE_URL, '/') . "; ";
         // Allow form submissions only to self.
         $csp .= "form-action 'self'; ";
         // Disallow framing of the page by any other page (stronger than X-Frame-Options).
