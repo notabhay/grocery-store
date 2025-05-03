@@ -1,10 +1,13 @@
 <?php
+
 namespace App\Controllers;
+
 use App\Core\Session;
 use App\Helpers\CaptchaHelper;
 use App\Core\BaseController;
 use App\Core\Registry;
-use Psr\Log\LoggerInterface; 
+use Psr\Log\LoggerInterface;
+
 class CaptchaController extends BaseController
 {
     private $session;
@@ -33,9 +36,9 @@ class CaptchaController extends BaseController
                 return;
             }
             header('Content-Type: image/png');
-            header('Cache-Control: no-cache, no-store, must-revalidate'); 
-            header('Pragma: no-cache'); 
-            header('Expires: 0'); 
+            header('Cache-Control: no-cache, no-store, must-revalidate');
+            header('Pragma: no-cache');
+            header('Expires: 0');
             echo $imageData;
         } catch (\Exception $e) {
             $this->logError("Captcha Generation Error: " . $e->getMessage(), ['exception' => $e]);

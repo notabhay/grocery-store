@@ -1,6 +1,6 @@
 <?php
 try {
-    $logFilePath = dirname(__DIR__) . '/logs/app.log'; 
+    $logFilePath = dirname(__DIR__) . '/logs/app.log';
     $logMessage = sprintf(
         "[%s] Request Received: URI=[%s], SCRIPT_NAME=[%s], PHP_SELF=[%s], Calculated BASE_URL attempt starts...\n",
         date('Y-m-d H:i:s'),
@@ -13,7 +13,7 @@ try {
     error_log("Failed to write diagnostic log: " . $e->getMessage() . "\n", 3, $logFilePath);
 }
 define('BASE_PATH', dirname(__DIR__));
-$scheme = 'http'; 
+$scheme = 'http';
 if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1)) {
     $scheme = 'https';
 } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
@@ -23,7 +23,7 @@ if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS']
 } elseif (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) {
     $scheme = 'https';
 }
-$host = $_SERVER['HTTP_HOST']; 
+$host = $_SERVER['HTTP_HOST'];
 $script_dir = dirname($_SERVER['SCRIPT_NAME']);
 $base_path_url = rtrim(str_replace('\\', '/', $script_dir), '/') . '/';
 if ($base_path_url === '//') {
@@ -31,7 +31,7 @@ if ($base_path_url === '//') {
 }
 define('BASE_URL', $scheme . '://' . $host . $base_path_url);
 require_once BASE_PATH . '/vendor/autoload.php';
-$required_extensions = ['pdo_mysql', 'session', 'gd', 'mbstring', 'json']; 
+$required_extensions = ['pdo_mysql', 'session', 'gd', 'mbstring', 'json'];
 $missing_extensions = [];
 foreach ($required_extensions as $ext) {
     if (!extension_loaded($ext)) {
@@ -39,19 +39,21 @@ foreach ($required_extensions as $ext) {
     }
 }
 if (!empty($missing_extensions)) {
-    http_response_code(500); 
+    http_response_code(500);
     die('ERROR: Required PHP extension(s) missing: ' . implode(', ', $missing_extensions) . '. Please contact server administrator.');
 }
 $config = require_once BASE_PATH . '/app/config.php';
-use App\Core\Request;       
-use App\Core\Router;        
-use App\Core\Database;      
-use App\Core\Registry;      
-use App\Core\Session;       
-use App\Helpers\CaptchaHelper; 
-use Monolog\Logger;         
-use Monolog\Handler\StreamHandler; 
-use App\Helpers\SecurityHelper; 
+
+use App\Core\Request;
+use App\Core\Router;
+use App\Core\Database;
+use App\Core\Registry;
+use App\Core\Session;
+use App\Helpers\CaptchaHelper;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use App\Helpers\SecurityHelper;
+
 SecurityHelper::setSecurityHeaders();
 Registry::bind('config', $config);
 try {
@@ -122,13 +124,13 @@ try {
     Router::load(BASE_PATH . '/app/routes.php')
         ->direct($request->uri(), $request->method());
 } catch (\Exception $e) {
-    $logger = Registry::get('logger'); 
+    $logger = Registry::get('logger');
     $logger->error("Unhandled Exception: " . $e->getMessage(), ['exception' => $e]);
     $statusCode = $e->getCode();
     if (!is_int($statusCode) || $statusCode < 100 || $statusCode > 599) {
         $statusCode = 500;
     }
-    http_response_code($statusCode); 
+    http_response_code($statusCode);
     if ($statusCode == 404) {
         $requestUriPathForCheck = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
         $baseUrlPathForCheck = parse_url(BASE_URL, PHP_URL_PATH);
@@ -147,7 +149,7 @@ try {
         if (strpos($appPathForCheck, '/api/') === 0) {
             header('Content-Type: application/json');
             echo json_encode(['error' => 'Not Found', 'message' => $e->getMessage()]);
-            exit; 
+            exit;
         }
     }
     if ($config['DEBUG_MODE'] ?? false) {

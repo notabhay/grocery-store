@@ -1,11 +1,14 @@
 <?php
+
 namespace App\Controllers\Admin;
+
 use App\Core\BaseController;
 use App\Core\Database;
 use App\Core\Session;
 use App\Core\Request;
 use App\Core\Redirect;
 use App\Models\User;
+
 class AdminUserController extends BaseController
 {
     private $db;
@@ -17,20 +20,20 @@ class AdminUserController extends BaseController
         $this->db = $db;
         $this->session = $session;
         $this->request = $request;
-        $this->userModel = new User($db); 
+        $this->userModel = new User($db);
     }
     public function index(): void
     {
         $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-        $perPage = 15; 
+        $perPage = 15;
         $result = $this->userModel->getAllUsersPaginated($page, $perPage);
         $userId = $this->session->getUserId();
-        $adminUser = $this->userModel->findById($userId); 
+        $adminUser = $this->userModel->findById($userId);
         $data = [
             'page_title' => 'Manage Users',
-            'admin_user' => $adminUser, 
-            'users' => $result['users'] ?? [], 
-            'pagination' => $result['pagination'] ?? [] 
+            'admin_user' => $adminUser,
+            'users' => $result['users'] ?? [],
+            'pagination' => $result['pagination'] ?? []
         ];
         $this->viewWithAdminLayout('admin/users/index', $data);
     }
@@ -46,8 +49,8 @@ class AdminUserController extends BaseController
         $adminUser = $this->userModel->findById($adminUserId);
         $data = [
             'page_title' => 'User Details',
-            'admin_user' => $adminUser, 
-            'user' => $user, 
+            'admin_user' => $adminUser,
+            'user' => $user,
             'csrf_token' => $this->session->generateCsrfToken()
         ];
         $this->viewWithAdminLayout('admin/users/show', $data);
@@ -64,9 +67,9 @@ class AdminUserController extends BaseController
         $adminUser = $this->userModel->findById($adminUserId);
         $data = [
             'page_title' => 'Edit User',
-            'admin_user' => $adminUser, 
-            'user' => $user, 
-            'csrf_token' => $this->session->generateCsrfToken() 
+            'admin_user' => $adminUser,
+            'user' => $user,
+            'csrf_token' => $this->session->generateCsrfToken()
         ];
         $this->viewWithAdminLayout('admin/users/edit', $data);
     }
@@ -90,12 +93,12 @@ class AdminUserController extends BaseController
         $errors = [];
         if (empty($name)) {
             $errors[] = 'Name is required.';
-        } elseif (strlen($name) > 100) { 
+        } elseif (strlen($name) > 100) {
             $errors[] = 'Name must be less than 100 characters.';
         }
         if (empty($phone)) {
             $errors[] = 'Phone is required.';
-        } elseif (!preg_match('/^[0-9+\-\s()]{5,20}$/', $phone)) { 
+        } elseif (!preg_match('/^[0-9+\-\s()]{5,20}$/', $phone)) {
             $errors[] = 'Phone number format is invalid (allow numbers, +, -, spaces, parentheses, 5-20 chars).';
         }
         if (!in_array($role, ['customer', 'admin'])) {
@@ -135,13 +138,13 @@ class AdminUserController extends BaseController
     {
         if (!$this->session->validateCsrfToken($this->request->post('csrf_token'))) {
             $this->session->flash('error', 'Invalid action or token missing. Please try again.');
-            Redirect::to('/admin/users/' . $id); 
+            Redirect::to('/admin/users/' . $id);
             exit();
         }
         $user = $this->userModel->findById($id);
         if (!$user) {
             $this->session->flash('error', 'User not found.');
-            Redirect::to('/admin/users'); 
+            Redirect::to('/admin/users');
             exit();
         }
         $token = $this->userModel->generatePasswordResetToken($id);
@@ -177,12 +180,12 @@ class AdminUserController extends BaseController
         if (!file_exists($viewPath)) {
             trigger_error("View file not found: {$viewPath}", E_USER_WARNING);
             echo "Error: View file '{$view}' not found.";
-            exit; 
+            exit;
         }
         if (!file_exists($layoutPath)) {
             trigger_error("Layout file not found: {$layoutPath}", E_USER_WARNING);
             echo "Error: Admin layout file not found.";
-            exit; 
+            exit;
         }
         try {
             $request = \App\Core\Registry::get('request');
@@ -198,7 +201,7 @@ class AdminUserController extends BaseController
             include $viewPath;
         } catch (\Throwable $e) {
             ob_end_clean();
-            error_log("Error rendering view '{$view}': " . $e->getMessage()); 
+            error_log("Error rendering view '{$view}': " . $e->getMessage());
             echo "Error rendering view '{$view}'. Please check the logs.";
             exit;
         }

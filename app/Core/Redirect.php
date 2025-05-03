@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Core;
-use App\Core\Registry; 
+
+use App\Core\Registry;
+
 class Redirect
 {
     public static function to(string $url, int $statusCode = 302): void
@@ -17,8 +20,7 @@ class Redirect
                 echo "Error: Cannot redirect relative path because BASE_URL is not defined.";
                 exit();
             }
-        }
-        elseif (strpos($finalUrl, '//') !== 0 && strpos($finalUrl, 'http:') !== 0 && strpos($finalUrl, 'https:') !== 0) {
+        } elseif (strpos($finalUrl, '//') !== 0 && strpos($finalUrl, 'http:') !== 0 && strpos($finalUrl, 'https:') !== 0) {
             if (Registry::has('logger')) {
                 Registry::get('logger')->warning("Invalid redirect URL format provided.", ['url' => $url, 'finalUrl' => $finalUrl]);
             }
@@ -36,9 +38,9 @@ class Redirect
     {
         if ($fallbackUrl === null) {
             if (defined('BASE_URL')) {
-                $fallbackUrl = BASE_URL; 
+                $fallbackUrl = BASE_URL;
             } else {
-                $fallbackUrl = '/'; 
+                $fallbackUrl = '/';
             }
         }
         $referer = $_SERVER['HTTP_REFERER'] ?? $fallbackUrl;

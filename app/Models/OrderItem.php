@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Models;
+
 use PDO;
-use App\Core\Database; 
+use App\Core\Database;
 use App\Core\Registry;
+
 class OrderItem
 {
     private $db;
@@ -30,10 +33,10 @@ class OrderItem
         $stmt->bindParam(':order_id', $data['order_id'], PDO::PARAM_INT);
         $stmt->bindParam(':product_id', $data['product_id'], PDO::PARAM_INT);
         $stmt->bindParam(':quantity', $data['quantity'], PDO::PARAM_INT);
-        $stmt->bindParam(':price', $data['price']); 
+        $stmt->bindParam(':price', $data['price']);
         try {
             if ($stmt->execute()) {
-                return (int) $this->db->lastInsertId(); 
+                return (int) $this->db->lastInsertId();
             } else {
                 $this->error_message = "Failed to create order item: " . implode(", ", $stmt->errorInfo());
                 return false;
@@ -53,12 +56,12 @@ class OrderItem
         $sql = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ";
         $valuePlaceholders = [];
         $params = [];
-        $paramIndex = 0; 
+        $paramIndex = 0;
         foreach ($items as $item) {
             if (!isset($item['product_id'], $item['quantity'], $item['price'])) {
                 $this->error_message = "Invalid item data provided for bulk insert. Missing required keys.";
                 Registry::get('logger')->warning($this->error_message, ['item_data' => $item, 'order_id' => $orderId]);
-                return false; 
+                return false;
             }
             $orderIdPlaceholder = ":order_id_" . $paramIndex;
             $productIdPlaceholder = ":product_id_" . $paramIndex;
@@ -77,12 +80,12 @@ class OrderItem
             if (strpos($placeholder, ':order_id_') === 0 || strpos($placeholder, ':product_id_') === 0 || strpos($placeholder, ':quantity_') === 0) {
                 $stmt->bindValue($placeholder, $value, PDO::PARAM_INT);
             } elseif (strpos($placeholder, ':price_') === 0) {
-                $stmt->bindValue($placeholder, $value); 
+                $stmt->bindValue($placeholder, $value);
             }
         }
         try {
             if ($stmt->execute()) {
-                return true; 
+                return true;
             } else {
                 $this->error_message = "Bulk order item insert failed: " . implode(", ", $stmt->errorInfo());
                 return false;
@@ -104,7 +107,7 @@ class OrderItem
         $stmt->bindParam(':order_id', $orderId, PDO::PARAM_INT);
         try {
             if ($stmt->execute()) {
-                return $stmt; 
+                return $stmt;
             } else {
                 $this->error_message = "Failed to execute query for order items: " . implode(", ", $stmt->errorInfo());
                 return false;
@@ -120,12 +123,12 @@ class OrderItem
         $sql = "SELECT oi.*, p.name as product_name, p.description as product_description, p.image_path as product_image
                 FROM order_items oi
                 JOIN products p ON oi.product_id = p.product_id
-                WHERE oi.item_id = :order_item_id"; 
+                WHERE oi.item_id = :order_item_id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':order_item_id', $orderItemId, PDO::PARAM_INT);
         try {
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC); 
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
             $this->error_message = "Database error fetching single order item: " . $e->getMessage();
             Registry::get('logger')->error($this->error_message, ['exception' => $e, 'item_id' => $orderItemId]);
@@ -135,8 +138,8 @@ class OrderItem
     public function update(int $orderItemId, array $data): bool
     {
         $fields = [];
-        $params = [':order_item_id' => $orderItemId]; 
-        $allowedFields = ['quantity', 'price']; 
+        $params = [':order_item_id' => $orderItemId];
+        $allowedFields = ['quantity', 'price'];
         foreach ($data as $key => $value) {
             if (in_array($key, $allowedFields)) {
                 $fields[] = "`$key` = :$key";
@@ -145,21 +148,21 @@ class OrderItem
         }
         if (empty($fields)) {
             $this->error_message = "No valid fields provided for item update.";
-            return false; 
+            return false;
         }
-        $sql = "UPDATE order_items SET " . implode(', ', $fields) . " WHERE item_id = :order_item_id"; 
+        $sql = "UPDATE order_items SET " . implode(', ', $fields) . " WHERE item_id = :order_item_id";
         $stmt = $this->db->prepare($sql);
-        foreach ($params as $key => &$value) { 
+        foreach ($params as $key => &$value) {
             if ($key === ':order_item_id' || $key === ':quantity') {
                 $stmt->bindValue($key, $value, PDO::PARAM_INT);
             } elseif ($key === ':price') {
-                $stmt->bindValue($key, $value); 
+                $stmt->bindValue($key, $value);
             }
         }
-        unset($value); 
+        unset($value);
         try {
             if ($stmt->execute()) {
-                return $stmt->rowCount() > 0; 
+                return $stmt->rowCount() > 0;
             } else {
                 $this->error_message = "Failed to execute item update: " . implode(", ", $stmt->errorInfo());
                 return false;
@@ -172,12 +175,12 @@ class OrderItem
     }
     public function delete(int $orderItemId): bool
     {
-        $sql = "DELETE FROM order_items WHERE item_id = :order_item_id"; 
+        $sql = "DELETE FROM order_items WHERE item_id = :order_item_id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':order_item_id', $orderItemId, PDO::PARAM_INT);
         try {
             if ($stmt->execute()) {
-                return $stmt->rowCount() > 0; 
+                return $stmt->rowCount() > 0;
             } else {
                 $this->error_message = "Failed to execute item delete: " . implode(", ", $stmt->errorInfo());
                 return false;

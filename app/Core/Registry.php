@@ -1,10 +1,13 @@
 <?php
+
 namespace App\Core;
+
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Formatter\LineFormatter;
-use Psr\Log\LogLevel; 
-use Exception; 
+use Psr\Log\LogLevel;
+use Exception;
+
 class Registry
 {
     private static $services = [];

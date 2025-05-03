@@ -1,6 +1,17 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Set the base path for rewrite rules relative to the domain root
     RewriteBase /prin/y1d13/advanced-web-technologies/grocery-store/
+
+    # Rewrite rule to route requests through public/
+    # If the request is NOT for the public directory itself or files within it
     RewriteCond %{REQUEST_URI} !^/prin/y1d13/advanced-web-technologies/grocery-store/public/
+    # Then rewrite the request to prepend public/
     RewriteRule ^(.*)$ public/$1 [L]
+
 </IfModule>
+
+# Optional: Improve security by preventing listing of directories
+
+Options -Indexes
