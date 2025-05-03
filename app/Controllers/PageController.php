@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Controllers;
+
 use App\Core\Database;
 use App\Core\Session;
 use App\Core\BaseController;
@@ -9,7 +11,8 @@ use App\Helpers\SecurityHelper;
 use App\Helpers\CartHelper;
 use App\Core\Registry;
 use Psr\Log\LoggerInterface;
-use App\Models\Product; 
+use App\Models\Product;
+
 class PageController extends BaseController
 {
     private $db;
@@ -24,7 +27,7 @@ class PageController extends BaseController
         $this->session = Registry::get('session');
         $this->request = Registry::get('request');
         $this->logger = Registry::get('logger');
-        $this->securityHelper = new SecurityHelper(); 
+        $this->securityHelper = new SecurityHelper();
         $this->cartHelper = new CartHelper($this->session, $this->db);
         $pdoConnection = $this->db->getConnection();
         if (!$pdoConnection) {
@@ -34,15 +37,15 @@ class PageController extends BaseController
     }
     public function index(): void
     {
-        $random_products = []; 
+        $random_products = [];
         try {
-            $productModel = new Product($this->db->getConnection()); 
+            $productModel = new Product($this->db->getConnection());
             $random_products = $productModel->getFeaturedProducts();
-            foreach ($random_products as &$product) { 
+            foreach ($random_products as &$product) {
                 $image_filename = isset($product['image']) ? basename($product['image']) : 'default.png';
                 $product['image_url'] = BASE_URL . 'assets/images/products/' . $image_filename;
             }
-            unset($product); 
+            unset($product);
         } catch (\Exception $e) {
             $this->logger->error("Error fetching products for homepage.", ['exception' => $e]);
         }
@@ -50,8 +53,8 @@ class PageController extends BaseController
             'page_title' => 'GhibliGroceries - Fresh Food Delivered',
             'meta_description' => 'Fresh groceries delivered to your door. Shop vegetables, meat, and more at our online grocery store.',
             'meta_keywords' => 'grocery, online shopping, vegetables, meat, fresh produce',
-            'random_products' => $random_products, 
-            'logged_in' => $this->session->isAuthenticated(), 
+            'random_products' => $random_products,
+            'logged_in' => $this->session->isAuthenticated(),
         ];
         $this->view('pages/index', $data);
     }
@@ -61,8 +64,8 @@ class PageController extends BaseController
             'page_title' => 'About Us - GhibliGroceries',
             'meta_description' => 'Learn more about GhibliGroceries, your source for fresh, quality groceries delivered fast.',
             'meta_keywords' => 'about us, grocery store, online groceries, GhibliGroceries',
-            'logged_in' => $this->session->isAuthenticated(), 
-            'additional_css_files' => ['assets/css/about.css'], 
+            'logged_in' => $this->session->isAuthenticated(),
+            'additional_css_files' => ['assets/css/about.css'],
         ];
         $this->view('pages/about', $data);
     }
@@ -72,19 +75,19 @@ class PageController extends BaseController
             'page_title' => 'Contact Us - GhibliGroceries',
             'meta_description' => 'Get in touch with GhibliGroceries. Contact us for support, inquiries, or feedback.',
             'meta_keywords' => 'contact, support, help, grocery store, GhibliGroceries',
-            'csrf_token' => $this->session->getCsrfToken(), 
-            'flash_message' => $this->session->getFlash('contact_message'), 
-            'form_errors' => $this->session->getFlash('form_errors', []), 
-            'old_input' => $this->session->getFlash('old_input', []), 
-            'logged_in' => $this->session->isAuthenticated(), 
-            'additional_css_files' => ['assets/css/contact.css'], 
+            'csrf_token' => $this->session->getCsrfToken(),
+            'flash_message' => $this->session->getFlash('contact_message'),
+            'form_errors' => $this->session->getFlash('form_errors', []),
+            'old_input' => $this->session->getFlash('old_input', []),
+            'logged_in' => $this->session->isAuthenticated(),
+            'additional_css_files' => ['assets/css/contact.css'],
         ];
         $this->view('pages/contact', $data);
     }
     public function submitContact(): void
     {
         if (!$this->request->isPost()) {
-            Redirect::to('/contact'); 
+            Redirect::to('/contact');
             return;
         }
         $name = $this->request->post('name', '');
@@ -97,7 +100,7 @@ class PageController extends BaseController
             return;
         }
         $sanitized_name = $this->securityHelper->sanitizeInput($name);
-        $sanitized_email = filter_var($email, FILTER_SANITIZE_EMAIL); 
+        $sanitized_email = filter_var($email, FILTER_SANITIZE_EMAIL);
         $sanitized_message = $this->securityHelper->sanitizeInput($message);
         $errors = [];
         if (empty($sanitized_name)) {
@@ -114,13 +117,13 @@ class PageController extends BaseController
         }
         if (!empty($errors)) {
             $this->session->flash('contact_message', ['type' => 'error', 'text' => 'Please correct the errors below.']);
-            $this->session->flash('form_errors', $errors); 
+            $this->session->flash('form_errors', $errors);
             $this->session->flash('old_input', ['name' => $sanitized_name, 'email' => $sanitized_email, 'message' => $sanitized_message]);
-            Redirect::to('/contact'); 
+            Redirect::to('/contact');
             return;
         }
         $this->logger->info("Contact form submitted successfully (simulation).", ['name' => $sanitized_name, 'email' => $sanitized_email]);
-        $submission_successful = true; 
+        $submission_successful = true;
         if ($submission_successful) {
             $this->session->flash('contact_message', ['type' => 'success', 'text' => 'Thank you for your message! We will get back to you soon.']);
         } else {
@@ -140,8 +143,8 @@ class PageController extends BaseController
             'page_title' => 'Your Shopping Cart - GhibliGroceries',
             'meta_description' => 'View and manage your shopping cart at GhibliGroceries.',
             'meta_keywords' => 'shopping cart, checkout, grocery store, GhibliGroceries',
-            'logged_in' => $this->session->isAuthenticated(), 
-            'additional_css_files' => ['assets/css/cart.css'], 
+            'logged_in' => $this->session->isAuthenticated(),
+            'additional_css_files' => ['assets/css/cart.css'],
         ]);
         $this->view('pages/cart', $data);
     }

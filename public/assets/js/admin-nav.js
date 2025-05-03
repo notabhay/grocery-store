@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (desktopNav) {
             const adminLi = document.createElement('li');
             const adminLink = document.createElement('a');
-            adminLink.href = window.baseUrl + 'admin/dashboard'; 
-            adminLink.textContent = 'Admin Dashboard'; 
+            adminLink.href = window.baseUrl + 'admin/dashboard';
+            adminLink.textContent = 'Admin Dashboard';
             if (window.location.pathname.startsWith(window.baseUrl + 'admin/dashboard')) {
                 adminLink.classList.add('active');
             }
@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (mobileNav) {
             const adminLi = document.createElement('li');
             const adminLink = document.createElement('a');
-            adminLink.href = window.baseUrl + 'admin/dashboard'; 
-            adminLink.textContent = 'Admin Dashboard'; 
+            adminLink.href = window.baseUrl + 'admin/dashboard';
+            adminLink.textContent = 'Admin Dashboard';
             if (window.location.pathname.startsWith(window.baseUrl + 'admin/dashboard')) {
                 adminLink.classList.add('active');
             }

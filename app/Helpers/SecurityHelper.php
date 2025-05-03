@@ -1,11 +1,13 @@
 <?php
+
 namespace App\Helpers;
+
 class SecurityHelper
 {
     public static function sanitizeInput(?string $data): string
     {
         if ($data === null) {
-            return ''; 
+            return '';
         }
         $data = trim($data);
         $data = htmlspecialchars($data, ENT_QUOTES | ENT_HTML5, 'UTF-8');
@@ -14,7 +16,7 @@ class SecurityHelper
     public static function encodeOutput(?string $data): string
     {
         if ($data === null) {
-            return ''; 
+            return '';
         }
         return htmlentities($data, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
@@ -64,15 +66,15 @@ class SecurityHelper
         header('X-Frame-Options: DENY');
         header('X-Content-Type-Options: nosniff');
         header('X-XSS-Protection: 1; mode=block');
-        $csp = "default-src 'self'; "; 
+        $csp = "default-src 'self'; ";
         $csp .= "script-src 'self' https://cdnjs.cloudflare.com https://unpkg.com 'unsafe-inline'; ";
         $csp .= "style-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com 'unsafe-inline'; ";
         $csp .= "img-src 'self' data:; ";
         $csp .= "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; ";
-        $connectSrcBase = BASE_URL; 
+        $connectSrcBase = BASE_URL;
         $publicSuffix = '/public/';
         if (substr($connectSrcBase, -strlen($publicSuffix)) === $publicSuffix) {
-            $connectSrcBase = substr($connectSrcBase, 0, -strlen($publicSuffix)); 
+            $connectSrcBase = substr($connectSrcBase, 0, -strlen($publicSuffix));
         }
         $connectSrcBasePath = rtrim($connectSrcBase, '/') . '/';
         $csp .= "connect-src 'self' " . $connectSrcBasePath . "; ";
@@ -85,13 +87,13 @@ class SecurityHelper
     }
     public static function logSecurityEvent(string $eventType, string $message, array $context = []): void
     {
-        $logDirectory = defined('BASE_PATH') ? BASE_PATH . '/logs' : __DIR__ . '/../../logs'; 
+        $logDirectory = defined('BASE_PATH') ? BASE_PATH . '/logs' : __DIR__ . '/../../logs';
         $logFile = $logDirectory . '/security.log';
         if (!is_dir($logDirectory)) {
             @mkdir($logDirectory, 0755, true);
         }
         $timestamp = date('Y-m-d H:i:s');
-        $ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN'; 
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
         $log_message = "[{$timestamp}] [{$eventType}] [IP: {$ip}] {$message}";
         if (!empty($context)) {
             $log_message .= ' | Context: ' . json_encode($context, JSON_UNESCAPED_SLASHES);

@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Models;
+
 use PDO;
 use App\Core\Database;
 use App\Core\Registry;
+
 class Product
 {
     private $db;
@@ -37,13 +40,13 @@ class Product
             $stmtChild = $this->db->prepare("SELECT category_id FROM categories WHERE parent_id = :parent_id");
             $stmtChild->bindParam(':parent_id', $categoryId, PDO::PARAM_INT);
             $stmtChild->execute();
-            $childCategoryIds = $stmtChild->fetchAll(PDO::FETCH_COLUMN, 0); 
+            $childCategoryIds = $stmtChild->fetchAll(PDO::FETCH_COLUMN, 0);
             $logger->info('Fetched child category IDs.', ['parent_id' => $categoryId, 'child_ids' => $childCategoryIds]);
         } catch (\PDOException $e) {
             $logger->error('Failed to fetch child categories.', ['error' => $e->getMessage(), 'categoryId' => $categoryId]);
         }
         $allCategoryIds = array_merge([$categoryId], $childCategoryIds);
-        $allCategoryIds = array_unique(array_map('intval', $allCategoryIds)); 
+        $allCategoryIds = array_unique(array_map('intval', $allCategoryIds));
         $logger->info('Combined category IDs for query.', ['allCategoryIds' => $allCategoryIds]);
         if (empty($allCategoryIds)) {
             $logger->warning('No valid category IDs found after combining parent and children.', ['original_categoryId' => $categoryId]);
@@ -57,7 +60,7 @@ class Product
                 ORDER BY p.name ASC";
         $logger->info('Preparing SQL query for findByCategory.', ['sql' => $sql]);
         $stmt = $this->db->prepare($sql);
-        $paramIndex = 1; 
+        $paramIndex = 1;
         foreach ($allCategoryIds as $id) {
             $stmt->bindValue($paramIndex++, $id, PDO::PARAM_INT);
         }
@@ -69,7 +72,7 @@ class Product
             return $results;
         } catch (\PDOException $e) {
             $logger->error('Database error during findByCategory execution.', ['error' => $e->getMessage(), 'sql' => $sql, 'params' => $allCategoryIds]);
-            return []; 
+            return [];
         }
     }
     public function getFeaturedProducts(): array
@@ -77,7 +80,7 @@ class Product
         $sql = "SELECT p.product_id, p.name, p.price, p.image_path, c.category_name as category_name FROM products p
                 LEFT JOIN categories c ON p.category_id = c.category_id
                 ORDER BY RAND()
-                LIMIT 2"; 
+                LIMIT 2";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -90,7 +93,7 @@ class Product
     public function findMultipleByIds(array $ids): array
     {
         if (empty($ids)) {
-            return []; 
+            return [];
         }
         $ids = array_map('intval', $ids);
         $placeholders = implode(',', array_fill(0, count($ids), '?'));
@@ -101,7 +104,7 @@ class Product
             return $stmt->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_UNIQUE);
         } catch (\PDOException $e) {
             Registry::get('logger')->error("Error fetching multiple products by ID", ['exception' => $e, 'ids' => $ids]);
-            return []; 
+            return [];
         }
     }
     public function checkStock(int $id)
@@ -118,12 +121,12 @@ class Product
         $sql = "SELECT p.*, c.category_name
                 FROM products p
                 LEFT JOIN categories c ON p.category_id = c.category_id";
-        $countSql = "SELECT COUNT(*) as total FROM products p"; 
+        $countSql = "SELECT COUNT(*) as total FROM products p";
         $whereConditions = [];
-        $params = []; 
-        $countParams = []; 
+        $params = [];
+        $countParams = [];
         if (!empty($filters['category_id'])) {
-            $whereConditions[] = "p.category_id = ?"; 
+            $whereConditions[] = "p.category_id = ?";
             $params[] = $filters['category_id'];
             $countParams[] = $filters['category_id'];
         }
@@ -138,15 +141,15 @@ class Product
             $countSql .= $whereClause;
         }
         $sql .= " ORDER BY p.name ASC LIMIT ? OFFSET ?";
-        $params[] = $perPage; 
+        $params[] = $perPage;
         $params[] = $offset;
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->execute($params);
             $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $countStmt = $this->db->prepare($countSql);
-            $countStmt->execute($countParams); 
-            $totalCount = (int) $countStmt->fetch(PDO::FETCH_ASSOC)['total']; 
+            $countStmt->execute($countParams);
+            $totalCount = (int) $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
             $totalPages = $totalCount > 0 ? ceil($totalCount / $perPage) : 0;
             $pagination = [
                 'current_page' => $page,
@@ -184,7 +187,7 @@ class Product
     {
         try {
             $sql = "INSERT INTO products (name, description, price, category_id, image_path, stock_quantity, is_active)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)"; 
+                    VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->db->prepare($sql);
             $stmt->execute([
                 $data['name'] ?? null,
@@ -193,9 +196,9 @@ class Product
                 $data['category_id'] ?? null,
                 $data['image_path'] ?? null,
                 $data['stock_quantity'] ?? 0,
-                $data['is_active'] ?? 1 
+                $data['is_active'] ?? 1
             ]);
-            return (int) $this->db->lastInsertId(); 
+            return (int) $this->db->lastInsertId();
         } catch (\PDOException $e) {
             Registry::get('logger')->error("Error creating product", ['exception' => $e, 'data' => $data]);
             return false;
@@ -207,7 +210,7 @@ class Product
             $sql = "UPDATE products
                     SET name = ?, description = ?, price = ?, category_id = ?,
                         image_path = ?, stock_quantity = ?, is_active = ?
-                    WHERE product_id = ?"; 
+                    WHERE product_id = ?";
             $stmt = $this->db->prepare($sql);
             $result = $stmt->execute([
                 $data['name'] ?? null,
@@ -217,7 +220,7 @@ class Product
                 $data['image_path'] ?? null,
                 $data['stock_quantity'] ?? 0,
                 $data['is_active'] ?? 1,
-                $id 
+                $id
             ]);
             return $result && $stmt->rowCount() > 0;
         } catch (\PDOException $e) {
@@ -246,7 +249,7 @@ class Product
             return (int) $stmt->fetchColumn();
         } catch (\PDOException $e) {
             Registry::get('logger')->error("Error counting low stock products", ['exception' => $e, 'threshold' => $threshold]);
-            return 0; 
+            return 0;
         }
     }
     public function getTotalProductCount(): int
@@ -256,7 +259,7 @@ class Product
             return (int) $stmt->fetchColumn();
         } catch (\PDOException $e) {
             Registry::get('logger')->error("Error counting total products", ['exception' => $e]);
-            return 0; 
+            return 0;
         }
     }
 }

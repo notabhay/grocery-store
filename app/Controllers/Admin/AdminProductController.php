@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Controllers\Admin;
+
 use App\Core\BaseController;
 use App\Core\Database;
 use App\Core\Session;
@@ -7,8 +9,9 @@ use App\Core\Request;
 use App\Core\Redirect;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\User as UserModel; 
+use App\Models\User as UserModel;
 use App\Helpers\SecurityHelper;
+
 class AdminProductController extends BaseController
 {
     private $db;
@@ -21,13 +24,13 @@ class AdminProductController extends BaseController
         $this->db = $db;
         $this->session = $session;
         $this->request = $request;
-        $this->productModel = new Product($db->getConnection()); 
+        $this->productModel = new Product($db->getConnection());
         $this->categoryModel = new Category($db->getConnection());
     }
     public function index(): void
     {
         $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-        $perPage = 15; 
+        $perPage = 15;
         $filters = [];
         if (isset($_GET['category_id']) && !empty($_GET['category_id'])) {
             $filters['category_id'] = (int) $_GET['category_id'];
@@ -38,16 +41,16 @@ class AdminProductController extends BaseController
         $result = $this->productModel->getAllProductsPaginated($page, $perPage, $filters);
         $categories = $this->categoryModel->getAll();
         $userId = $this->session->getUserId();
-        $adminUserModel = new UserModel($this->db); 
+        $adminUserModel = new UserModel($this->db);
         $adminUser = $adminUserModel->findById($userId);
         $data = [
             'page_title' => 'Manage Products',
             'admin_user' => $adminUser,
-            'products' => $result['products'] ?? [], 
-            'pagination' => $result['pagination'] ?? [], 
-            'filters' => $filters, 
-            'categories' => $categories, 
-            'csrf_token' => $this->session->generateCsrfToken() 
+            'products' => $result['products'] ?? [],
+            'pagination' => $result['pagination'] ?? [],
+            'filters' => $filters,
+            'categories' => $categories,
+            'csrf_token' => $this->session->generateCsrfToken()
         ];
         $this->viewWithAdminLayout('admin/products/index', $data);
     }
@@ -55,13 +58,13 @@ class AdminProductController extends BaseController
     {
         $categories = $this->categoryModel->getAll();
         $userId = $this->session->getUserId();
-        $adminUserModel = new UserModel($this->db); 
+        $adminUserModel = new UserModel($this->db);
         $adminUser = $adminUserModel->findById($userId);
         $data = [
             'page_title' => 'Add New Product',
             'admin_user' => $adminUser,
-            'categories' => $categories, 
-            'csrf_token' => $this->session->generateCsrfToken() 
+            'categories' => $categories,
+            'csrf_token' => $this->session->generateCsrfToken()
         ];
         $this->viewWithAdminLayout('admin/products/create', $data);
     }
@@ -74,14 +77,14 @@ class AdminProductController extends BaseController
         }
         $name = trim($this->request->post('name'));
         $description = trim($this->request->post('description'));
-        $price = $this->request->post('price'); 
+        $price = $this->request->post('price');
         $categoryId = (int) $this->request->post('category_id');
         $stockQuantity = (int) $this->request->post('stock_quantity');
-        $isActive = $this->request->post('is_active') ? 1 : 0; 
+        $isActive = $this->request->post('is_active') ? 1 : 0;
         $errors = [];
         if (empty($name)) {
             $errors[] = 'Product name is required.';
-        } elseif (strlen($name) > 100) { 
+        } elseif (strlen($name) > 100) {
             $errors[] = 'Product name must be less than 100 characters.';
         }
         if (empty($description)) {
@@ -90,7 +93,7 @@ class AdminProductController extends BaseController
         if (empty($price) || !is_numeric($price) || $price <= 0) {
             $errors[] = 'Valid positive product price is required.';
         }
-        if (empty($categoryId) || $categoryId <= 0 || !$this->categoryModel->findById($categoryId)) { 
+        if (empty($categoryId) || $categoryId <= 0 || !$this->categoryModel->findById($categoryId)) {
             $errors[] = 'Valid category is required.';
         }
         if ($stockQuantity < 0) {
@@ -100,9 +103,9 @@ class AdminProductController extends BaseController
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $uploadResult = $this->handleImageUpload($_FILES['image']);
             if ($uploadResult['success']) {
-                $imagePath = $uploadResult['path']; 
+                $imagePath = $uploadResult['path'];
             } else {
-                $errors[] = $uploadResult['error']; 
+                $errors[] = $uploadResult['error'];
             }
         } else {
             $uploadError = $_FILES['image']['error'] ?? UPLOAD_ERR_NO_FILE;
@@ -122,7 +125,7 @@ class AdminProductController extends BaseController
             'description' => $description,
             'price' => $price,
             'category_id' => $categoryId,
-            'image_path' => $imagePath, 
+            'image_path' => $imagePath,
             'stock_quantity' => $stockQuantity,
             'is_active' => $isActive
         ];
@@ -148,14 +151,14 @@ class AdminProductController extends BaseController
         }
         $categories = $this->categoryModel->getAll();
         $userId = $this->session->getUserId();
-        $adminUserModel = new UserModel($this->db); 
+        $adminUserModel = new UserModel($this->db);
         $adminUser = $adminUserModel->findById($userId);
         $data = [
             'page_title' => 'Edit Product',
             'admin_user' => $adminUser,
-            'product' => $product, 
-            'categories' => $categories, 
-            'csrf_token' => $this->session->generateCsrfToken() 
+            'product' => $product,
+            'categories' => $categories,
+            'csrf_token' => $this->session->generateCsrfToken()
         ];
         $this->viewWithAdminLayout('admin/products/edit', $data);
     }
@@ -185,16 +188,16 @@ class AdminProductController extends BaseController
         if (empty($price) || !is_numeric($price) || $price <= 0) $errors[] = 'Valid positive product price is required.';
         if (empty($categoryId) || $categoryId <= 0 || !$this->categoryModel->findById($categoryId)) $errors[] = 'Valid category is required.';
         if ($stockQuantity < 0) $errors[] = 'Stock quantity cannot be negative.';
-        $imagePath = $product['image_path']; 
-        $oldImagePath = $product['image_path']; 
+        $imagePath = $product['image_path'];
+        $oldImagePath = $product['image_path'];
         $newImageUploaded = false;
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $uploadResult = $this->handleImageUpload($_FILES['image']);
             if ($uploadResult['success']) {
-                $imagePath = $uploadResult['path']; 
+                $imagePath = $uploadResult['path'];
                 $newImageUploaded = true;
             } else {
-                $errors[] = $uploadResult['error']; 
+                $errors[] = $uploadResult['error'];
             }
         } elseif (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
             $errors[] = 'Error uploading new image. Code: ' . $_FILES['image']['error'];
@@ -209,7 +212,7 @@ class AdminProductController extends BaseController
             'description' => $description,
             'price' => $price,
             'category_id' => $categoryId,
-            'image_path' => $imagePath, 
+            'image_path' => $imagePath,
             'stock_quantity' => $stockQuantity,
             'is_active' => $isActive
         ];
@@ -259,7 +262,7 @@ class AdminProductController extends BaseController
     private function handleImageUpload(array $file): array
     {
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        $maxSize = 5 * 1024 * 1024; 
+        $maxSize = 5 * 1024 * 1024;
         if (!in_array($file['type'], $allowedTypes)) {
             return [
                 'success' => false,
@@ -286,7 +289,7 @@ class AdminProductController extends BaseController
         $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         $uniqueFilename = SecurityHelper::generateRandomString(16) . '_' . time() . '.' . $fileExtension;
         $uploadPathAbsolute = $uploadDirAbsolute . $uniqueFilename;
-        $uploadPathRelative = $uploadDirRelative . $uniqueFilename; 
+        $uploadPathRelative = $uploadDirRelative . $uniqueFilename;
         if (move_uploaded_file($file['tmp_name'], $uploadPathAbsolute)) {
             return [
                 'success' => true,
@@ -307,12 +310,12 @@ class AdminProductController extends BaseController
         if (!file_exists($viewPath)) {
             trigger_error("View file not found: {$viewPath}", E_USER_WARNING);
             echo "Error: View file '{$view}' not found.";
-            exit; 
+            exit;
         }
         if (!file_exists($layoutPath)) {
             trigger_error("Layout file not found: {$layoutPath}", E_USER_WARNING);
             echo "Error: Admin layout file not found.";
-            exit; 
+            exit;
         }
         try {
             $request = \App\Core\Registry::get('request');
@@ -328,7 +331,7 @@ class AdminProductController extends BaseController
             include $viewPath;
         } catch (\Throwable $e) {
             ob_end_clean();
-            error_log("Error rendering view '{$view}': " . $e->getMessage()); 
+            error_log("Error rendering view '{$view}': " . $e->getMessage());
             echo "Error rendering view '{$view}'. Please check the logs.";
             exit;
         }

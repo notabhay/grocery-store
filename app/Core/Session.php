@@ -1,23 +1,26 @@
 <?php
+
 namespace App\Core;
-use App\Core\Registry; 
+
+use App\Core\Registry;
+
 class Session
 {
     private $config = [
-        'cookie_lifetime' => 0, 
-        'cookie_path' => '/', 
-        'cookie_domain' => '', 
-        'cookie_secure' => false, 
-        'cookie_httponly' => true, 
-        'cookie_samesite' => 'Lax', 
-        'session_timeout' => 1800, 
-        'regenerate_interval' => 300, 
-        'check_ip_address' => true, 
-        'csrf_token_key' => '_csrf_token', 
-        'flash_message_key' => '_flash', 
-        'user_id_key' => 'user_id', 
-        'login_time_key' => 'login_time', 
-        'user_ip_key' => 'user_ip', 
+        'cookie_lifetime' => 0,
+        'cookie_path' => '/',
+        'cookie_domain' => '',
+        'cookie_secure' => false,
+        'cookie_httponly' => true,
+        'cookie_samesite' => 'Lax',
+        'session_timeout' => 1800,
+        'regenerate_interval' => 300,
+        'check_ip_address' => true,
+        'csrf_token_key' => '_csrf_token',
+        'flash_message_key' => '_flash',
+        'user_id_key' => 'user_id',
+        'login_time_key' => 'login_time',
+        'user_ip_key' => 'user_ip',
     ];
     public function __construct(array $config = [])
     {
@@ -80,9 +83,9 @@ class Session
             if (ini_get("session.use_cookies")) {
                 $params = session_get_cookie_params();
                 setcookie(
-                    session_name(), 
-                    '', 
-                    time() - 42000, 
+                    session_name(),
+                    '',
+                    time() - 42000,
                     $params["path"],
                     $params["domain"],
                     $params["secure"],
@@ -158,7 +161,7 @@ class Session
     {
         $flashData = $_SESSION[$this->config['flash_message_key']] ?? [];
         $this->destroy();
-        $this->start(); 
+        $this->start();
         if (!empty($flashData)) {
             $_SESSION[$this->config['flash_message_key']] = $flashData;
         }
@@ -168,7 +171,7 @@ class Session
     {
         return $this->has($this->config['user_id_key']);
     }
-    public function getUserId() 
+    public function getUserId()
     {
         return $this->get($this->config['user_id_key']);
     }
@@ -177,7 +180,7 @@ class Session
         if (session_status() === PHP_SESSION_NONE) {
             @session_start();
         }
-        return isset($_SESSION['user_id']); 
+        return isset($_SESSION['user_id']);
     }
     public static function getStatic(string $key, $default = null)
     {
@@ -196,13 +199,13 @@ class Session
     public function validateActivity(): bool
     {
         if (!$this->isAuthenticated()) {
-            return true; 
+            return true;
         }
         $loginTime = $this->get($this->config['login_time_key']);
         if ($loginTime && (time() - $loginTime > $this->config['session_timeout'])) {
             $this->flash('error', 'Your session has expired due to inactivity. Please login again.');
-            $this->logoutUser(); 
-            return false; 
+            $this->logoutUser();
+            return false;
         }
         if ($this->config['check_ip_address']) {
             $storedIp = $this->get($this->config['user_ip_key']);
@@ -216,28 +219,28 @@ class Session
                     ]);
                 }
                 $this->flash('error', 'Your session is invalid due to a security check. Please login again.');
-                $this->logoutUser(); 
-                return false; 
+                $this->logoutUser();
+                return false;
             }
             if (!$storedIp && $currentIp !== 'unknown') {
                 $this->set($this->config['user_ip_key'], $currentIp);
             }
         }
-        $lastRegenerate = $this->get('_last_regenerate', 0); 
+        $lastRegenerate = $this->get('_last_regenerate', 0);
         if (time() - $lastRegenerate > $this->config['regenerate_interval']) {
             $this->regenerate(false);
         }
         $this->set($this->config['login_time_key'], time());
-        return true; 
+        return true;
     }
     public function requireLogin(string $redirectUrl = '/login'): void
     {
         if (!$this->isAuthenticated()) {
             $this->flash('error', 'Please login to access this page.');
-            \App\Core\Redirect::to($redirectUrl); 
+            \App\Core\Redirect::to($redirectUrl);
         }
         if (!$this->validateActivity()) {
-            \App\Core\Redirect::to($redirectUrl); 
+            \App\Core\Redirect::to($redirectUrl);
         }
     }
 }

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Controllers\Api;
+
 use App\Core\BaseController;
 use App\Core\Request;
 use App\Core\Session;
@@ -8,6 +10,7 @@ use App\Core\Registry;
 use App\Helpers\CartHelper;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+
 class CartApiController extends BaseController
 {
     private $cartHelper;
@@ -20,7 +23,7 @@ class CartApiController extends BaseController
         $this->db = Registry::get('database');
         $this->cartHelper = new CartHelper($this->session, Registry::get('database'));
         $this->logger = new Logger('cart_api');
-        $logFilePath = BASE_PATH . '/logs/app.log'; 
+        $logFilePath = BASE_PATH . '/logs/app.log';
         $logDir = dirname($logFilePath);
         if (!is_dir($logDir)) {
             mkdir($logDir, 0777, true);
@@ -56,8 +59,8 @@ class CartApiController extends BaseController
             'total_items' => $result['total_items'],
             'added_product_id' => $productId,
             'added_quantity' => $quantity,
-            'product_name' => $result['updated_product']['name'] ?? 'N/A' 
-        ], 200); 
+            'product_name' => $result['updated_product']['name'] ?? 'N/A'
+        ], 200);
     }
     public function update()
     {
@@ -78,7 +81,7 @@ class CartApiController extends BaseController
         $newQuantity = (int) $requestData['quantity'];
         $cart = $this->session->get('cart', []);
         $currentQuantity = isset($cart[$productId]) ? $cart[$productId] : 0;
-        $quantityChange = $newQuantity - $currentQuantity; 
+        $quantityChange = $newQuantity - $currentQuantity;
         if ($newQuantity <= 0) {
             $result = $this->cartHelper->removeCartItem($productId);
         } else {
@@ -91,12 +94,12 @@ class CartApiController extends BaseController
         }
         $this->jsonResponse([
             'success' => true,
-            'message' => $result['message'] ?? 'Cart updated successfully.', 
+            'message' => $result['message'] ?? 'Cart updated successfully.',
             'cart' => $result['cart'],
             'total_items' => $result['total_items'],
             'total_price' => $result['total_price'],
             'is_empty' => $result['is_empty'],
-            'updated_product' => $result['updated_product'] ?? null 
+            'updated_product' => $result['updated_product'] ?? null
         ], 200);
     }
     public function getCart()
@@ -112,7 +115,7 @@ class CartApiController extends BaseController
         $cartData = $this->cartHelper->getCartData();
         $this->jsonResponse([
             'success' => true,
-            'cart' => $cartData['cart_items'], 
+            'cart' => $cartData['cart_items'],
             'total_items' => $cartData['total_items'],
             'total_price' => $cartData['total_price'],
             'is_empty' => $cartData['is_empty']
@@ -196,9 +199,9 @@ class CartApiController extends BaseController
         $this->jsonResponse([
             'success' => true,
             'message' => 'Cart cleared.',
-            'total_items' => $result['total_items'], 
-            'total_price' => $result['total_price'], 
-            'is_empty' => $result['is_empty']      
+            'total_items' => $result['total_items'],
+            'total_price' => $result['total_price'],
+            'is_empty' => $result['is_empty']
         ], 200);
     }
     public function getCartCount()
@@ -213,7 +216,7 @@ class CartApiController extends BaseController
             return;
         }
         $cartData = $this->cartHelper->getCartData();
-        $count = $cartData['total_items'] ?? 0; 
+        $count = $cartData['total_items'] ?? 0;
         $this->logger->info(date('[Y-m-d H:i:s] ') . "CartApiController::getCartCount - Returning count: " . $count);
         $this->jsonResponse([
             'count' => $count
