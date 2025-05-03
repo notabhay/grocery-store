@@ -27,7 +27,7 @@ $logged_in = isset($_SESSION['user_id']); // Simplified boolean check
 
         <!-- Logo Section -->
         <div class="logo">
-            <a href="<?= BASE_URL ?>/">
+            <a href="<?= BASE_URL ?>">
                 <!-- Link to homepage -->
                 <img src="<?= BASE_URL ?>assets/images/Logo.png" alt="GhibliGroceries Logo" class="logo-image">
                 <span class="logo-text">GhibliGroceries</span>
@@ -38,16 +38,16 @@ $logged_in = isset($_SESSION['user_id']); // Simplified boolean check
         <nav>
             <ul>
                 <!-- Navigation items - 'active' class is added based on $currentPath -->
-                <li><a href="<?= BASE_URL ?>/"
+                <li><a href="<?= BASE_URL ?>"
                         class="<?php echo (isset($currentPath) && $currentPath === '/') ? 'active' : ''; ?>">Home</a>
                 </li>
-                <li><a href="<?= BASE_URL ?>/categories"
+                <li><a href="<?= BASE_URL ?>categories"
                         class="<?php echo (isset($currentPath) && $currentPath === '/categories') ? 'active' : ''; ?>">Categories</a>
                 </li>
-                <li><a href="<?= BASE_URL ?>/about"
+                <li><a href="<?= BASE_URL ?>about"
                         class="<?php echo (isset($currentPath) && $currentPath === '/about') ? 'active' : ''; ?>">About</a>
                 </li>
-                <li><a href="<?= BASE_URL ?>/contact"
+                <li><a href="<?= BASE_URL ?>contact"
                         class="<?php echo (isset($currentPath) && $currentPath === '/contact') ? 'active' : ''; ?>">Contact</a>
                 </li>
             </ul>
@@ -83,7 +83,7 @@ $logged_in = isset($_SESSION['user_id']); // Simplified boolean check
 
             // Display Admin Panel link if the user is an admin
             if ($isAdmin) {
-                echo '<a href="' . BASE_URL . '/admin/dashboard" class="sign-in-btn">Admin Panel</a>';
+                echo '<a href="' . BASE_URL . 'admin/dashboard" class="sign-in-btn">Admin Panel</a>';
             }
             ?>
 
@@ -111,12 +111,12 @@ $logged_in = isset($_SESSION['user_id']); // Simplified boolean check
             // Display different actions based on login status
             if ($logged_in): ?>
                 <!-- Actions for logged-in users -->
-                <a href="<?= BASE_URL ?>/my-orders" class="sign-in-btn">My Orders</a>
-                <a href="<?= BASE_URL ?>/logout" class="sign-up-btn">Logout</a>
+                <a href="<?= BASE_URL ?>my-orders" class="sign-in-btn">My Orders</a>
+                <a href="<?= BASE_URL ?>logout" class="sign-up-btn">Logout</a>
             <?php else: ?>
                 <!-- Actions for logged-out users -->
-                <a href="<?= BASE_URL ?>/login" class="sign-in-btn">Sign In</a>
-                <a href="<?= BASE_URL ?>/register" class="sign-up-btn">Sign Up</a>
+                <a href="<?= BASE_URL ?>login" class="sign-in-btn">Sign In</a>
+                <a href="<?= BASE_URL ?>register" class="sign-up-btn">Sign Up</a>
             <?php endif; ?>
         </div> <!-- End header-actions -->
 
@@ -136,15 +136,15 @@ $logged_in = isset($_SESSION['user_id']); // Simplified boolean check
     <nav>
         <ul>
             <!-- Mobile navigation items - mirrors desktop but styled for mobile -->
-            <li><a href="<?= BASE_URL ?>/"
+            <li><a href="<?= BASE_URL ?>"
                     class="<?php echo (isset($currentPath) && $currentPath === '/') ? 'active' : ''; ?>">Home</a></li>
-            <li><a href="<?= BASE_URL ?>/categories"
+            <li><a href="<?= BASE_URL ?>categories"
                     class="<?php echo (isset($currentPath) && $currentPath === '/categories') ? 'active' : ''; ?>">Categories</a>
             </li>
-            <li><a href="<?= BASE_URL ?>/about"
+            <li><a href="<?= BASE_URL ?>about"
                     class="<?php echo (isset($currentPath) && $currentPath === '/about') ? 'active' : ''; ?>">About</a>
             </li>
-            <li><a href="<?= BASE_URL ?>/contact"
+            <li><a href="<?= BASE_URL ?>contact"
                     class="<?php echo (isset($currentPath) && $currentPath === '/contact') ? 'active' : ''; ?>">Contact</a>
             </li>
 
@@ -153,7 +153,7 @@ $logged_in = isset($_SESSION['user_id']); // Simplified boolean check
             if ($logged_in): ?>
                 <!-- Mobile Cart Link -->
                 <li>
-                    <a href="<?= BASE_URL ?>/cart" class="mobile-cart-button">
+                    <a href="<?= BASE_URL ?>cart" class="mobile-cart-button">
                         <?php // Display filled/empty cart icon
                         if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0): ?>
                             <img src="<?= BASE_URL ?>assets/images/cart/filled_shopping_cart.png" alt="Shopping Cart"
@@ -167,12 +167,12 @@ $logged_in = isset($_SESSION['user_id']); // Simplified boolean check
                     </a>
                 </li>
                 <!-- Other logged-in links -->
-                <li><a href="<?= BASE_URL ?>/my-orders" class="sign-in-btn">My Orders</a></li>
-                <li><a href="<?= BASE_URL ?>/logout">Logout</a></li>
+                <li><a href="<?= BASE_URL ?>my-orders" class="sign-in-btn">My Orders</a></li>
+                <li><a href="<?= BASE_URL ?>logout">Logout</a></li>
             <?php else: ?>
                 <!-- Logged-out links -->
-                <li><a href="<?= BASE_URL ?>/login">Sign In</a></li>
-                <li><a href="<?= BASE_URL ?>/register">Sign Up</a></li>
+                <li><a href="<?= BASE_URL ?>login">Sign In</a></li>
+                <li><a href="<?= BASE_URL ?>register">Sign Up</a></li>
             <?php endif; ?>
         </ul>
     </nav>

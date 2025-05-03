@@ -14,9 +14,23 @@
 define('BASE_PATH', dirname(__DIR__));
 
 // --- Define Base URL ---
-// Hardcoded Base URL for the university server environment.
-// Ensure this path ends with a slash '/'.
-define('BASE_URL', 'https://teach.scam.keele.ac.uk/prin/y1d13/advanced-web-technologies/grocery-store/');
+// Determine Scheme (http/https)
+$scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
+
+// Determine Host (including port if non-standard)
+$host = $_SERVER['HTTP_HOST']; // e.g., localhost:8888 or teach.scam.keele.ac.uk
+
+// Determine Base Path relative to document root
+$script_dir = dirname($_SERVER['SCRIPT_NAME']);
+// Normalize directory separator and ensure trailing slash
+$base_path_url = rtrim(str_replace('\\', '/', $script_dir), '/') . '/';
+// Handle root directory case where script_dir might be '/' or '\'
+if ($base_path_url === '//') {
+    $base_path_url = '/';
+}
+
+// Combine to form the Base URL
+define('BASE_URL', $scheme . '://' . $host . $base_path_url);
 // --- End Base URL Definition ---
 
 // Include the Composer autoloader.

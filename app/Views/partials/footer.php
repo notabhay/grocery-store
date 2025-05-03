@@ -40,19 +40,19 @@ $logged_in = isset($_SESSION['user_id']); // Simplified boolean check
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="<?= BASE_URL ?>/">Home</a></li>
-                    <li><a href="<?= BASE_URL ?>/categories">Categories</a></li>
-                    <li><a href="<?= BASE_URL ?>/about">About</a></li>
-                    <li><a href="<?= BASE_URL ?>/contact">Contact</a></li>
+                    <li><a href="<?= BASE_URL ?>">Home</a></li>
+                    <li><a href="<?= BASE_URL ?>categories">Categories</a></li>
+                    <li><a href="<?= BASE_URL ?>about">About</a></li>
+                    <li><a href="<?= BASE_URL ?>contact">Contact</a></li>
                     <?php
                     // Conditionally display links based on user login status
                     if ($logged_in): ?>
                         <!-- Links for logged-in users -->
-                        <li><a href="<?= BASE_URL ?>/my-orders">My Orders</a></li>
+                        <li><a href="<?= BASE_URL ?>my-orders">My Orders</a></li>
                     <?php else: ?>
                         <!-- Links for logged-out users -->
-                        <li><a href="<?= BASE_URL ?>/register">Register</a></li>
-                        <li><a href="<?= BASE_URL ?>/login">Login</a></li>
+                        <li><a href="<?= BASE_URL ?>register">Register</a></li>
+                        <li><a href="<?= BASE_URL ?>login">Login</a></li>
                     <?php endif; ?>
                 </ul>
             </div>
