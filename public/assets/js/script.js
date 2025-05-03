@@ -1056,6 +1056,9 @@ document.addEventListener('DOMContentLoaded', function () {
             return 0;
         }
         try {
+            // Log the exact URL being requested
+            console.log('Attempting to fetch cart count from URL:', `${window.baseUrl}api/cart/count`);
+
             // Fetch count from API
             const response = await fetch(`${window.baseUrl}api/cart/count`, {
                 method: 'GET',
@@ -1085,8 +1088,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error("Expected JSON response for cart count, got non-JSON: " + text);
             }
         } catch (error) {
-            // Handle fetch errors
-            console.error('Error fetching cart count:', error);
+            // Handle fetch errors - log the full error object for more details
+            console.error('Error fetching cart count:', error); // Log the full error object
+            // Keep the existing error message log as well if desired, or combine them.
+            console.error(`Error message: ${error.message}. Status: ${error.response ? error.response.status : 'N/A'}`);
             return 0; // Return 0 on error
         }
     }

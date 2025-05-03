@@ -635,6 +635,9 @@ class CartApiController extends BaseController
      */
     public function getCartCount()
     {
+        // Log entry to the method
+        $this->logger->info(date('[Y-m-d H:i:s] ') . "CartApiController::getCartCount - Entered method.");
+
         // Ensure GET request
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             $this->jsonResponse(['error' => 'Invalid request method. Only GET is allowed.'], 405);
@@ -652,9 +655,15 @@ class CartApiController extends BaseController
         // Retrieve cart data using the helper
         $cartData = $this->cartHelper->getCartData();
 
+        // Get the count value
+        $count = $cartData['total_items'] ?? 0; // Default to 0 if cart is empty/not set
+
+        // Log the count being returned
+        $this->logger->info(date('[Y-m-d H:i:s] ') . "CartApiController::getCartCount - Returning count: " . $count);
+
         // Respond with just the count
         $this->jsonResponse([
-            'count' => $cartData['total_items'] ?? 0 // Default to 0 if cart is empty/not set
+            'count' => $count
         ], 200);
     }
 
