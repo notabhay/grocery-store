@@ -134,7 +134,7 @@ class ProductController extends BaseController
             'page_title' => 'Browse Products',
             'meta_description' => 'Browse our wide selection of fresh groceries by category.',
             'meta_keywords' => 'products, categories, grocery, online shopping',
-            'additional_css_files' => ['/public/assets/css/categories.css'], // Specific CSS
+            'additional_css_files' => ['assets/css/categories.css'], // Specific CSS
             'logged_in' => $logged_in // Pass login status
         ]);
     }

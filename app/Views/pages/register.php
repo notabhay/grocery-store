@@ -31,7 +31,7 @@ $page_title = $page_title ?? 'Register - GhibliGroceries';
 $meta_description = $meta_description ?? 'Create an account with GhibliGroceries to start ordering fresh groceries online.';
 $meta_keywords = $meta_keywords ?? 'register, grocery, create account, sign up';
 // Define specific CSS for this page
-$additional_css_files = $additional_css_files ?? ['/public/assets/css/register.css'];
+$additional_css_files = $additional_css_files ?? ['assets/css/register.css'];
 
 // Initialize variables related to form state and data
 $csrf_token = $csrf_token ?? ''; // CSRF token from controller

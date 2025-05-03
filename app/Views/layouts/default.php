@@ -48,7 +48,7 @@ use App\Core\Registry;
     // Conditionally include additional CSS files if specified by the controller
     if (!empty($additional_css_files) && is_array($additional_css_files)):
         foreach ($additional_css_files as $css_file): ?>
-            <link rel="stylesheet" href="<?php echo htmlspecialchars($css_file); ?>">
+            <link rel="stylesheet" href="<?= BASE_URL ?><?php echo htmlspecialchars($css_file); ?>">
     <?php endforeach;
     endif;
     ?>

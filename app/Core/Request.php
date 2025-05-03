@@ -129,6 +129,26 @@ class Request
 
         // Trim leading/trailing slashes from the final relative path.
         // Return an empty string for the root ('/') or if the path is null/empty.
+
+        // Log the URI components for debugging
+        if (defined('BASE_PATH')) { // Ensure BASE_PATH is defined before using it
+            error_log(
+                "Request URI: " . ($this->server['REQUEST_URI'] ?? 'N/A') .
+                    " | BASE_URL: " . $baseUrlPath .
+                    " | Relative Path: " . ($relativePath ?: 'N/A') . "\n",
+                3,
+                BASE_PATH . '/logs/app.log'
+            );
+        } else {
+            // Fallback if BASE_PATH is not defined (e.g., log to default PHP error log)
+            error_log(
+                "Request URI: " . ($this->server['REQUEST_URI'] ?? 'N/A') .
+                    " | BASE_URL: " . $baseUrlPath .
+                    " | Relative Path: " . ($relativePath ?: 'N/A') .
+                    " | WARNING: BASE_PATH not defined, logging to default log."
+            );
+        }
+
         return trim($relativePath ?: '', '/');
     }
 

@@ -115,7 +115,7 @@ class UserController extends BaseController
             'page_title' => 'Login - GhibliGroceries',
             'meta_description' => 'Login to GhibliGroceries - Access your account to place orders.',
             'meta_keywords' => 'login, grocery, online shopping, account access',
-            'additional_css_files' => ['/public/assets/css/login.css'], // Specific CSS
+            'additional_css_files' => ['assets/css/login.css'], // Specific CSS
             'email' => $email ?? '', // Email input value (for repopulation)
             'login_error' => $login_error ?? '', // Login error message
             'captcha_error' => $captcha_error ?? '', // CAPTCHA error message
@@ -238,7 +238,7 @@ class UserController extends BaseController
             'page_title' => 'Register - GhibliGroceries',
             'meta_description' => 'Create an account with GhibliGroceries to start ordering fresh groceries online.',
             'meta_keywords' => 'register, grocery, create account, sign up',
-            'additional_css_files' => ['/public/assets/css/register.css'], // Specific CSS
+            'additional_css_files' => ['assets/css/register.css'], // Specific CSS
             'csrf_token' => $this->session->getCsrfToken(), // CSRF token for form
             'registration_error' => $registration_error ?? '', // Registration error message(s)
             'registration_success' => $registration_success ?? false, // Success flag (optional)
