@@ -147,7 +147,6 @@ CREATE TABLE IF NOT EXISTS order_history (
         INDEX idx_change_date (change_date) 
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 DELIMITER 
-CREATE TRIGGER password_history_trigger
 AFTER UPDATE ON users
 FOR EACH ROW
 BEGIN
@@ -158,9 +157,7 @@ VALUES
     (NEW.user_id, NEW.password);
 END IF;
 END 
-DELIMITER ;
 DELIMITER 
-CREATE TRIGGER order_status_change_trigger
 AFTER UPDATE ON orders
 FOR EACH ROW
 BEGIN
@@ -181,9 +178,7 @@ VALUES
     );
 END IF;
 END 
-DELIMITER ;
 DELIMITER 
-CREATE TRIGGER inventory_order_trigger
 AFTER INSERT ON order_items
 FOR EACH ROW
 BEGIN
@@ -234,9 +229,7 @@ VALUES
         )
     );
 END 
-DELIMITER ;
 DELIMITER 
-CREATE PROCEDURE record_login_attempt(
     IN p_email VARCHAR(100),
     IN p_ip_address VARCHAR(45),
     IN p_user_agent VARCHAR(255),
@@ -272,9 +265,7 @@ WHERE
     AND failed_login_attempts >= 5;
 END IF;
 END 
-DELIMITER ;
 DELIMITER 
-CREATE PROCEDURE log_security_event(
     IN p_user_id INT,
     IN p_event_type VARCHAR(50),
     IN p_ip_address VARCHAR(45),
@@ -290,19 +281,15 @@ VALUES
         p_description
     );
 END 
-DELIMITER ;
 DELIMITER 
-CREATE PROCEDURE clean_expired_sessions()
 BEGIN
 DELETE FROM
     user_sessions
 WHERE
     expires_at < NOW();
 END 
-DELIMITER ;
 CREATE EVENT clean_sessions_event ON SCHEDULE EVERY 1 HOUR DO CALL clean_expired_sessions();
 DELIMITER 
-CREATE PROCEDURE create_order(
     IN p_user_id INT,
     IN p_items JSON,
     IN p_shipping_address TEXT,
@@ -457,7 +444,6 @@ SET
         ' items.'
     );
 END 
-DELIMITER ;
 INSERT INTO
     categories (category_id, category_name, parent_id)
 VALUES

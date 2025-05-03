@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Controllers;
-
 use App\Core\BaseController;
 use App\Core\Database;
 use App\Core\Registry;
@@ -12,7 +10,6 @@ use App\Models\User;
 use App\Helpers\SecurityHelper;
 use App\Helpers\CaptchaHelper;
 use Psr\Log\LoggerInterface;
-
 class UserController extends BaseController
 {
     private $db;
@@ -28,7 +25,7 @@ class UserController extends BaseController
         $this->request = Registry::get('request');
         $this->logger = Registry::get('logger');
         $this->captchaHelper = new CaptchaHelper($this->session);
-        $pdoConnection = $this->db->getConnection();
+        $pdoConnection = $this->db->getConnection(); 
         if ($pdoConnection) {
             $this->userModel = new User($pdoConnection);
         } else {
@@ -46,19 +43,19 @@ class UserController extends BaseController
         $this->captchaHelper->storeText($captchaText);
         $login_error = $this->session->getFlash('login_error');
         $captcha_error = $this->session->getFlash('captcha_error');
-        $email = $this->session->getFlash('input_email');
-        $success_message = $this->session->getFlash('success');
+        $email = $this->session->getFlash('input_email'); 
+        $success_message = $this->session->getFlash('success'); 
         $csrf_token = $this->session->getCsrfToken();
         $data = [
             'page_title' => 'Login - GhibliGroceries',
             'meta_description' => 'Login to GhibliGroceries - Access your account to place orders.',
             'meta_keywords' => 'login, grocery, online shopping, account access',
-            'additional_css_files' => ['assets/css/login.css'],
-            'email' => $email ?? '',
-            'login_error' => $login_error ?? '',
-            'captcha_error' => $captcha_error ?? '',
-            'success_message' => $success_message ?? '',
-            'csrf_token' => $csrf_token
+            'additional_css_files' => ['assets/css/login.css'], 
+            'email' => $email ?? '', 
+            'login_error' => $login_error ?? '', 
+            'captcha_error' => $captcha_error ?? '', 
+            'success_message' => $success_message ?? '', 
+            'csrf_token' => $csrf_token 
         ];
         $this->view('pages/login', $data);
     }
@@ -72,22 +69,22 @@ class UserController extends BaseController
         if (!$this->session->validateCsrfToken($csrf_input)) {
             $this->session->flash('login_error', 'Invalid security token. Please try again.');
             $this->logger->warning('CSRF token validation failed during login attempt.');
-            $this->regenerateCaptchaAndRedirect('/login');
+            $this->regenerateCaptchaAndRedirect('/login'); 
             return;
         }
         $captcha_input = $this->request->post('captcha', '');
         if (!$this->captchaHelper->validate($captcha_input)) {
             $this->session->flash('captcha_error', "The verification code is incorrect.");
-            $this->session->flash('input_email', $this->request->post('email', ''));
+            $this->session->flash('input_email', $this->request->post('email', '')); 
             $this->logger->warning('CAPTCHA validation failed during login attempt.');
             $this->regenerateCaptchaAndRedirect('/login');
             return;
         }
         $email = SecurityHelper::sanitizeInput($this->request->post('email', ''));
-        $password = $this->request->post('password', '');
+        $password = $this->request->post('password', ''); 
         if (!SecurityHelper::validateEmail($email) || empty($password)) {
             $this->session->flash('login_error', "Invalid email format or missing password.");
-            $this->session->flash('input_email', $email);
+            $this->session->flash('input_email', $email); 
             $this->regenerateCaptchaAndRedirect('/login');
             return;
         }
@@ -100,12 +97,12 @@ class UserController extends BaseController
                     $this->regenerateCaptchaAndRedirect('/login');
                     return;
                 }
-                $this->session->loginUser($user['user_id']);
-                $this->session->set('user_name', $user['name']);
-                $this->session->set('user_email', $user['email']);
-                $this->session->remove('captcha');
+                $this->session->loginUser($user['user_id']); 
+                $this->session->set('user_name', $user['name']); 
+                $this->session->set('user_email', $user['email']); 
+                $this->session->remove('captcha'); 
                 $this->logger->info('User logged in successfully.', ['user_id' => $user['user_id'], 'email' => $email]);
-                Redirect::to('/');
+                Redirect::to('/'); 
                 return;
             } else {
                 $this->logger->error('User data not found after successful password verification.', ['email' => $email]);
@@ -115,7 +112,7 @@ class UserController extends BaseController
             }
         } else {
             $this->session->flash('login_error', "Invalid email or password.");
-            $this->session->flash('input_email', $email);
+            $this->session->flash('input_email', $email); 
             $this->logger->warning('Invalid login attempt (wrong credentials).', ['email' => $email]);
             $this->regenerateCaptchaAndRedirect('/login');
             return;
@@ -128,26 +125,26 @@ class UserController extends BaseController
             return;
         }
         $registration_error = $this->session->getFlash('registration_error');
-        $registration_success = $this->session->getFlash('registration_success');
-        $input_data = $this->session->getFlash('input_data', []);
+        $registration_success = $this->session->getFlash('registration_success'); 
+        $input_data = $this->session->getFlash('input_data', []); 
         $data = [
             'page_title' => 'Register - GhibliGroceries',
             'meta_description' => 'Create an account with GhibliGroceries to start ordering fresh groceries online.',
             'meta_keywords' => 'register, grocery, create account, sign up',
-            'additional_css_files' => ['assets/css/register.css'],
-            'csrf_token' => $this->session->getCsrfToken(),
-            'registration_error' => $registration_error ?? '',
-            'registration_success' => $registration_success ?? false,
-            'input' => $input_data
+            'additional_css_files' => ['assets/css/register.css'], 
+            'csrf_token' => $this->session->getCsrfToken(), 
+            'registration_error' => $registration_error ?? '', 
+            'registration_success' => $registration_success ?? false, 
+            'input' => $input_data 
         ];
         $this->view('pages/register', $data);
     }
     public function register(): void
     {
-        $isAjax = $this->request->isAjax();
+        $isAjax = $this->request->isAjax(); 
         if ($this->session->isAuthenticated()) {
             if ($isAjax) {
-                $this->jsonResponse(['success' => false, 'message' => 'Already logged in.'], 403);
+                $this->jsonResponse(['success' => false, 'message' => 'Already logged in.'], 403); 
                 return;
             } else {
                 Redirect::to('/');
@@ -156,14 +153,14 @@ class UserController extends BaseController
         }
         if (!$this->request->isPost()) {
             if ($isAjax) {
-                $this->jsonResponse(['success' => false, 'message' => 'Invalid request method.'], 405);
+                $this->jsonResponse(['success' => false, 'message' => 'Invalid request method.'], 405); 
                 return;
             } else {
                 Redirect::to('/register');
                 return;
             }
         }
-        $csrf_input = $this->request->input('csrf_token', '');
+        $csrf_input = $this->request->input('csrf_token', ''); 
         if (!$this->session->validateCsrfToken($csrf_input)) {
             $this->logger->warning('CSRF token validation failed during registration attempt.', ['isAjax' => $isAjax]);
             if ($isAjax) {
@@ -178,8 +175,8 @@ class UserController extends BaseController
         $name = SecurityHelper::sanitizeInput($this->request->input('name', ''));
         $phone = SecurityHelper::sanitizeInput($this->request->input('phone', ''));
         $email = SecurityHelper::sanitizeInput($this->request->input('email', ''));
-        $password = $this->request->input('password', '');
-        $input_data = ['name' => $name, 'phone' => $phone, 'email' => $email];
+        $password = $this->request->input('password', ''); 
+        $input_data = ['name' => $name, 'phone' => $phone, 'email' => $email]; 
         $errors = [];
         if (!SecurityHelper::validateName($name)) {
             $errors['name'] = 'Please enter a valid name (letters and spaces only).';
@@ -199,11 +196,11 @@ class UserController extends BaseController
         if (!empty($errors)) {
             $this->logger->warning('Registration validation failed.', ['errors' => $errors, 'email' => $email, 'isAjax' => $isAjax]);
             if ($isAjax) {
-                $this->jsonResponse(['success' => false, 'message' => 'Validation failed.', 'errors' => $errors], 422);
+                $this->jsonResponse(['success' => false, 'message' => 'Validation failed.', 'errors' => $errors], 422); 
                 return;
             } else {
-                $this->session->flash('registration_error', implode('<br>', $errors));
-                $this->session->flash('input_data', $input_data);
+                $this->session->flash('registration_error', implode('<br>', $errors)); 
+                $this->session->flash('input_data', $input_data); 
                 Redirect::to('/register');
                 return;
             }
@@ -239,7 +236,7 @@ class UserController extends BaseController
                     return;
                 } else {
                     $this->session->flash('registration_error', 'Registration failed due to a database error. Please try again later.');
-                    $this->session->flash('input_data', $input_data);
+                    $this->session->flash('input_data', $input_data); 
                     Redirect::to('/register');
                     return;
                 }
@@ -251,7 +248,7 @@ class UserController extends BaseController
                 return;
             } else {
                 $this->session->flash('registration_error', 'An unexpected error occurred during registration. Please try again.');
-                $this->session->flash('input_data', $input_data);
+                $this->session->flash('input_data', $input_data); 
                 Redirect::to('/register');
                 return;
             }
@@ -275,24 +272,24 @@ class UserController extends BaseController
             }
         }
         if ($error) {
-            $this->jsonResponse(['error' => $error], 400);
+            $this->jsonResponse(['error' => $error], 400); 
         } else {
-            $this->jsonResponse(['exists' => $exists]);
+            $this->jsonResponse(['exists' => $exists]); 
         }
     }
     public function logout(): void
     {
-        $userId = $this->session->get('user_id');
-        $this->session->logoutUser();
-        $this->session->flash('success', 'You have been logged out successfully.');
-        $this->logger->info('User logged out.', ['user_id' => $userId ?? 'N/A']);
-        Redirect::to('/login');
+        $userId = $this->session->get('user_id'); 
+        $this->session->logoutUser(); 
+        $this->session->flash('success', 'You have been logged out successfully.'); 
+        $this->logger->info('User logged out.', ['user_id' => $userId ?? 'N/A']); 
+        Redirect::to('/login'); 
     }
     protected function jsonResponse($data, int $statusCode = 200): void
     {
         if (!headers_sent()) {
             header('Content-Type: application/json');
-            http_response_code($statusCode);
+            http_response_code($statusCode); 
         } else {
             $this->logger->error("Headers already sent, cannot set JSON response headers.", ['status_code' => $statusCode]);
         }

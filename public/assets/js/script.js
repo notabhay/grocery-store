@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const menuToggle = document.querySelector('.mobile-menu-toggle');
     const navMenu = document.querySelector('.mobile-menu');
-    if (menuToggle && navMenu) {
+    if (menuToggle && navMenu) { 
         menuToggle.addEventListener('click', function () {
             navMenu.classList.toggle('show');
         });
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const footerToggle = document.querySelector('.footer-toggle');
     const footerToggleIcon = document.getElementById('footer-toggle-icon');
     const footer = document.getElementById('site-footer');
-    if (footerToggle && footer && footerToggleIcon) {
+    if (footerToggle && footer && footerToggleIcon) { 
         footerToggle.addEventListener('click', function () {
             footer.classList.toggle('hidden');
             footerToggleIcon.classList.toggle('rotate');
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     } catch (e) {
                         window.scrollTo(0, document.body.scrollHeight);
                     }
-                }, 500);
+                }, 500); 
             }
         });
     } else {
@@ -34,11 +34,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!footerToggleIcon) console.warn("Footer toggle icon not found.");
         if (!footer) console.warn("Site footer element not found.");
     }
-    let currentModalConfirmCallback = null;
+    let currentModalConfirmCallback = null; 
     const modalConfirmButton = document.getElementById('modal-confirm-button');
     const modalCancelButton = document.getElementById('modal-cancel-button');
     const confirmationModal = document.getElementById('confirmation-modal');
-    const modalMessage = document.getElementById('modal-message');
+    const modalMessage = document.getElementById('modal-message'); 
     if (modalConfirmButton && confirmationModal) {
         modalConfirmButton.addEventListener('click', () => {
             console.log('Persistent Confirm Listener Fired.');
@@ -73,10 +73,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function showConfirmationModal(message, confirmCallback) {
         console.log('Showing confirmation modal. Message:', message);
         if (confirmationModal && modalMessage) {
-            modalMessage.textContent = message;
-            currentModalConfirmCallback = confirmCallback;
+            modalMessage.textContent = message; 
+            currentModalConfirmCallback = confirmCallback; 
             console.log('Callback stored. Type:', typeof currentModalConfirmCallback);
-            confirmationModal.classList.add('modal-visible');
+            confirmationModal.classList.add('modal-visible'); 
             console.log('Added "modal-visible" class. Modal classList:', confirmationModal.classList);
         } else {
             console.error('Modal (#confirmation-modal) or message element (#modal-message) not found in showConfirmationModal.');
@@ -96,17 +96,17 @@ document.addEventListener('DOMContentLoaded', function () {
     resetSubCategoryDropdown();
     if (mainCategorySelect) {
         mainCategorySelect.addEventListener('change', function () {
-            const categoryId = this.value;
-            resetSubCategoryDropdown();
+            const categoryId = this.value; 
+            resetSubCategoryDropdown(); 
             if (productDisplayArea) {
-                productDisplayArea.innerHTML = '<p>Loading products...</p>';
+                productDisplayArea.innerHTML = '<p>Loading products...</p>'; 
                 if (categoryId === 'all' || !categoryId) {
                     productDisplayArea.innerHTML = '<p>Select a specific category to view products.</p>';
-                    return;
+                    return; 
                 }
             } else {
                 if (categoryId === 'all' || !categoryId) {
-                    return;
+                    return; 
                 }
             }
             fetchAndPopulateSubcategories(categoryId);
@@ -143,9 +143,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (subCategorySelect) {
         subCategorySelect.addEventListener('change', function () {
-            const subCategoryId = this.value;
+            const subCategoryId = this.value; 
             if (productDisplayArea) {
-                productDisplayArea.innerHTML = '<p>Loading products...</p>';
+                productDisplayArea.innerHTML = '<p>Loading products...</p>'; 
                 if (subCategoryId && subCategoryId !== "") {
                     fetch(`${window.baseUrl}/ajax/products-by-category?categoryId=${encodeURIComponent(subCategoryId)}`)
                         .then(response => {
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 console.warn('Skipping invalid subcategory data:', subCat);
                             }
                         });
-                        subCategorySelect.disabled = false;
+                        subCategorySelect.disabled = false; 
                     } else {
                         subCategorySelect.innerHTML = '<option value="">
                     }
@@ -253,19 +253,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 const price = parseFloat(prod.price);
                 const formattedPrice = !isNaN(price) ? price.toFixed(2) : 'N/A'; 
                 html += `
-                    < div class="product-card" >
+                    <div class="product-card">
                         <a href="${window.baseUrl}product/${escapeHTML(prod.product_id)}" class="product-link">
                             <img src="${window.baseUrl}/${escapeHTML(prod.image_path)}" alt="${escapeHTML(prod.name)}" class="product-image">
-                                <h4 class="product-name">${escapeHTML(prod.name)}</h4>
-                                <p class="product-price">$${formattedPrice}</p>
+                            <h4 class="product-name">${escapeHTML(prod.name)}</h4>
+                            <p class="product-price">$${formattedPrice}</p>
                         </a>
-                        ${
-                    isLoggedIn
-                        ? `<button class="add-to-cart-btn" data-product-id="${escapeHTML(prod.product_id)}">Add to Cart</button>`
-                        : `<a href="${window.baseUrl}/login" class="login-to-purchase-btn">Login to Purchase</a>`
-                }
-                    </ >
-                    `;
+                        ${isLoggedIn
+                        ? `<button class="add-to-cart-btn" data-product-id="${escapeHTML(prod.product_id)}">Add to Cart</button>` 
+                        : `<a href="${window.baseUrl}/login" class="login-to-purchase-btn">Login to Purchase</a>` 
+                    }
+                    </div>
+                `;
             });
             html += '</div>'; 
         }
@@ -288,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
         const toast = document.createElement('div');
-        toast.className = `toast toast - ${ type } `; 
+        toast.className = `toast toast-${type}`; 
         let iconClass = 'fa-check-circle'; 
         if (type === 'error') {
             iconClass = 'fa-exclamation-circle';
@@ -296,13 +295,13 @@ document.addEventListener('DOMContentLoaded', function () {
             iconClass = 'fa-info-circle';
         }
         toast.innerHTML = `
-                    < div class="toast-icon" >
-                        <i class="fas ${iconClass}"></i>
-            </div >
-                    <div class="toast-content">
-                        ${escapeHTML(message)}
-                    </div>
-                `;
+            <div class="toast-icon">
+                <i class="fas ${iconClass}"></i>
+            </div>
+            <div class="toast-content">
+                ${escapeHTML(message)}
+            </div>
+        `;
         toastContainer.appendChild(toast);
         setTimeout(() => {
             toast.style.opacity = '1';
@@ -333,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 product_id: productId,
                 quantity: 1 
             };
-            fetch(`${ window.baseUrl } /api/cart / add`, {
+            fetch(`${window.baseUrl}/api/cart/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -347,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         return response.json(); 
                     } else if (!response.ok) {
                         return response.text().then(text => {
-                            throw new Error(`Add to cart failed: ${ response.status } ${ response.statusText }. ${ text } `);
+                            throw new Error(`Add to cart failed: ${response.status} ${response.statusText}. ${text}`);
                         });
                     } else {
                         return response.text().then(text => { throw new Error("Expected JSON response from add to cart, got non-JSON: " + text); });
@@ -368,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Add to Cart Fetch error:', error);
                     button.textContent = 'Add to Cart';
                     button.disabled = false;
-                    showToast(`An error occurred: ${ error.message }. Please try again.`, 'error');
+                    showToast(`An error occurred: ${error.message}. Please try again.`, 'error');
                 });
         }
     });
@@ -434,7 +433,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             console.log('*** Confirm Callback Entered for product ID (decrease):', productId, '***');
                             const allButtons = document.querySelectorAll('button');
                             allButtons.forEach(btn => { btn.disabled = true; });
-                            const deleteUrl = `${ window.baseUrl } /api/cart / item / ${ productId } `;
+                            const deleteUrl = `${window.baseUrl}/api/cart/item/${productId}`;
                             console.log('Making DELETE request from decrease-to-zero callback to:', deleteUrl);
                             fetch(deleteUrl, {
                                 method: 'POST',
@@ -451,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         return response.json();
                                     } else if (!response.ok) {
                                         return response.text().then(text => {
-                                            throw new Error(`Remove item failed: ${ response.status } ${ response.statusText }. ${ text } `);
+                                            throw new Error(`Remove item failed: ${response.status} ${response.statusText}. ${text}`);
                                         });
                                     } else {
                                         return response.text().then(text => {
@@ -463,12 +462,12 @@ document.addEventListener('DOMContentLoaded', function () {
                                     console.log('Parsed response data:', data);
                                     if (data.success) {
                                         console.log('Attempting to update UI after deletion...');
-                                        const itemRow = document.querySelector(`.cart - item[data - product - id="${productId}"]`);
+                                        const itemRow = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
                                         if (itemRow) itemRow.remove();
                                         const cartTotalElement = document.getElementById('cart-total-price');
                                         if (cartTotalElement && data.total_price !== undefined) {
                                             const totalPrice = parseFloat(data.total_price);
-                                            cartTotalElement.textContent = !isNaN(totalPrice) ? `$${ totalPrice.toFixed(2) } ` : '$--.--';
+                                            cartTotalElement.textContent = !isNaN(totalPrice) ? `$${totalPrice.toFixed(2)}` : '$--.--';
                                         } else if (cartTotalElement) {
                                             cartTotalElement.textContent = '$0.00'; 
                                         }
@@ -486,7 +485,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 })
                                 .catch(error => {
                                     console.error('Error details during delete fetch operation (decrease-to-zero):', error);
-                                    showToast(`An error occurred: ${ error.message }. Please try again.`, 'error');
+                                    showToast(`An error occurred: ${error.message}. Please try again.`, 'error');
                                     allButtons.forEach(btn => { btn.disabled = false; });
                                 });
                         } 
@@ -519,7 +518,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.log('Making POST request to clear cart...');
                     const allButtons = document.querySelectorAll('button');
                     allButtons.forEach(btn => { btn.disabled = true; });
-                    fetch(`${ window.baseUrl } /api/cart / clear`, {
+                    fetch(`${window.baseUrl}/api/cart/clear`, {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
@@ -534,7 +533,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 return response.json();
                             } else if (!response.ok) {
                                 return response.text().then(text => {
-                                    throw new Error(`Clear cart failed: ${ response.status } ${ response.statusText }. ${ text } `);
+                                    throw new Error(`Clear cart failed: ${response.status} ${response.statusText}. ${text}`);
                                 });
                             } else {
                                 return response.text().then(text => {
@@ -561,7 +560,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         })
                         .catch(error => {
                             console.error('Error during clear cart fetch operation:', error);
-                            showToast(`An error occurred: ${ error.message }. Please try again.`, 'error');
+                            showToast(`An error occurred: ${error.message}. Please try again.`, 'error');
                             allButtons.forEach(btn => { btn.disabled = false; });
                         });
                 }; 
@@ -596,7 +595,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     return response.json();
                 } else if (!response.ok) {
                     return response.text().then(text => {
-                        throw new Error(`Update cart failed: ${ response.status } ${ response.statusText }. ${ text } `);
+                        throw new Error(`Update cart failed: ${response.status} ${response.statusText}. ${text}`);
                     });
                 } else {
                     return response.text().then(text => {
@@ -622,7 +621,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 console.error('Update Cart Fetch error:', error);
-                showToast(`An error occurred: ${ error.message }. Please try again.`, 'error');
+                showToast(`An error occurred: ${error.message}. Please try again.`, 'error');
                 quantityButtons.forEach(btn => { btn.disabled = false; });
                 quantityInputs.forEach(input => { input.disabled = false; });
             });
@@ -634,12 +633,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const cartContainer = document.querySelector('.cart-container');
             if (cartContainer) {
                 cartContainer.innerHTML = `
-                    < h1 > Your Shopping Cart</h1 >
-                        <div class="empty-cart">
-                            <img src="${window.baseUrl}/assets/images/cart/empty_shopping_cart.png" alt="Empty Shopping Cart" class="empty-cart-image">
-                                <p>Your shopping cart is empty.</p>
-                                <a href="${window.baseUrl}/categories" class="continue-shopping-btn">Continue Shopping</a>
-                        </div>
+                    <h1>Your Shopping Cart</h1>
+                    <div class="empty-cart">
+                        <img src="${window.baseUrl}/assets/images/cart/empty_shopping_cart.png" alt="Empty Shopping Cart" class="empty-cart-image">
+                        <p>Your shopping cart is empty.</p>
+                        <a href="${window.baseUrl}/categories" class="continue-shopping-btn">Continue Shopping</a>
+                    </div>
                 `;
             }
             return; 
@@ -647,7 +646,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const updatedProduct = data.updated_product;
         if (updatedProduct) {
             const productId = updatedProduct.product_id;
-            const itemRow = document.querySelector(`.cart - item[data - product - id="${productId}"]`);
+            const itemRow = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
             if (updatedProduct.new_quantity <= 0 && itemRow) {
                 itemRow.remove();
             }
@@ -659,13 +658,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     quantityInput.setAttribute('data-previous-value', updatedProduct.new_quantity.toString());
                 }
                 if (totalElement && updatedProduct.new_total !== undefined) {
-                    totalElement.textContent = `$${ updatedProduct.new_total.toFixed(2) } `;
+                    totalElement.textContent = `$${updatedProduct.new_total.toFixed(2)}`;
                 }
             }
         }
         const cartTotalElement = document.getElementById('cart-total-price');
         if (cartTotalElement && data.total_price !== undefined) {
-            cartTotalElement.textContent = `$${ data.total_price.toFixed(2) } `;
+            cartTotalElement.textContent = `$${data.total_price.toFixed(2)}`;
         }
         const quantityButtons = document.querySelectorAll('.quantity-btn');
         const quantityInputs = document.querySelectorAll('.quantity-input');
@@ -676,10 +675,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const cartImage = document.querySelector('.cart-image');
         if (cartImage) {
             if (filled) {
-                cartImage.src = `${ window.baseUrl } /assets/images / cart / filled_shopping_cart.png`;
+                cartImage.src = `${window.baseUrl}/assets/images/cart/filled_shopping_cart.png`;
                 cartImage.alt = 'Shopping Cart';
             } else {
-                cartImage.src = `${ window.baseUrl } /assets/images / cart / empty_shopping_cart.png`;
+                cartImage.src = `${window.baseUrl}/assets/images/cart/empty_shopping_cart.png`;
                 cartImage.alt = 'Empty Shopping Cart';
             }
         }
@@ -691,7 +690,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         const allButtons = document.querySelectorAll('button');
         allButtons.forEach(btn => { btn.disabled = true; });
-        const deleteUrl = `${ window.baseUrl } /api/cart / item / ${ productId } `;
+        const deleteUrl = `${window.baseUrl}/api/cart/item/${productId}`;
         console.log('Making DELETE request to:', deleteUrl);
         fetch(deleteUrl, {
             method: 'POST', 
@@ -708,7 +707,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     return response.json();
                 } else if (!response.ok) {
                     return response.text().then(text => {
-                        throw new Error(`Remove item failed: ${ response.status } ${ response.statusText }. ${ text } `);
+                        throw new Error(`Remove item failed: ${response.status} ${response.statusText}. ${text}`);
                     });
                 } else {
                     return response.text().then(text => {
@@ -720,12 +719,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Parsed response data:', data);
                 if (data.success) {
                     console.log('Attempting to update UI after deletion...');
-                    const itemRow = document.querySelector(`.cart - item[data - product - id="${productId}"]`);
+                    const itemRow = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
                     if (itemRow) itemRow.remove();
                     const cartTotalElement = document.getElementById('cart-total-price');
                     if (cartTotalElement && data.total_price !== undefined) {
                         const totalPrice = parseFloat(data.total_price);
-                        cartTotalElement.textContent = !isNaN(totalPrice) ? `$${ totalPrice.toFixed(2) } ` : '$--.--'; 
+                        cartTotalElement.textContent = !isNaN(totalPrice) ? `$${totalPrice.toFixed(2)}` : '$--.--'; 
                     }
                     if (data.is_empty) {
                         updateCartUI({
@@ -746,7 +745,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error('Error details during delete fetch operation:', error);
                 console.error('Remove Cart Item Fetch error:', error);
-                showToast(`An error occurred: ${ error.message }. Please try again.`, 'error');
+                showToast(`An error occurred: ${error.message}. Please try again.`, 'error');
                 allButtons.forEach(btn => { btn.disabled = false; });
             });
     }
@@ -756,8 +755,8 @@ document.addEventListener('DOMContentLoaded', function () {
             return 0;
         }
         try {
-            console.log('Attempting to fetch cart count from URL:', `${ window.baseUrl } api / cart / count`);
-            const response = await fetch(`${ window.baseUrl } api / cart / count`, {
+            console.log('Attempting to fetch cart count from URL:', `${window.baseUrl}api/cart/count`);
+            const response = await fetch(`${window.baseUrl}api/cart/count`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'
@@ -765,7 +764,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             if (!response.ok) {
                 const errorText = await response.text().catch(() => 'Could not read error response body');
-                throw new Error(`HTTP error! status: ${ response.status }. ${ errorText } `);
+                throw new Error(`HTTP error! status: ${response.status}. ${errorText}`);
             }
             const contentType = response.headers.get("content-type");
             if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -782,7 +781,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } catch (error) {
             console.error('Error fetching cart count:', error); 
-            console.error(`Error message: ${ error.message }.Status: ${ error.response ? error.response.status : 'N/A' } `);
+            console.error(`Error message: ${error.message}. Status: ${error.response ? error.response.status : 'N/A'}`);
             return 0; 
         }
     }
@@ -802,7 +801,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateCartBadge();
     if (mainCategorySelect && mainCategorySelect.value && mainCategorySelect.value !== 'all') {
         const initialCategoryId = mainCategorySelect.value;
-        console.log(`Initial main category detected: ${ initialCategoryId }. Fetching sub - categories...`);
+        console.log(`Initial main category detected: ${initialCategoryId}. Fetching sub-categories...`);
         fetchAndPopulateSubcategories(initialCategoryId);
     } else if (mainCategorySelect) {
         console.log("No initial main category selected or 'all' selected.");

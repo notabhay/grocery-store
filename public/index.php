@@ -26,7 +26,7 @@ if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS']
 $host = $_SERVER['HTTP_HOST']; 
 $script_dir = dirname($_SERVER['SCRIPT_NAME']);
 $base_path_url = rtrim(str_replace('\\', '/', $script_dir), '/') . '/';
-if ($base_path_url === '
+if ($base_path_url === '//') {
     $base_path_url = '/';
 }
 define('BASE_URL', $scheme . '://' . $host . $base_path_url);

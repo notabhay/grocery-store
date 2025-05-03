@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Models;
-
 use PDO;
 use App\Core\Database;
-
 class User
 {
     private $db;
@@ -24,7 +21,7 @@ class User
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result === false ? null : $result;
+        return $result === false ? null : $result; 
     }
     public function findByEmail(string $email): ?array
     {
@@ -32,7 +29,7 @@ class User
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result === false ? null : $result;
+        return $result === false ? null : $result; 
     }
     public function emailExists(string $email): bool
     {
@@ -47,9 +44,9 @@ class User
         $stmt->bindParam(':name', $name, PDO::PARAM_STR);
         $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+        $stmt->bindParam(':password', $password, PDO::PARAM_STR); 
         if ($stmt->execute()) {
-            return (int) $this->db->lastInsertId();
+            return (int) $this->db->lastInsertId(); 
         }
         return false;
     }
@@ -57,33 +54,33 @@ class User
     {
         $fields = [];
         $params = [':id' => $id];
-        $allowedFields = ['name', 'phone', 'email', 'password', 'role'];
+        $allowedFields = ['name', 'phone', 'email', 'password', 'role']; 
         foreach ($data as $key => $value) {
             if (in_array($key, $allowedFields)) {
-                $fields[] = "`$key` = :$key";
+                $fields[] = "`$key` = :$key"; 
                 $params[":$key"] = $value;
             }
         }
         if (empty($fields)) {
-            return false;
+            return false; 
         }
         $sql = "UPDATE users SET " . implode(', ', $fields) . " WHERE user_id = :id";
         $stmt = $this->db->prepare($sql);
-        foreach ($params as $key => &$value) {
+        foreach ($params as $key => &$value) { 
             if ($key === ':id') {
                 $stmt->bindValue($key, $value, PDO::PARAM_INT);
             } else {
                 $stmt->bindValue($key, $value, PDO::PARAM_STR);
             }
         }
-        unset($value);
+        unset($value); 
         return $stmt->execute();
     }
     public function delete(int $id): bool
     {
         $stmt = $this->db->prepare("DELETE FROM users WHERE user_id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        return $stmt->execute();
+        return $stmt->execute(); 
     }
     public function verifyPassword(string $email, string $password): bool
     {
@@ -107,7 +104,7 @@ class User
             }
             return password_verify($password, $user['password']);
         }
-        return false;
+        return false; 
     }
     public function getAll(): array
     {
@@ -116,7 +113,7 @@ class User
     }
     public function getAllUsersPaginated(int $page = 1, int $perPage = 15): array
     {
-        $page = max(1, $page);
+        $page = max(1, $page); 
         $offset = ($page - 1) * $perPage;
         $countStmt = $this->db->query("SELECT COUNT(*) FROM users");
         $totalUsers = (int) $countStmt->fetchColumn();
@@ -154,7 +151,7 @@ class User
             }
         }
         if (empty($fields)) {
-            return false;
+            return false; 
         }
         $sql = "UPDATE users SET " . implode(', ', $fields) . " WHERE user_id = :id";
         $stmt = $this->db->prepare($sql);
@@ -165,14 +162,14 @@ class User
                 $stmt->bindValue($key, $value, PDO::PARAM_STR);
             }
         }
-        unset($value);
-        return $stmt->execute();
+        unset($value); 
+        return $stmt->execute(); 
     }
     public function generatePasswordResetToken(int $userId)
     {
         try {
-            $token = bin2hex(random_bytes(32));
-            $expiresAt = date('Y-m-d H:i:s', time() + 3600);
+            $token = bin2hex(random_bytes(32)); 
+            $expiresAt = date('Y-m-d H:i:s', time() + 3600); 
             $stmt = $this->db->prepare("
                 UPDATE users
                 SET reset_token = :token, reset_token_expires = :expires_at
@@ -188,7 +185,7 @@ class User
                     return false;
                 }
             }
-            return false;
+            return false; 
         } catch (\Exception $e) {
             \App\Core\Registry::get('logger')->error("Error generating password reset token", ['exception' => $e, 'user_id' => $userId]);
             return false;
@@ -210,7 +207,7 @@ class User
             return (int) $stmt->fetchColumn();
         } catch (\PDOException $e) {
             \App\Core\Registry::get('logger')->error("Error counting users", ['exception' => $e]);
-            return 0;
+            return 0; 
         }
     }
 }

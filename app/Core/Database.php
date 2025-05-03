@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Core;
-
-use PDO;
-use PDOException;
-use App\Core\Registry;
-
+use PDO; 
+use PDOException; 
+use App\Core\Registry; 
 class Database
 {
     private $host;
@@ -22,7 +19,7 @@ class Database
         $this->username = $username;
         $this->password = $password;
         $this->charset = $charset;
-        $this->connect();
+        $this->connect(); 
     }
     public function getConnection(): ?PDO
     {
@@ -44,18 +41,18 @@ class Database
                 $this->username,
                 $this->password,
                 [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, 
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, 
+                    PDO::ATTR_EMULATE_PREPARES => false, 
                 ]
             );
-            $this->error = '';
+            $this->error = ''; 
         } catch (PDOException $e) {
             $this->error = "Connection Error: " . $e->getMessage();
             if (Registry::has('logger')) {
                 Registry::get('logger')->critical("Database connection error: " . $e->getMessage(), ['exception' => $e]);
             }
-            $this->conn = null;
+            $this->conn = null; 
         }
         return $this->conn;
     }
@@ -73,20 +70,20 @@ class Database
             return false;
         }
         try {
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute($params);
-            $this->error = '';
-            return $stmt;
+            $stmt = $this->conn->prepare($query); 
+            $stmt->execute($params); 
+            $this->error = ''; 
+            return $stmt; 
         } catch (PDOException $e) {
             $this->error = "Query Error: " . $e->getMessage();
             if (Registry::has('logger')) {
                 Registry::get('logger')->error("Database query error: " . $e->getMessage(), [
                     'query' => $query,
-                    'params' => $params,
+                    'params' => $params, 
                     'exception' => $e
                 ]);
             }
-            return false;
+            return false; 
         }
     }
     public function execute($query, $params = [])
@@ -99,20 +96,20 @@ class Database
             return false;
         }
         try {
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute($params);
-            $this->error = '';
-            return $stmt->rowCount();
+            $stmt = $this->conn->prepare($query); 
+            $stmt->execute($params); 
+            $this->error = ''; 
+            return $stmt->rowCount(); 
         } catch (PDOException $e) {
             $this->error = "Query Error: " . $e->getMessage();
             if (Registry::has('logger')) {
                 Registry::get('logger')->error("Database execute error: " . $e->getMessage(), [
                     'query' => $query,
-                    'params' => $params,
+                    'params' => $params, 
                     'exception' => $e
                 ]);
             }
-            return false;
+            return false; 
         }
     }
     public function beginTransaction(): bool

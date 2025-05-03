@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Helpers;
-
 use App\Core\Session;
 use App\Models\Product;
 use App\Core\Database;
-
 class CartHelper
 {
     private $session;
@@ -23,7 +20,7 @@ class CartHelper
         if (empty($cart)) {
             return [
                 'cart_items' => [],
-                'total_price' => 0.0,
+                'total_price' => 0.0, 
                 'total_items' => 0,
                 'is_empty' => true
             ];
@@ -31,20 +28,20 @@ class CartHelper
         $productIds = array_keys($cart);
         $products = $this->productModel->findMultipleByIds($productIds);
         $cartItems = [];
-        $totalPrice = 0.0;
+        $totalPrice = 0.0; 
         $totalItems = 0;
         foreach ($cart as $productId => $quantity) {
             if (isset($products[$productId])) {
                 $product = $products[$productId];
-                $itemPrice = (float)$product['price'] * (int)$quantity;
+                $itemPrice = (float)$product['price'] * (int)$quantity; 
                 $totalPrice += $itemPrice;
-                $totalItems += (int)$quantity;
+                $totalItems += (int)$quantity; 
                 $cartItems[] = [
                     'product_id' => $productId,
                     'name' => $product['name'],
-                    'price' => (float)$product['price'],
-                    'image' => $product['image'] ?? 'default_image.png',
-                    'quantity' => (int)$quantity,
+                    'price' => (float)$product['price'], 
+                    'image' => $product['image'] ?? 'default_image.png', 
+                    'quantity' => (int)$quantity, 
                     'total_price' => $itemPrice
                 ];
             } else {
@@ -55,7 +52,7 @@ class CartHelper
             'cart_items' => $cartItems,
             'total_price' => $totalPrice,
             'total_items' => $totalItems,
-            'is_empty' => ($totalItems === 0)
+            'is_empty' => ($totalItems === 0) 
         ];
     }
     public function updateCartItem(int $productId, int $quantity): array
@@ -74,7 +71,7 @@ class CartHelper
             if (isset($cart[$productId])) {
                 unset($cart[$productId]);
             }
-            $newQuantity = 0;
+            $newQuantity = 0; 
         } else {
             $cart[$productId] = $newQuantity;
         }
@@ -89,7 +86,7 @@ class CartHelper
                 'price' => (float)$product['price'],
                 'new_total' => (float)$product['price'] * $newQuantity
             ];
-        } elseif ($currentQuantity > 0) {
+        } elseif ($currentQuantity > 0) { 
             $updatedProductData = [
                 'product_id' => $productId,
                 'name' => $product['name'],

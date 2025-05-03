@@ -1,16 +1,13 @@
 <?php
-
 namespace App\Controllers\Admin;
-
 use App\Core\BaseController;
 use App\Core\Database;
 use App\Core\Session;
 use App\Core\Request;
 use App\Core\Redirect;
 use App\Models\Category;
-use App\Models\User as UserModel;
+use App\Models\User as UserModel; 
 use App\Helpers\SecurityHelper;
-
 class AdminCategoryController extends BaseController
 {
     private $db;
@@ -27,17 +24,17 @@ class AdminCategoryController extends BaseController
     public function index(): void
     {
         $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-        $perPage = 15;
+        $perPage = 15; 
         $result = $this->categoryModel->getAllCategoriesPaginated($page, $perPage);
         $userId = $this->session->getUserId();
-        $adminUserModel = new UserModel($this->db);
+        $adminUserModel = new UserModel($this->db); 
         $adminUser = $adminUserModel->findById($userId);
         $data = [
             'page_title' => 'Manage Categories',
             'admin_user' => $adminUser,
-            'categories' => $result['categories'] ?? [],
-            'pagination' => $result['pagination'] ?? [],
-            'csrf_token' => $this->session->generateCsrfToken()
+            'categories' => $result['categories'] ?? [], 
+            'pagination' => $result['pagination'] ?? [], 
+            'csrf_token' => $this->session->generateCsrfToken() 
         ];
         $this->viewWithAdminLayout('admin/categories/index', $data);
     }
@@ -45,13 +42,13 @@ class AdminCategoryController extends BaseController
     {
         $categories = $this->categoryModel->getAll();
         $userId = $this->session->getUserId();
-        $adminUserModel = new UserModel($this->db);
+        $adminUserModel = new UserModel($this->db); 
         $adminUser = $adminUserModel->findById($userId);
         $data = [
             'page_title' => 'Add New Category',
             'admin_user' => $adminUser,
-            'categories' => $categories,
-            'csrf_token' => $this->session->generateCsrfToken()
+            'categories' => $categories, 
+            'csrf_token' => $this->session->generateCsrfToken() 
         ];
         $this->viewWithAdminLayout('admin/categories/create', $data);
     }
@@ -101,16 +98,16 @@ class AdminCategoryController extends BaseController
         }
         $categories = $this->categoryModel->getAll();
         $userId = $this->session->getUserId();
-        $adminUserModel = new UserModel($this->db);
+        $adminUserModel = new UserModel($this->db); 
         $adminUser = $adminUserModel->findById($userId);
         $hasProducts = $this->categoryModel->hasProducts($id);
         $data = [
             'page_title' => 'Edit Category',
             'admin_user' => $adminUser,
-            'category' => $category,
-            'categories' => $categories,
-            'has_products' => $hasProducts,
-            'csrf_token' => $this->session->generateCsrfToken()
+            'category' => $category, 
+            'categories' => $categories, 
+            'has_products' => $hasProducts, 
+            'csrf_token' => $this->session->generateCsrfToken() 
         ];
         $this->viewWithAdminLayout('admin/categories/edit', $data);
     }
@@ -189,12 +186,12 @@ class AdminCategoryController extends BaseController
         if (!file_exists($viewPath)) {
             trigger_error("View file not found: {$viewPath}", E_USER_WARNING);
             echo "Error: View file '{$view}' not found.";
-            exit;
+            exit; 
         }
         if (!file_exists($layoutPath)) {
             trigger_error("Layout file not found: {$layoutPath}", E_USER_WARNING);
             echo "Error: Admin layout file not found.";
-            exit;
+            exit; 
         }
         try {
             $request = \App\Core\Registry::get('request');
@@ -210,7 +207,7 @@ class AdminCategoryController extends BaseController
             include $viewPath;
         } catch (\Throwable $e) {
             ob_end_clean();
-            error_log("Error rendering view '{$view}': " . $e->getMessage());
+            error_log("Error rendering view '{$view}': " . $e->getMessage()); 
             echo "Error rendering view '{$view}'. Please check the logs.";
             exit;
         }

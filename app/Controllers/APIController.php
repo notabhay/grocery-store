@@ -1,13 +1,10 @@
 <?php
-
 namespace App\Controllers;
-
 use App\Core\BaseController;
 use App\Core\Registry;
 use App\Models\Order;
 use App\Controllers\OrderController;
 use PDO;
-
 class APIController extends BaseController
 {
     private $db;
@@ -23,15 +20,15 @@ class APIController extends BaseController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->order = new Order($db);
-        $this->request_method = $_SERVER['REQUEST_METHOD'];
-        $this->endpoint = $this->getEndpoint();
-        $this->params = $this->getParams();
-        $this->authenticate();
+        $this->order = new Order($db); 
+        $this->request_method = $_SERVER['REQUEST_METHOD']; 
+        $this->endpoint = $this->getEndpoint(); 
+        $this->params = $this->getParams(); 
+        $this->authenticate(); 
     }
     public function processRequest(): void
     {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json'); 
         switch ($this->endpoint) {
             case 'orders':
                 $this->handleOrdersEndpoint();
@@ -40,7 +37,7 @@ class APIController extends BaseController
                 $this->setResponse(404, ['error' => 'Endpoint not found']);
                 break;
         }
-        $this->sendResponse();
+        $this->sendResponse(); 
     }
     private function handleOrdersEndpoint(): void
     {
@@ -54,9 +51,9 @@ class APIController extends BaseController
                     $this->getOrderById($this->params['id']);
                 } else {
                     if ($this->is_manager) {
-                        $this->getAllOrders();
+                        $this->getAllOrders(); 
                     } else {
-                        $this->getUserOrders();
+                        $this->getUserOrders(); 
                     }
                 }
                 break;
@@ -74,11 +71,11 @@ class APIController extends BaseController
     }
     private function getOrderById($order_id): void
     {
-        $orderController = new OrderController();
-        $order = $orderController->getOrderDetails($order_id, $this->user_id);
+        $orderController = new OrderController(); 
+        $order = $orderController->getOrderDetails($order_id, $this->user_id); 
         if ($order) {
             if ($this->is_manager || $order['user_id'] == $this->user_id) {
-                $this->setResponse(200, $order);
+                $this->setResponse(200, $order); 
             } else {
                 $this->setResponse(403, ['error' => 'You are not authorized to view this order']);
             }
@@ -112,10 +109,10 @@ class APIController extends BaseController
     }
     private function getUserOrders(): void
     {
-        $orderController = new OrderController();
-        $orders = $orderController->getUserOrders($this->user_id);
-        if ($orders !== false) {
-            $this->setResponse(200, ['orders' => $orders]);
+        $orderController = new OrderController(); 
+        $orders = $orderController->getUserOrders($this->user_id); 
+        if ($orders !== false) { 
+            $this->setResponse(200, ['orders' => $orders]); 
         } else {
             $this->setResponse(500, ['error' => 'Failed to retrieve orders']);
         }
@@ -127,46 +124,46 @@ class APIController extends BaseController
             $this->setResponse(400, ['error' => 'Status is required']);
             return;
         }
-        $orderController = new OrderController();
+        $orderController = new OrderController(); 
         if ($orderController->updateOrderStatusAsManager($order_id, $data['status'])) {
-            $this->setResponse(200, ['message' => 'Order status updated successfully']);
+            $this->setResponse(200, ['message' => 'Order status updated successfully']); 
         } else {
             $this->setResponse(500, ['error' => 'Failed to update order status. Check logs for details.']);
         }
     }
     private function authenticate(): void
     {
-        $headers = getallheaders();
+        $headers = getallheaders(); 
         if (isset($headers['Authorization'])) {
             $auth_header = $headers['Authorization'];
             if (strpos($auth_header, 'Bearer ') === 0) {
                 $token = substr($auth_header, 7);
-                if ($token == 'manager_token_123') {
+                if ($token == 'manager_token_123') { 
                     $this->is_authenticated = true;
                     $this->is_manager = true;
-                    $this->user_id = 1;
-                } elseif ($token == 'user_token_456') {
+                    $this->user_id = 1; 
+                } elseif ($token == 'user_token_456') { 
                     $this->is_authenticated = true;
-                    $this->user_id = 2;
+                    $this->user_id = 2; 
                 }
             }
         }
     }
     private function getEndpoint(): string
     {
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $path_parts = explode('/', trim($path, '/'));
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); 
+        $path_parts = explode('/', trim($path, '/')); 
         $api_index = array_search('api', $path_parts);
         if ($api_index !== false && isset($path_parts[$api_index + 1])) {
             return $path_parts[$api_index + 1];
         }
-        return '';
+        return ''; 
     }
     private function getParams(): array
     {
         $params = [];
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $path_parts = explode('/', trim($path, '/'));
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); 
+        $path_parts = explode('/', trim($path, '/')); 
         $endpoint_index = array_search($this->endpoint, $path_parts);
         if ($endpoint_index !== false && isset($path_parts[$endpoint_index + 1])) {
             $params['id'] = $path_parts[$endpoint_index + 1];
@@ -180,8 +177,8 @@ class APIController extends BaseController
     }
     private function sendResponse(): void
     {
-        http_response_code($this->response_code);
-        echo json_encode($this->response);
-        exit;
+        http_response_code($this->response_code); 
+        echo json_encode($this->response); 
+        exit; 
     }
 }

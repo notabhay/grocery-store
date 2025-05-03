@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Models;
-
 use PDO;
-use App\Core\Database;
+use App\Core\Database; 
 use App\Core\Registry;
-
 class Order
 {
     private $db;
@@ -67,13 +64,13 @@ class Order
         $data['notes'] = $data['notes'] ?? null;
         $data['shipping_address'] = $data['shipping_address'] ?? null;
         $stmt->bindParam(':user_id', $data['user_id'], PDO::PARAM_INT);
-        $stmt->bindParam(':total_amount', $data['total_amount']);
+        $stmt->bindParam(':total_amount', $data['total_amount']); 
         $stmt->bindParam(':status', $data['status'], PDO::PARAM_STR);
         $stmt->bindParam(':notes', $data['notes'], PDO::PARAM_STR);
         $stmt->bindParam(':shipping_address', $data['shipping_address'], PDO::PARAM_STR);
         try {
             if ($stmt->execute()) {
-                $this->order_id = (int) $this->db->lastInsertId();
+                $this->order_id = (int) $this->db->lastInsertId(); 
                 return $this->order_id;
             } else {
                 $this->error_message = "Order execution failed: " . implode(", ", $stmt->errorInfo());
@@ -169,7 +166,7 @@ class Order
         $stmt->bindParam(':order_id', $orderId, PDO::PARAM_INT);
         try {
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            return $stmt->fetch(PDO::FETCH_ASSOC); 
         } catch (\PDOException $e) {
             $this->error_message = "Database error fetching order: " . $e->getMessage();
             Registry::get('logger')->error($this->error_message, ['exception' => $e, 'order_id' => $orderId]);
@@ -180,29 +177,29 @@ class Order
     {
         $fields = [];
         $params = [':order_id' => $orderId];
-        $allowedFields = ['total_amount', 'status', 'notes', 'shipping_address'];
+        $allowedFields = ['total_amount', 'status', 'notes', 'shipping_address']; 
         foreach ($data as $key => $value) {
             if (in_array($key, $allowedFields)) {
-                $fields[] = "`$key` = :$key";
+                $fields[] = "`$key` = :$key"; 
                 $params[":$key"] = $value;
             }
         }
         if (empty($fields)) {
             $this->error_message = "No valid fields provided for update.";
-            return false;
+            return false; 
         }
         $sql = "UPDATE orders SET " . implode(', ', $fields) . " WHERE order_id = :order_id";
         $stmt = $this->db->prepare($sql);
-        foreach ($params as $key => &$value) {
-            if ($key === ':order_id') {
+        foreach ($params as $key => &$value) { 
+            if ($key === ':order_id') { 
                 $stmt->bindValue($key, $value, PDO::PARAM_INT);
             } elseif ($key === ':total_amount') {
-                $stmt->bindValue($key, $value);
-            } else {
+                $stmt->bindValue($key, $value); 
+            } else { 
                 $stmt->bindValue($key, $value, PDO::PARAM_STR);
             }
         }
-        unset($value);
+        unset($value); 
         try {
             if ($stmt->execute()) {
                 return $stmt->rowCount() > 0;
@@ -248,15 +245,15 @@ class Order
         $limitParam = ':limit';
         $offsetParam = ':offset';
         if ($limit !== null) {
-            $sql .= " LIMIT $limitParam";
+            $sql .= " LIMIT $limitParam"; 
             $params[$limitParam] = $limit;
         }
         if ($offset !== null) {
             if ($limit === null) {
                 $sql .= " LIMIT :default_limit";
-                $params[':default_limit'] = 1000000;
+                $params[':default_limit'] = 1000000; 
             }
-            $sql .= " OFFSET $offsetParam";
+            $sql .= " OFFSET $offsetParam"; 
             $params[$offsetParam] = $offset;
         }
         try {
@@ -264,11 +261,11 @@ class Order
             foreach ($params as $key => &$value) {
                 if ($key === $limitParam || $key === $offsetParam || $key === ':default_limit') {
                     $stmt->bindValue($key, $value, PDO::PARAM_INT);
-                } else {
+                } else { 
                     $stmt->bindValue($key, $value, PDO::PARAM_STR);
                 }
             }
-            unset($value);
+            unset($value); 
             if ($stmt->execute()) {
                 return $stmt;
             } else {
@@ -287,9 +284,9 @@ class Order
         $sql = "SELECT o.*, u.name as user_name, u.email as user_email, u.phone as user_phone
                 FROM orders o
                 JOIN users u ON o.user_id = u.user_id
-                WHERE 1=1";
+                WHERE 1=1"; 
         $countSql = "SELECT COUNT(*) FROM orders o WHERE 1=1";
-        $params = [];
+        $params = []; 
         if (!empty($filters['status'])) {
             $sql .= " AND o.status = :status";
             $countSql .= " AND o.status = :status";
@@ -307,14 +304,14 @@ class Order
         }
         $sql .= " ORDER BY o.order_date DESC";
         $sql .= " LIMIT :limit OFFSET :offset";
-        $queryParams = $params;
+        $queryParams = $params; 
         $queryParams[':limit'] = $perPage;
         $queryParams[':offset'] = $offset;
         $countParams = $params;
         try {
             $countStmt = $this->db->prepare($countSql);
             foreach ($countParams as $key => &$value) {
-                $countStmt->bindValue($key, $value);
+                $countStmt->bindValue($key, $value); 
             }
             unset($value);
             $countStmt->execute();
@@ -325,7 +322,7 @@ class Order
                 if ($key === ':limit' || $key === ':offset') {
                     $stmt->bindValue($key, $value, PDO::PARAM_INT);
                 } else {
-                    $stmt->bindValue($key, $value);
+                    $stmt->bindValue($key, $value); 
                 }
             }
             unset($value);
@@ -365,12 +362,12 @@ class Order
         }
         try {
             $stmt = $this->db->prepare($sql);
-            $stmt->execute($params);
+            $stmt->execute($params); 
             return (int) $stmt->fetchColumn();
         } catch (\PDOException $e) {
             $this->error_message = "Database error counting orders: " . $e->getMessage();
             Registry::get('logger')->error($this->error_message, ['exception' => $e, 'status' => $status]);
-            return 0;
+            return 0; 
         }
     }
     public function findOrderWithDetails(int $orderId): array|false
@@ -379,11 +376,11 @@ class Order
             $order = $this->readOne($orderId);
             if (!$order) {
                 if (empty($this->error_message)) {
-                    $this->error_message = "Order not found.";
+                    $this->error_message = "Order not found."; 
                 }
                 return false;
             }
-            $orderItemModel = new OrderItem($this->db);
+            $orderItemModel = new OrderItem($this->db); 
             $itemsStmt = $orderItemModel->readByOrder($orderId);
             if (!$itemsStmt) {
                 $this->error_message = "Failed to fetch order items: " . $orderItemModel->getErrorMessage();
@@ -404,7 +401,7 @@ class Order
                 }
             }
             $order['items'] = $items;
-            if (isset($order['total_amount']) && abs((float)$order['total_amount'] - $calculatedTotalAmount) > 0.01) {
+            if (isset($order['total_amount']) && abs((float)$order['total_amount'] - $calculatedTotalAmount) > 0.01) { 
                 Registry::get('logger')->warning("Order total discrepancy detected.", [
                     'order_id' => $orderId,
                     'stored_total' => $order['total_amount'],
@@ -439,7 +436,7 @@ class Order
         } catch (\PDOException $e) {
             $this->error_message = "Database error counting orders: " . $e->getMessage();
             Registry::get('logger')->error($this->error_message, ['exception' => $e]);
-            return 0;
+            return 0; 
         }
     }
     public function getOrderCountByStatus(string $status): int
@@ -452,7 +449,7 @@ class Order
         } catch (\PDOException $e) {
             $this->error_message = "Database error counting orders by status: " . $e->getMessage();
             Registry::get('logger')->error($this->error_message, ['exception' => $e, 'status' => $status]);
-            return 0;
+            return 0; 
         }
     }
     public function getRecentOrders(int $limit = 5): array|false
@@ -462,9 +459,9 @@ class Order
                     FROM orders o
                     JOIN users u ON o.user_id = u.user_id
                     ORDER BY o.order_date DESC
-                    LIMIT :limit";
+                    LIMIT :limit"; 
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT); 
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {

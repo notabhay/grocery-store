@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Models;
-
 use PDO;
 use App\Core\Database;
-
 class Category
 {
     private $db;
@@ -131,7 +128,7 @@ class Category
             if (class_exists('\\App\\Core\\Registry') && \App\Core\Registry::has('logger')) {
                 \App\Core\Registry::get('logger')->error("Error counting total categories", ['exception' => $e]);
             }
-            return 0;
+            return 0; 
         }
     }
 }

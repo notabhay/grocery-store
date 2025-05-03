@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Controllers\Api;
-
 use App\Core\BaseController;
 use App\Core\Request;
 use App\Core\Session;
@@ -9,7 +7,6 @@ use App\Core\Registry;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Helpers\SecurityHelper;
-
 class OrderApiController extends BaseController
 {
     private $orderModel;
@@ -19,26 +16,26 @@ class OrderApiController extends BaseController
     {
         $this->orderModel = new Order(Registry::get('db'));
         $this->orderItemModel = new OrderItem(Registry::get('db'));
-        $this->orderController = new \App\Controllers\OrderController();
-        header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, PUT, POST, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        $this->orderController = new \App\Controllers\OrderController(); 
+        header('Content-Type: application/json'); 
+        header('Access-Control-Allow-Origin: *'); 
+        header('Access-Control-Allow-Methods: GET, PUT, POST, OPTIONS'); 
+        header('Access-Control-Allow-Headers: Content-Type, Authorization'); 
         if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-            http_response_code(200);
-            exit();
+            http_response_code(200); 
+            exit(); 
         }
     }
     private function checkApiAuth(): bool
     {
         if (!Registry::get('session')->isAuthenticated()) {
-            http_response_code(401);
+            http_response_code(401); 
             echo json_encode(['error' => 'Authentication required.']);
             return false;
         }
         $userRole = Registry::get('session')->get('user_role');
         if ($userRole !== 'admin') {
-            http_response_code(403);
+            http_response_code(403); 
             echo json_encode(['error' => 'Permission denied. Requires administrator privileges.']);
             return false;
         }
@@ -47,7 +44,7 @@ class OrderApiController extends BaseController
     public function index()
     {
         if (!$this->checkApiAuth()) {
-            return;
+            return; 
         }
         try {
             $orders = $this->orderModel->getAll();
@@ -107,7 +104,7 @@ class OrderApiController extends BaseController
             return;
         }
         $newStatus = SecurityHelper::sanitizeInput($requestData['status']);
-        $allowedStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+        $allowedStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled']; 
         if (!in_array($newStatus, $allowedStatuses)) {
             http_response_code(400);
             echo json_encode(['error' => 'Invalid status value provided. Allowed values: ' . implode(', ', $allowedStatuses)]);
@@ -125,7 +122,7 @@ class OrderApiController extends BaseController
                 http_response_code(200);
                 echo json_encode(['message' => 'Order status updated successfully.']);
             } else {
-                http_response_code(500);
+                http_response_code(500); 
                 echo json_encode(['error' => 'Failed to update order status.']);
             }
         } catch (\Exception $e) {

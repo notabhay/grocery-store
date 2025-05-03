@@ -1,12 +1,9 @@
 <?php
-
 namespace App\Middleware;
-
 use App\Core\Session;
 use App\Core\Redirect;
 use App\Core\Registry;
 use App\Models\User;
-
 class AdminAuthMiddleware
 {
     private $session;
@@ -16,7 +13,7 @@ class AdminAuthMiddleware
         $this->session = Registry::get('session');
         $this->db = Registry::get('database');
     }
-    public function handle(callable $next): mixed
+    public function handle(callable $next): mixed 
     {
         if (!$this->session->isAuthenticated()) {
             $this->session->flash('error', 'Please log in to access the admin area.');
@@ -26,7 +23,7 @@ class AdminAuthMiddleware
         $userId = $this->session->getUserId();
         if (!$userId) {
             $this->session->flash('error', 'Authentication error. Please log in again.');
-            $this->session->destroy();
+            $this->session->destroy(); 
             Redirect::to('/login');
             exit();
         }

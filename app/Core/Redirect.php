@@ -6,7 +6,7 @@ class Redirect
     public static function to(string $url, int $statusCode = 302): void
     {
         $finalUrl = $url;
-        if (strpos($url, '/') === 0 && strpos($url, '
+        if (strpos($url, '/') === 0 && strpos($url, '//') !== 0) {
             if (defined('BASE_URL')) {
                 $finalUrl = rtrim(BASE_URL, '/') . '/' . ltrim($url, '/');
             } else {
@@ -18,7 +18,7 @@ class Redirect
                 exit();
             }
         }
-        elseif (strpos($finalUrl, '
+        elseif (strpos($finalUrl, '//') !== 0 && strpos($finalUrl, 'http:') !== 0 && strpos($finalUrl, 'https:') !== 0) {
             if (Registry::has('logger')) {
                 Registry::get('logger')->warning("Invalid redirect URL format provided.", ['url' => $url, 'finalUrl' => $finalUrl]);
             }

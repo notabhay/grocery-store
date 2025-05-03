@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Controllers\Api;
-
 if (!defined('BASE_PATH')) {
     define('BASE_PATH', dirname(dirname(dirname(__DIR__))));
 }
@@ -9,7 +7,7 @@ $config = require BASE_PATH . '/app/config.php';
 $api_version = $config['API_VERSION'] ?? 'N/A';
 $api_rate_limit = $config['API_RATE_LIMIT'] ?? 'N/A';
 $api_base_url = rtrim($config['SITE_URL'] ?? 'http://localhost/', '/') . ($config['API_BASE_PATH'] ?? '/api');
-$items_per_page = $config['ITEMS_PER_PAGE'] ?? 10;
+$items_per_page = $config['ITEMS_PER_PAGE'] ?? 10; 
 $api_doc = <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -367,7 +365,6 @@ $api_doc = <<<HTML
         <p>&copy; <?php echo date("Y"); ?> Fresh Grocery Store. All rights reserved.</p>
 </footer>
 </body>
-
 </html>
 HTML;
 echo $api_doc;

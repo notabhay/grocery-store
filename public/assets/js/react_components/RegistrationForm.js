@@ -1,35 +1,35 @@
 const FormInput = ({ id, label, type, value, onChange, onBlur, error, success, isRequired = true }) => {
     return (
         <div className="form-group">
-            { }
+            {}
             <label htmlFor={id}>{label}{isRequired && <span className="required"> *</span>}</label>
             <div className="input-container">
-                { }
+                {}
                 <input
                     type={type}
                     id={id}
-                    name={id}
+                    name={id} 
                     value={value}
                     onChange={onChange}
-                    onBlur={onBlur}
-                    className={error ? "invalid" : ""}
-                    required={isRequired}
+                    onBlur={onBlur} 
+                    className={error ? "invalid" : ""} 
+                    required={isRequired} 
                 />
-                { }
+                {}
                 {success && !error && value && (
                     <span className="field-success">
                         <i className="fas fa-check-circle"></i>
                     </span>
                 )}
             </div>
-            { }
+            {}
             {error && <div className="error-message"><i className="fas fa-exclamation-circle"></i> {error}</div>}
         </div>
     );
 };
 const PasswordStrengthMeter = ({ password }) => {
     const getPasswordStrength = (password) => {
-        if (!password) return { strength: "", label: "" };
+        if (!password) return { strength: "", label: "" }; 
         const hasLetter = /[a-zA-Z]/.test(password);
         const hasNumber = /\d/.test(password);
         const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
@@ -38,17 +38,17 @@ const PasswordStrengthMeter = ({ password }) => {
         const metCriteria = criteria.filter(Boolean).length;
         if (metCriteria <= 2) return { strength: "weak", label: "Weak" };
         if (metCriteria === 3) return { strength: "medium", label: "Medium" };
-        return { strength: "strong", label: "Strong" };
+        return { strength: "strong", label: "Strong" }; 
     };
     const { strength, label } = getPasswordStrength(password);
     if (!password) return null;
     return (
         <div className="password-strength">
             <div className="strength-meter">
-                { }
+                {}
                 <div className={`strength-meter-fill ${strength}`}></div>
             </div>
-            { }
+            {}
             <div className={`strength-text ${strength}`}>{label}</div>
         </div>
     );
@@ -72,33 +72,33 @@ const RegistrationForm = ({ csrfToken }) => {
         email: false,
         password: false
     });
-    const [isSubmitting, setIsSubmitting] = React.useState(false);
-    const [submitError, setSubmitError] = React.useState("");
-    const [submitSuccess, setSubmitSuccess] = React.useState(false);
-    const [isCheckingEmail, setIsCheckingEmail] = React.useState(false);
-    const [emailExists, setEmailExists] = React.useState(false);
+    const [isSubmitting, setIsSubmitting] = React.useState(false); 
+    const [submitError, setSubmitError] = React.useState(""); 
+    const [submitSuccess, setSubmitSuccess] = React.useState(false); 
+    const [isCheckingEmail, setIsCheckingEmail] = React.useState(false); 
+    const [emailExists, setEmailExists] = React.useState(false); 
     const emailCheckTimeout = React.useRef(null);
     const validate = {
         name: (value) => {
             if (!value.trim()) return "Name is required";
             if (!/^[a-zA-Z\s]+$/.test(value)) return "Name should only contain letters and spaces";
-            return "";
+            return ""; 
         },
         phone: (value) => {
             if (!value.trim()) return "Phone number is required";
             if (!/^\d{10}$/.test(value)) return "Phone number must be 10 digits";
-            return "";
+            return ""; 
         },
         email: (value) => {
             if (!value.trim()) return "Email is required";
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Invalid email format";
             if (emailExists) return "Email already exists";
-            return "";
+            return ""; 
         },
         password: (value) => {
             if (!value) return "Password is required";
             if (value.length < 8) return "Password must be at least 8 characters";
-            return "";
+            return ""; 
         }
     };
     const handleChange = (e) => {
@@ -142,25 +142,25 @@ const RegistrationForm = ({ csrfToken }) => {
         }));
         if (name === 'email' && formData.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
             if (emailCheckTimeout.current) {
-                clearTimeout(emailCheckTimeout.current);
+                clearTimeout(emailCheckTimeout.current); 
             }
             checkEmailExists(formData.email);
         }
     };
     const checkEmailExists = (email) => {
-        setIsCheckingEmail(true);
-        setEmailExists(false);
+        setIsCheckingEmail(true); 
+        setEmailExists(false); 
         const data = new FormData();
         data.append('email', email);
-        fetch('ajax/check-email', {
+        fetch('ajax/check-email', { 
             method: 'POST',
             body: data
         })
-            .then(response => response.json())
+            .then(response => response.json()) 
             .then(data => {
-                setIsCheckingEmail(false);
+                setIsCheckingEmail(false); 
                 if (data.exists) {
-                    setEmailExists(true);
+                    setEmailExists(true); 
                     setErrors(prevErrors => ({
                         ...prevErrors,
                         email: "Email already exists"
@@ -173,11 +173,11 @@ const RegistrationForm = ({ csrfToken }) => {
             })
             .catch(error => {
                 console.error('Error checking email:', error);
-                setIsCheckingEmail(false);
+                setIsCheckingEmail(false); 
             });
     };
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
         const allTouched = {};
         Object.keys(formData).forEach(key => { allTouched[key] = true; });
         setTouched(allTouched);
@@ -188,16 +188,16 @@ const RegistrationForm = ({ csrfToken }) => {
             newErrors[key] = error;
             if (error) hasErrors = true;
         });
-        setErrors(newErrors);
+        setErrors(newErrors); 
         if (hasErrors) return;
-        setIsSubmitting(true);
-        setSubmitError("");
+        setIsSubmitting(true); 
+        setSubmitError(""); 
         const data = new FormData();
         Object.keys(formData).forEach(key => {
             data.append(key, formData[key]);
         });
-        data.append('csrf_token', csrfToken);
-        fetch('register', {
+        data.append('csrf_token', csrfToken); 
+        fetch('register', { 
             method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
@@ -211,21 +211,21 @@ const RegistrationForm = ({ csrfToken }) => {
                 return response.json();
             })
             .then(data => {
-                setIsSubmitting(false);
+                setIsSubmitting(false); 
                 if (data.success) {
-                    setSubmitSuccess(true);
+                    setSubmitSuccess(true); 
                     setFormData({ name: "", phone: "", email: "", password: "" });
                     setTouched({ name: false, phone: false, email: false, password: false });
                     setTimeout(() => {
-                        window.location.href = window.baseUrl + 'login';
-                    }, 2000);
+                        window.location.href = window.baseUrl + 'login'; 
+                    }, 2000); 
                 } else {
                     setSubmitError(data.message || "Registration failed. Please try again.");
                 }
             })
             .catch(error => {
                 console.error('Error during registration:', error);
-                setIsSubmitting(false);
+                setIsSubmitting(false); 
                 if (error.message.includes('403')) {
                     setSubmitError("Security token validation failed. Please refresh the page and try again.");
                 } else {
@@ -235,22 +235,22 @@ const RegistrationForm = ({ csrfToken }) => {
     };
     return (
         <div className="register-form-container">
-            { }
+            {}
             {submitSuccess ? (
                 <div className="alert alert-success">
                     <p>Registration successful! Redirecting to login page...</p>
                 </div>
             ) : (
                 <React.Fragment>
-                    { }
+                    {}
                     {submitError && (
                         <div className="alert alert-error">
                             <p>{submitError}</p>
                         </div>
                     )}
-                    { }
-                    <form onSubmit={handleSubmit} className="register-form" noValidate> { }
-                        { }
+                    {}
+                    <form onSubmit={handleSubmit} className="register-form" noValidate> {}
+                        {}
                         <FormInput
                             id="name"
                             label="Full Name"
@@ -258,13 +258,13 @@ const RegistrationForm = ({ csrfToken }) => {
                             value={formData.name}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            error={touched.name ? errors.name : ""}
-                            success={touched.name && !errors.name}
+                            error={touched.name ? errors.name : ""} 
+                            success={touched.name && !errors.name} 
                         />
                         <FormInput
                             id="phone"
                             label="Phone Number (10 digits)"
-                            type="tel"
+                            type="tel" 
                             value={formData.phone}
                             onChange={handleChange}
                             onBlur={handleBlur}
@@ -274,14 +274,14 @@ const RegistrationForm = ({ csrfToken }) => {
                         <FormInput
                             id="email"
                             label="Email Address"
-                            type="email"
+                            type="email" 
                             value={formData.email}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             error={touched.email ? errors.email : ""}
                             success={touched.email && !errors.email && !isCheckingEmail}
                         />
-                        { }
+                        {}
                         {isCheckingEmail && (
                             <div className="loading-indicator">
                                 <i className="fas fa-spinner fa-spin"></i> Checking email...
@@ -297,14 +297,14 @@ const RegistrationForm = ({ csrfToken }) => {
                             error={touched.password ? errors.password : ""}
                             success={touched.password && !errors.password}
                         />
-                        { }
+                        {}
                         <PasswordStrengthMeter password={formData.password} />
-                        { }
+                        {}
                         <div className="form-group">
                             <button
                                 type="submit"
                                 className="btn btn-primary"
-                                disabled={isSubmitting}
+                                disabled={isSubmitting} 
                             >
                                 {isSubmitting ? (
                                     <React.Fragment>
@@ -316,7 +316,7 @@ const RegistrationForm = ({ csrfToken }) => {
                             </button>
                         </div>
                     </form>
-                    { }
+                    {}
                     <div className="login-link">
                         <p>Already have an account? <a href={window.baseUrl + 'login'}>Login here</a></p>
                     </div>

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Core;
-
 class Request
 {
     private $getParams;
@@ -31,7 +29,8 @@ class Request
                 $headerKey = str_replace('_', '-', strtolower(substr($key, 5)));
                 $headerKey = ucwords($headerKey, '-');
                 $headers[$headerKey] = $value;
-            } elseif (in_array($key, ['CONTENT_TYPE', 'CONTENT_LENGTH', 'CONTENT_MD5'], true)) {
+            } 
+            elseif (in_array($key, ['CONTENT_TYPE', 'CONTENT_LENGTH', 'CONTENT_MD5'], true)) {
                 $headerKey = str_replace('_', '-', strtolower($key));
                 $headerKey = ucwords($headerKey, '-');
                 $headers[$headerKey] = $value;

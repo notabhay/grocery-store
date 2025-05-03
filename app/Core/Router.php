@@ -1,14 +1,11 @@
 <?php
-
 namespace App\Core;
-
-use Exception;
-use ReflectionClass;
-use ReflectionParameter;
-use App\Helpers\CaptchaHelper;
-use App\Core\Session;
-use App\Core\Redirect;
-
+use Exception; 
+use ReflectionClass; 
+use ReflectionParameter; 
+use App\Helpers\CaptchaHelper; 
+use App\Core\Session; 
+use App\Core\Redirect; 
 class Router
 {
     protected $routes = [
@@ -22,9 +19,9 @@ class Router
     protected static $routePrefix = '';
     public static function load(string $file): self
     {
-        $router = new static;
-        require $file;
-        return $router;
+        $router = new static; 
+        require $file; 
+        return $router; 
     }
     public function get(string $uri, array $action): void
     {
@@ -74,16 +71,16 @@ class Router
             if (preg_match($pattern, $uri, $matches)) {
                 $this->params = [];
                 foreach ($matches as $key => $match) {
-                    if (is_string($key)) {
+                    if (is_string($key)) { 
                         $this->params[$key] = is_numeric($match) ? (int) $match : $match;
                     }
                 }
                 $this->matchedController = $routeInfo;
                 $this->matchedPattern = $pattern;
-                return true;
+                return true; 
             }
         }
-        return false;
+        return false; 
     }
     public function direct(string $uri, string $requestType)
     {
@@ -91,10 +88,10 @@ class Router
         $baseUrlPath = defined('BASE_URL') ? parse_url(BASE_URL, PHP_URL_PATH) : '';
         $requestPathClean = trim($requestUriPath, '/');
         $basePathClean = trim($baseUrlPath, '/');
-        $appPath = '/';
+        $appPath = '/'; 
         if (!empty($basePathClean) && strpos($requestPathClean, $basePathClean) === 0) {
             $appPathSegment = substr($requestPathClean, strlen($basePathClean));
-            $appPath = '/' . ltrim($appPathSegment, '/');
+            $appPath = '/' . ltrim($appPathSegment, '/'); 
         } elseif (empty($basePathClean) && !empty($requestPathClean)) {
             $appPath = '/' . $requestPathClean;
         }
@@ -103,7 +100,7 @@ class Router
         }
         $uriPathClean = trim($appPath, '/');
         if ($uriPathClean === '') {
-            $uriPathClean = '/';
+            $uriPathClean = '/'; 
         }
         $pathForMatching = ltrim($appPath, '/');
         if ($this->match($pathForMatching, $requestType) && $this->matchedController) {
@@ -137,7 +134,7 @@ class Router
                 } else {
                     Registry::get('session')->flash('error', 'Please log in to access that page.');
                     Redirect::to('/login');
-                    exit();
+                    exit(); 
                 }
             }
             $controllerClass = $this->matchedController['controller'];
@@ -181,15 +178,15 @@ class Router
             throw new Exception("Controller class {$controllerClass} not found.");
         }
         $reflection = new ReflectionClass($controllerClass);
-        $constructor = $reflection->getConstructor();
-        $dependencies = [];
+        $constructor = $reflection->getConstructor(); 
+        $dependencies = []; 
         if ($constructor) {
-            $constructorParams = $constructor->getParameters();
+            $constructorParams = $constructor->getParameters(); 
             foreach ($constructorParams as $param) {
-                $paramType = $param->getType();
-                $resolved = false;
+                $paramType = $param->getType(); 
+                $resolved = false; 
                 if ($paramType && !$paramType->isBuiltin() && $paramType instanceof \ReflectionNamedType) {
-                    $dependencyClassName = $paramType->getName();
+                    $dependencyClassName = $paramType->getName(); 
                     if ($dependencyClassName === Database::class && Registry::has('database')) {
                         $dependencies[] = Registry::get('database');
                         $resolved = true;
@@ -203,10 +200,12 @@ class Router
                     if (!$resolved && Registry::has($dependencyClassName)) {
                         $dependencies[] = Registry::get($dependencyClassName);
                         $resolved = true;
-                    } elseif (!$resolved && Registry::has(strtolower($param->getName()))) {
+                    }
+                    elseif (!$resolved && Registry::has(strtolower($param->getName()))) {
                         $dependencies[] = Registry::get(strtolower($param->getName()));
                         $resolved = true;
-                    } elseif (!$resolved) {
+                    }
+                    elseif (!$resolved) {
                         if ($param->isOptional()) {
                             $dependencies[] = $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null;
                             $resolved = true;
@@ -216,9 +215,9 @@ class Router
                     }
                 } else {
                     if ($param->isDefaultValueAvailable()) {
-                        $dependencies[] = $param->getDefaultValue();
+                        $dependencies[] = $param->getDefaultValue(); 
                     } elseif ($param->isOptional()) {
-                        $dependencies[] = null;
+                        $dependencies[] = null; 
                     } else {
                         $dependencies[] = null;
                     }
