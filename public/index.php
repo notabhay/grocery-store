@@ -60,7 +60,6 @@ Registry::bind('config', $config);
 // --- Core Services Initialization (Dependency Injection Setup) ---
 // This block sets up essential services and binds them to the Registry.
 // It's wrapped in a try-catch to handle critical initialization errors.
-die('DEBUG: Reached before core services initialization try block.');
 try {
     // --- Logger Setup ---
     // Define the path for the application log file.
@@ -81,6 +80,7 @@ try {
     $logger->pushHandler(new StreamHandler($logFilePath, $logLevel));
     // Bind the logger instance to the Registry.
     Registry::bind('logger', $logger);
+    die('DEBUG: Logger initialized successfully!');
 
     // --- Database Setup ---
     // Instantiate the Database connection handler using credentials from the config.
