@@ -27,7 +27,7 @@ class Router
      *            are arrays containing 'controller' and 'action' strings.
      *            Example: ['GET']['#^/users/(?P<id>[^/]+)$#i'] => ['controller' => UserController::class, 'action' => 'show']
      */
-    protected array $routes = [
+    protected $routes = [
         'GET' => [],
         'POST' => [],
         'PUT' => [],
@@ -37,24 +37,24 @@ class Router
      * @var array Stores the parameters extracted from the matched URI pattern.
      *            Keys are parameter names defined in the route (e.g., 'id'), values are the matched segments.
      */
-    protected array $params = [];
+    protected $params = [];
 
     /**
      * @var array|null Stores the controller and action information of the matched route.
      *                 Example: ['controller' => UserController::class, 'action' => 'show']
      */
-    protected ?array $matchedController = null;
+    protected $matchedController = null;
 
     /**
      * @var string|null Stores the regex pattern of the matched route.
      *                  Used internally, e.g., for the hardcoded authentication check.
      */
-    protected ?string $matchedPattern = null;
+    protected $matchedPattern = null;
 
     /**
      * @var string Stores the current prefix being applied to routes defined within a group.
      */
-    protected static string $routePrefix = '';
+    protected static $routePrefix = '';
 
     /**
      * Loads route definitions from a specified file.

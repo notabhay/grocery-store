@@ -10,7 +10,6 @@ use App\Core\Registry;
 use App\Helpers\CartHelper;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-use Monolog\Level;
 
 /**
  * Cart API Controller
@@ -62,7 +61,7 @@ class CartApiController extends BaseController
             mkdir($logDir, 0777, true);
         }
         // Add a handler to log messages to the application log file
-        $this->logger->pushHandler(new StreamHandler($logFilePath, Level::Debug));
+        $this->logger->pushHandler(new StreamHandler($logFilePath, Logger::DEBUG));
     }
 
     /**

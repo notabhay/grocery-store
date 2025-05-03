@@ -27,32 +27,32 @@ class UserController extends BaseController
     /**
      * @var Database Database connection wrapper instance.
      */
-    private Database $db;
+    private $db;
 
     /**
      * @var Session Session management instance.
      */
-    private Session $session;
+    private $session;
 
     /**
      * @var Request HTTP request handling instance.
      */
-    private Request $request;
+    private $request;
 
     /**
      * @var User User model instance for database interactions.
      */
-    private User $userModel;
+    private $userModel;
 
     /**
      * @var LoggerInterface Logger instance for recording events and errors.
      */
-    private LoggerInterface $logger;
+    private $logger;
 
     /**
      * @var CaptchaHelper Helper for generating and validating CAPTCHA images/text.
      */
-    private CaptchaHelper $captchaHelper;
+    private $captchaHelper;
 
     /**
      * UserController constructor.

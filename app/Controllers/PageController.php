@@ -25,32 +25,32 @@ class PageController extends BaseController
     /**
      * @var Database Database connection wrapper instance.
      */
-    private Database $db;
+    private $db;
 
     /**
      * @var Session Session management instance.
      */
-    private Session $session;
+    private $session;
 
     /**
      * @var Request HTTP request handling instance.
      */
-    private Request $request;
+    private $request;
 
     /**
      * @var SecurityHelper Helper for input sanitization and validation.
      */
-    private SecurityHelper $securityHelper;
+    private $securityHelper;
 
     /**
      * @var LoggerInterface Logger instance for recording events and errors.
      */
-    private LoggerInterface $logger;
+    private $logger;
 
     /**
      * @var CartHelper Helper for managing shopping cart data and interactions.
      */
-    private CartHelper $cartHelper;
+    private $cartHelper;
 
     /**
      * PageController constructor.

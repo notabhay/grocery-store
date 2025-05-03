@@ -14,15 +14,15 @@ namespace App\Core;
 class Request
 {
     /** @var array Filtered GET parameters ($_GET). */
-    private array $getParams;
+    private $getParams;
     /** @var array Filtered POST parameters ($_POST). */
-    private array $postParams;
+    private $postParams;
     /** @var array Uploaded file information ($_FILES). */
-    private array $files;
+    private $files;
     /** @var array Server environment variables ($_SERVER). */
-    private array $server;
+    private $server;
     /** @var array Parsed HTTP request headers. */
-    private array $headers;
+    private $headers;
     /** @var string|null|false Cached raw input stream content. */
     private $inputStream;
 

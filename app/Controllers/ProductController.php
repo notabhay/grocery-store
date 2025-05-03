@@ -24,32 +24,32 @@ class ProductController extends BaseController
     /**
      * @var Database Database connection wrapper instance.
      */
-    private Database $db;
+    private $db;
 
     /**
      * @var Session Session management instance.
      */
-    private Session $session;
+    private $session;
 
     /**
      * @var Request HTTP request handling instance.
      */
-    private Request $request;
+    private $request;
 
     /**
      * @var LoggerInterface Logger instance for recording events and errors.
      */
-    private LoggerInterface $logger;
+    private $logger;
 
     /**
      * @var Category Category model instance for database interactions.
      */
-    private Category $categoryModel;
+    private $categoryModel;
 
     /**
      * @var Product Product model instance for database interactions.
      */
-    private Product $productModel;
+    private $productModel;
 
     /**
      * ProductController constructor.

@@ -31,7 +31,6 @@ use App\Core\Session;       // Manages user sessions.
 use App\Helpers\CaptchaHelper; // Helper for generating and validating CAPTCHAs.
 use Monolog\Logger;         // PSR-3 compliant logging library.
 use Monolog\Handler\StreamHandler; // Monolog handler to write logs to files.
-use Monolog\Level;          // Defines logging levels (e.g., Debug, Warning, Error).
 use App\Helpers\SecurityHelper; // Helper for setting security-related HTTP headers.
 
 // --- Initial Setup & Security ---
@@ -62,7 +61,7 @@ try {
     $logger = new Logger('app');
     // Determine the minimum logging level based on the debug mode setting in config.
     // Log everything (Debug level) if DEBUG_MODE is true, otherwise log Warnings and above.
-    $logLevel = ($config['DEBUG_MODE'] ?? false) ? Level::Debug : Level::Warning;
+    $logLevel = ($config['DEBUG_MODE'] ?? false) ? Logger::DEBUG : Logger::WARNING;
     // Add a handler to write log records to the specified file with the determined level.
     $logger->pushHandler(new StreamHandler($logFilePath, $logLevel));
     // Bind the logger instance to the Registry.
