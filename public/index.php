@@ -32,8 +32,21 @@ try {
 define('BASE_PATH', dirname(__DIR__));
 
 // --- Define Base URL ---
-// Determine Scheme (http/https)
-$scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
+// Determine Scheme (http/https) - More robust check
+$scheme = 'http'; // Default to http
+if (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] == 1)) {
+    // Standard HTTPS check
+    $scheme = 'https';
+} elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+    // Check for proxy header (common)
+    $scheme = 'https';
+} elseif (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on') {
+    // Check for another proxy header (less common)
+    $scheme = 'https';
+} elseif (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) {
+    // Check if running on standard HTTPS port (fallback)
+    $scheme = 'https';
+}
 
 // Determine Host (including port if non-standard)
 $host = $_SERVER['HTTP_HOST']; // e.g., localhost:8888 or teach.scam.keele.ac.uk
