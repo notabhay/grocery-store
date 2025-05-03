@@ -307,10 +307,24 @@ class Router
 
         // Log all defined routes for the current request type to help with debugging
         $definedRoutes = isset($this->routes[$requestType]) ? array_keys($this->routes[$requestType]) : [];
+
+        // Create a more readable list of routes for debugging
+        $readableRoutes = [];
+        if (isset($this->routes[$requestType])) {
+            foreach ($this->routes[$requestType] as $pattern => $routeInfo) {
+                $readableRoutes[] = [
+                    'pattern' => $pattern,
+                    'controller' => $routeInfo['controller'],
+                    'action' => $routeInfo['action']
+                ];
+            }
+        }
+
         $routesInfo = [
             'requested_uri' => $uriPath,
             'request_method' => $requestType,
             'defined_routes' => $definedRoutes,
+            'readable_routes' => $readableRoutes,
             'base_url' => defined('BASE_URL') ? BASE_URL : '/',
             'uri_path_clean' => $uriPathClean
         ];

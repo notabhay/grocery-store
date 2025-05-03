@@ -125,25 +125,30 @@ class Request
         }
 
         // ADDED: Check if the relative path starts with "public/" and remove it
+        $originalRelativePath = $relativePath;
         if (strpos($relativePath, 'public/') === 0) {
             $relativePath = substr($relativePath, strlen('public/'));
         }
 
         // Log the URI components for debugging
         if (defined('BASE_PATH')) {
-            error_log(
-                "Request URI: " . ($this->server['REQUEST_URI'] ?? 'N/A') .
-                    " | BASE_URL: " . $baseUrlPath .
-                    " | Relative Path: " . ($relativePath ?: 'N/A') . "\n",
-                3,
-                BASE_PATH . '/logs/app.log'
-            );
+            $logMessage = "Request URI: " . ($this->server['REQUEST_URI'] ?? 'N/A') .
+                " | BASE_URL: " . $baseUrlPath .
+                " | Original Relative Path: " . ($originalRelativePath ?: 'N/A') .
+                " | Final Relative Path: " . ($relativePath ?: 'N/A');
+
+            if (Registry::has('logger')) {
+                Registry::get('logger')->debug($logMessage);
+            } else {
+                error_log($logMessage . "\n", 3, BASE_PATH . '/logs/app.log');
+            }
         } else {
             // Fallback if BASE_PATH is not defined (e.g., log to default PHP error log)
             error_log(
                 "Request URI: " . ($this->server['REQUEST_URI'] ?? 'N/A') .
                     " | BASE_URL: " . $baseUrlPath .
-                    " | Relative Path: " . ($relativePath ?: 'N/A') .
+                    " | Original Relative Path: " . ($originalRelativePath ?: 'N/A') .
+                    " | Final Relative Path: " . ($relativePath ?: 'N/A') .
                     " | WARNING: BASE_PATH not defined, logging to default log."
             );
         }

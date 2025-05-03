@@ -44,6 +44,7 @@ $router = new Router();
 
 // --- Public Page Routes ---
 $router->get('', [PageController::class, 'index']); // Homepage
+$router->get('public', [PageController::class, 'index']); // Handle direct access to public directory
 $router->get('about', [PageController::class, 'about']); // About page
 $router->get('contact', [PageController::class, 'contact']); // Contact page view
 $router->post('contact/submit', [PageController::class, 'submitContact']); // Contact form submission
