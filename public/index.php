@@ -93,7 +93,6 @@ try {
     if ($db->getConnection()) {
         // Bind the database instance to the Registry if connection is successful.
         Registry::bind('database', $db);
-        die('DEBUG: Database initialized and bound successfully!');
     } else {
         // Handle database connection failure gracefully.
         $errorMessage = "Database Connection Error: Sorry, we couldn't connect to the database. Please try again later.";
@@ -127,6 +126,7 @@ try {
     $session = new Session($sessionConfig);
     // Bind the session instance to the Registry.
     Registry::bind('session', $session);
+    die('DEBUG: Session initialized and bound successfully!');
 
     // --- CAPTCHA Helper Setup ---
     // Instantiate the CaptchaHelper, passing the session instance for storing CAPTCHA codes.
