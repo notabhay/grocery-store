@@ -80,7 +80,7 @@ class Redirect
      * @param int $statusCode The HTTP status code for the redirect (default: 302 Found).
      * @return void This method terminates script execution via the `to()` method.
      */
-    public static function back(string $fallbackUrl = null, int $statusCode = 302): void
+    public static function back(?string $fallbackUrl = null, int $statusCode = 302): void
     {
         // Determine the fallback URL if not explicitly provided
         if ($fallbackUrl === null) {

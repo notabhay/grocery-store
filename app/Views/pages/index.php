@@ -66,38 +66,38 @@ $logged_in = $logged_in ?? false; // User login status
         <?php // Check if there are random products to display 
         ?>
         <?php if (!empty($random_products)): ?>
-            <?php // Loop through each featured product 
+        <?php // Loop through each featured product 
             ?>
-            <?php foreach ($random_products as $product): ?>
-                <!-- Individual Product Card -->
-                <article class="product-card">
-                    <!-- Product Image (uses placeholder if path is missing) -->
-                    <img src="<?= BASE_URL ?><?php echo htmlspecialchars($product['image_path'] ?? 'assets/images/placeholder.png'); ?>"
-                        alt="<?php echo htmlspecialchars($product['name'] ?? 'Product'); ?>">
-                    <!-- Product Name (uses 'N/A' if missing) -->
-                    <div class="product-name"><?php echo htmlspecialchars($product['name'] ?? 'N/A'); ?></div>
-                    <!-- Product Price (formats to 2 decimal places, defaults to 0) -->
-                    <div class="product-price">$<?php echo number_format($product['price'] ?? 0, 2); ?></div>
-                    <?php // Display button based on login status 
+        <?php foreach ($random_products as $product): ?>
+        <!-- Individual Product Card -->
+        <article class="product-card">
+            <!-- Product Image (uses placeholder if path is missing) -->
+            <img src="<?= BASE_URL ?><?php echo htmlspecialchars($product['image_path'] ?? 'assets/images/placeholder.png'); ?>"
+                alt="<?php echo htmlspecialchars($product['name'] ?? 'Product'); ?>">
+            <!-- Product Name (uses 'N/A' if missing) -->
+            <div class="product-name"><?php echo htmlspecialchars($product['name'] ?? 'N/A'); ?></div>
+            <!-- Product Price (formats to 2 decimal places, defaults to 0) -->
+            <div class="product-price">$<?php echo number_format($product['price'] ?? 0, 2); ?></div>
+            <?php // Display button based on login status 
                     ?>
-                    <?php if ($logged_in): ?>
-                        <!-- Add to Cart Button (for logged-in users, JS interaction) -->
-                        <button class="add-to-cart-btn" data-product-id="<?php echo htmlspecialchars($product['product_id'] ?? ''); // Ensure product_id exists 
+            <?php if ($logged_in): ?>
+            <!-- Add to Cart Button (for logged-in users, JS interaction) -->
+            <button class="add-to-cart-btn" data-product-id="<?php echo htmlspecialchars($product['product_id'] ?? ''); // Ensure product_id exists 
                                                                             ?>">
-                            Add to Cart
-                        </button>
-                    <?php else: ?>
-                        <!-- Login Link (for logged-out users) -->
-                        <a href="<?= BASE_URL ?>login" class="login-to-purchase-btn">
-                            Login to Purchase
-                        </a>
-                    <?php endif; ?>
-                </article>
-            <?php endforeach; // End product loop 
+                Add to Cart
+            </button>
+            <?php else: ?>
+            <!-- Login Link (for logged-out users) -->
+            <a href="<?= BASE_URL ?>login" class="login-to-purchase-btn">
+                Login to Purchase
+            </a>
+            <?php endif; ?>
+        </article>
+        <?php endforeach; // End product loop 
             ?>
         <?php else: ?>
-            <!-- Message displayed if no featured products are available -->
-            <p>No products to display currently.</p>
+        <!-- Message displayed if no featured products are available -->
+        <p>No products to display currently.</p>
         <?php endif; // End check for random products 
         ?>
     </section> <!-- End product-showcase -->

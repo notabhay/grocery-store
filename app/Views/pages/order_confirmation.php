@@ -85,19 +85,19 @@ $items = $order['items'] ?? [];
 
         <!-- Display flash messages (success, error, info) -->
         <?php if ($session->hasFlash('success')): ?>
-            <div class="alert alert-success" role="alert">
-                <?= htmlspecialchars($session->getFlash('success')); ?>
-            </div>
+        <div class="alert alert-success" role="alert">
+            <?= htmlspecialchars($session->getFlash('success')); ?>
+        </div>
         <?php endif; ?>
         <?php if ($session->hasFlash('error')): ?>
-            <div class="alert alert-error" role="alert">
-                <?= htmlspecialchars($session->getFlash('error')); ?>
-            </div>
+        <div class="alert alert-error" role="alert">
+            <?= htmlspecialchars($session->getFlash('error')); ?>
+        </div>
         <?php endif; ?>
         <?php if ($session->hasFlash('info')): ?>
-            <div class="alert alert-info" role="alert">
-                <?= htmlspecialchars($session->getFlash('info')); ?>
-            </div>
+        <div class="alert alert-info" role="alert">
+            <?= htmlspecialchars($session->getFlash('info')); ?>
+        </div>
         <?php endif; ?>
 
         <!-- Grid layout for Order and Customer Information -->
@@ -145,10 +145,10 @@ $items = $order['items'] ?? [];
                     </div>
                     <!-- Customer Phone (only displayed if provided) -->
                     <?php if (!empty($user_phone_safe) && $user_phone_safe !== 'N/A'): ?>
-                        <div class="info-item">
-                            <span class="info-label">Phone:</span>
-                            <span class="info-value"><?= $user_phone_safe ?></span>
-                        </div>
+                    <div class="info-item">
+                        <span class="info-label">Phone:</span>
+                        <span class="info-value"><?= $user_phone_safe ?></span>
+                    </div>
                     <?php endif; ?>
                 </div>
             </div> <!-- End Customer Information block -->
@@ -156,36 +156,36 @@ $items = $order['items'] ?? [];
 
         <!-- Shipping Address Section (only displayed if provided) -->
         <?php if (!empty($shipping_address_safe)): ?>
-            <div class="summary-block">
-                <h3>Shipping Address</h3>
-                <div class="shipping-address">
-                    <?= $shipping_address_safe // Output sanitized address with preserved line breaks 
+        <div class="summary-block">
+            <h3>Shipping Address</h3>
+            <div class="shipping-address">
+                <?= $shipping_address_safe // Output sanitized address with preserved line breaks 
                     ?>
-                </div>
             </div>
+        </div>
         <?php endif; ?>
 
         <!-- Items Ordered Section (only displayed if items exist) -->
         <?php if (!empty($items)): ?>
-            <div class="order-summary-section">
-                <h2>Items Ordered</h2>
-                <!-- Responsive table container -->
-                <div class="table-responsive">
-                    <!-- Table displaying items in the order -->
-                    <table class="order-table">
-                        <!-- Table header -->
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th class="text-end">Price</th>
-                                <th class="text-center">Quantity</th>
-                                <th class="text-end">Subtotal</th>
-                            </tr>
-                        </thead>
-                        <!-- Table body -->
-                        <tbody>
-                            <!-- Loop through each item in the order -->
-                            <?php foreach ($items as $item):
+        <div class="order-summary-section">
+            <h2>Items Ordered</h2>
+            <!-- Responsive table container -->
+            <div class="table-responsive">
+                <!-- Table displaying items in the order -->
+                <table class="order-table">
+                    <!-- Table header -->
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th class="text-end">Price</th>
+                            <th class="text-center">Quantity</th>
+                            <th class="text-end">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <!-- Table body -->
+                    <tbody>
+                        <!-- Loop through each item in the order -->
+                        <?php foreach ($items as $item):
                                 // Basic validation for item data
                                 if (!is_array($item) || !isset($item['image_url'], $item['product_name'], $item['quantity'], $item['price_formatted'], $item['subtotal_formatted']))
                                     continue; // Skip if essential data is missing
@@ -197,47 +197,47 @@ $items = $order['items'] ?? [];
                                 $item_price_safe = htmlspecialchars($item['price_formatted']);
                                 $item_subtotal_safe = htmlspecialchars($item['subtotal_formatted']);
                             ?>
-                                <!-- Table row for a single item -->
-                                <tr>
-                                    <!-- Product details (image and name) -->
-                                    <td class="product-details">
-                                        <img src="<?= $item_image_url_safe ?>" alt="<?= $item_name_safe ?>"
-                                            class="product-thumbnail">
-                                        <span class="product-name"><?= $item_name_safe ?></span>
-                                    </td>
-                                    <!-- Item price -->
-                                    <td class="text-end"><?= $item_price_safe ?></td>
-                                    <!-- Item quantity -->
-                                    <td class="text-center"><?= $item_quantity_safe ?></td>
-                                    <!-- Item subtotal -->
-                                    <td class="text-end"><?= $item_subtotal_safe ?></td>
-                                </tr>
-                            <?php endforeach; // End of items loop 
+                        <!-- Table row for a single item -->
+                        <tr>
+                            <!-- Product details (image and name) -->
+                            <td class="product-details">
+                                <img src="<?= $item_image_url_safe ?>" alt="<?= $item_name_safe ?>"
+                                    class="product-thumbnail">
+                                <span class="product-name"><?= $item_name_safe ?></span>
+                            </td>
+                            <!-- Item price -->
+                            <td class="text-end"><?= $item_price_safe ?></td>
+                            <!-- Item quantity -->
+                            <td class="text-center"><?= $item_quantity_safe ?></td>
+                            <!-- Item subtotal -->
+                            <td class="text-end"><?= $item_subtotal_safe ?></td>
+                        </tr>
+                        <?php endforeach; // End of items loop 
                             ?>
-                        </tbody>
-                        <!-- Table footer -->
-                        <tfoot>
-                            <tr>
-                                <!-- Grand total row -->
-                                <td colspan="3" class="text-end">Total:</td>
-                                <td class="text-end order-total"><?= $total_amount_formatted_safe ?></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div> <!-- End table-responsive -->
-            </div> <!-- End order-summary-section -->
+                    </tbody>
+                    <!-- Table footer -->
+                    <tfoot>
+                        <tr>
+                            <!-- Grand total row -->
+                            <td colspan="3" class="text-end">Total:</td>
+                            <td class="text-end order-total"><?= $total_amount_formatted_safe ?></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div> <!-- End table-responsive -->
+        </div> <!-- End order-summary-section -->
         <?php endif; // End of check for empty items 
         ?>
 
         <!-- Order Notes Section (only displayed if notes exist) -->
         <?php if (!empty($notes_safe)): ?>
-            <div class="summary-block">
-                <h3>Order Notes</h3>
-                <div class="notes-content">
-                    <?= $notes_safe // Output sanitized notes with preserved line breaks 
+        <div class="summary-block">
+            <h3>Order Notes</h3>
+            <div class="notes-content">
+                <?= $notes_safe // Output sanitized notes with preserved line breaks 
                     ?>
-                </div>
             </div>
+        </div>
         <?php endif; ?>
 
         <!-- Action buttons section -->
@@ -255,93 +255,93 @@ $items = $order['items'] ?? [];
 </main> <!-- End main content area -->
 <!-- Print-specific CSS rules -->
 <style type="text/css" media="print">
-    /* Hide elements not relevant for printing */
-    header,
-    footer,
-    .confirmation-actions,
-    /* Hide action buttons */
-    .mobile-menu-toggle {
-        /* Hide mobile menu toggle if present */
-        display: none !important;
-    }
+/* Hide elements not relevant for printing */
+header,
+footer,
+.confirmation-actions,
+/* Hide action buttons */
+.mobile-menu-toggle {
+    /* Hide mobile menu toggle if present */
+    display: none !important;
+}
 
-    /* Adjust container for full width printing */
-    .container {
-        width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        max-width: none !important;
-        box-shadow: none !important;
-        /* Remove shadows for print */
-        border: none !important;
-        /* Remove borders for print */
-    }
+/* Adjust container for full width printing */
+.container {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    /* Remove shadows for print */
+    border: none !important;
+    /* Remove borders for print */
+}
 
-    /* Center titles for print */
-    .page-title,
-    .page-subtitle {
-        text-align: center !important;
-        margin: 20px 0 !important;
-    }
+/* Center titles for print */
+.page-title,
+.page-subtitle {
+    text-align: center !important;
+    margin: 20px 0 !important;
+}
 
-    /* Adjust spacing for success message */
-    .confirmation-success {
-        margin: 20px 0 !important;
-        padding: 10px 0 !important;
-        text-align: center;
-        /* Center success message */
-    }
+/* Adjust spacing for success message */
+.confirmation-success {
+    margin: 20px 0 !important;
+    padding: 10px 0 !important;
+    text-align: center;
+    /* Center success message */
+}
 
-    .confirmation-success i {
-        font-size: 2em !important;
-        /* Ensure icon size is appropriate */
-    }
+.confirmation-success i {
+    font-size: 2em !important;
+    /* Ensure icon size is appropriate */
+}
 
-    /* Set base font size for print */
-    body {
-        font-size: 10pt !important;
-        color: #000 !important;
-        /* Ensure text is black */
-        background-color: #fff !important;
-        /* Ensure background is white */
-    }
+/* Set base font size for print */
+body {
+    font-size: 10pt !important;
+    color: #000 !important;
+    /* Ensure text is black */
+    background-color: #fff !important;
+    /* Ensure background is white */
+}
 
-    /* Adjust table padding for print */
-    .order-table th,
-    .order-table td {
-        padding: 5px 8px !important;
-        border: 1px solid #ccc !important;
-        /* Add light borders for clarity */
-    }
+/* Adjust table padding for print */
+.order-table th,
+.order-table td {
+    padding: 5px 8px !important;
+    border: 1px solid #ccc !important;
+    /* Add light borders for clarity */
+}
 
-    /* Reduce thumbnail size for print */
-    .product-thumbnail {
-        max-width: 40px !important;
-        height: auto !important;
-        vertical-align: middle;
-        /* Align image nicely in cell */
-    }
+/* Reduce thumbnail size for print */
+.product-thumbnail {
+    max-width: 40px !important;
+    height: auto !important;
+    vertical-align: middle;
+    /* Align image nicely in cell */
+}
 
-    /* Ensure summary blocks are distinct */
-    .summary-block {
-        border: 1px solid #eee !important;
-        padding: 10px !important;
-        margin-bottom: 15px !important;
-        page-break-inside: avoid !important;
-        /* Try to keep blocks from splitting across pages */
-    }
+/* Ensure summary blocks are distinct */
+.summary-block {
+    border: 1px solid #eee !important;
+    padding: 10px !important;
+    margin-bottom: 15px !important;
+    page-break-inside: avoid !important;
+    /* Try to keep blocks from splitting across pages */
+}
 
-    /* Ensure grid layout works reasonably in print */
-    .order-summary-grid {
-        display: block !important;
-        /* Stack blocks vertically for print */
-    }
+/* Ensure grid layout works reasonably in print */
+.order-summary-grid {
+    display: block !important;
+    /* Stack blocks vertically for print */
+}
 
-    /* Remove background colors from badges */
-    .badge {
-        background-color: transparent !important;
-        color: #000 !important;
-        border: 1px solid #ccc !important;
-        padding: 2px 4px !important;
-    }
+/* Remove background colors from badges */
+.badge {
+    background-color: transparent !important;
+    color: #000 !important;
+    border: 1px solid #ccc !important;
+    padding: 2px 4px !important;
+}
 </style>

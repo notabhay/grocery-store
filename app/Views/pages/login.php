@@ -46,9 +46,9 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
             <?php // Display general login error message if it exists 
             ?>
             <?php if (!empty($login_error)): ?>
-                <div class="alert alert-error">
-                    <p><?php echo htmlspecialchars($login_error); ?></p>
-                </div>
+            <div class="alert alert-error">
+                <p><?php echo htmlspecialchars($login_error); ?></p>
+            </div>
             <?php endif; ?>
 
             <!-- Container for the login form and registration link -->
@@ -95,9 +95,9 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
                         <?php // Display CAPTCHA error message if it exists 
                         ?>
                         <?php if (!empty($captcha_error)): ?>
-                            <div class="error-message">
-                                <i class="fas fa-exclamation-circle"></i> <?php echo htmlspecialchars($captcha_error); ?>
-                            </div>
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i> <?php echo htmlspecialchars($captcha_error); ?>
+                        </div>
                         <?php endif; ?>
                     </div>
 
@@ -126,36 +126,36 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
 
 <!-- Inline JavaScript for specific login page functionalities -->
 <script>
-    // Wait for the DOM to be fully loaded before running script
-    document.addEventListener('DOMContentLoaded', function() {
-        // --- Password Visibility Toggle ---
-        const togglePassword = document.querySelector('.toggle-password');
-        if (togglePassword) { // Check if the element exists
-            togglePassword.addEventListener('click', function() {
-                const passwordInput = document.getElementById('password');
-                const icon = this.querySelector('i'); // Get the icon inside the span
-                // Check current type and toggle
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text'; // Show password
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash'); // Change icon to slashed eye
-                } else {
-                    passwordInput.type = 'password'; // Hide password
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye'); // Change icon back to eye
-                }
-            });
-        }
+// Wait for the DOM to be fully loaded before running script
+document.addEventListener('DOMContentLoaded', function() {
+    // --- Password Visibility Toggle ---
+    const togglePassword = document.querySelector('.toggle-password');
+    if (togglePassword) { // Check if the element exists
+        togglePassword.addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i'); // Get the icon inside the span
+            // Check current type and toggle
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text'; // Show password
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash'); // Change icon to slashed eye
+            } else {
+                passwordInput.type = 'password'; // Hide password
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye'); // Change icon back to eye
+            }
+        });
+    }
 
-        // --- CAPTCHA Refresh ---
-        const refreshCaptcha = document.querySelector('.refresh-captcha');
-        const captchaImage = document.getElementById('captcha-img');
-        if (refreshCaptcha && captchaImage) { // Check if both elements exist
-            refreshCaptcha.addEventListener('click', function(e) {
-                e.preventDefault(); // Prevent default button behavior
-                // Update the image source with a timestamp to bypass browser cache
-                captchaImage.src = '<?= BASE_URL ?>captcha?' + new Date().getTime();
-            });
-        }
-    });
+    // --- CAPTCHA Refresh ---
+    const refreshCaptcha = document.querySelector('.refresh-captcha');
+    const captchaImage = document.getElementById('captcha-img');
+    if (refreshCaptcha && captchaImage) { // Check if both elements exist
+        refreshCaptcha.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent default button behavior
+            // Update the image source with a timestamp to bypass browser cache
+            captchaImage.src = '<?= BASE_URL ?>captcha?' + new Date().getTime();
+        });
+    }
+});
 </script>

@@ -46,11 +46,11 @@ $csrf_token_safe = htmlspecialchars($csrf_token);
             <?php // Check if $flash_message is set, is an array, and has the required keys 
             ?>
             <?php if (isset($flash_message) && is_array($flash_message) && isset($flash_message['text'], $flash_message['type'])): ?>
-                <div class="alert alert-<?= htmlspecialchars($flash_message['type']) // Use type for alert class 
+            <div class="alert alert-<?= htmlspecialchars($flash_message['type']) // Use type for alert class 
                                         ?>" role="alert">
-                    <?= htmlspecialchars($flash_message['text']) // Display the message text 
+                <?= htmlspecialchars($flash_message['text']) // Display the message text 
                     ?>
-                </div>
+            </div>
             <?php endif; ?>
 
             <!-- Wrapper for contact info and form -->
@@ -114,7 +114,7 @@ $csrf_token_safe = htmlspecialchars($csrf_token);
                             <?php // Display validation error for 'name' if it exists 
                             ?>
                             <?php if (isset($form_errors['name'])): ?>
-                                <span class="error-message"><?= htmlspecialchars($form_errors['name']) ?></span>
+                            <span class="error-message"><?= htmlspecialchars($form_errors['name']) ?></span>
                             <?php endif; ?>
                         </div>
 
@@ -126,7 +126,7 @@ $csrf_token_safe = htmlspecialchars($csrf_token);
                             <?php // Display validation error for 'email' if it exists 
                             ?>
                             <?php if (isset($form_errors['email'])): ?>
-                                <span class="error-message"><?= htmlspecialchars($form_errors['email']) ?></span>
+                            <span class="error-message"><?= htmlspecialchars($form_errors['email']) ?></span>
                             <?php endif; ?>
                         </div>
 
@@ -138,7 +138,7 @@ $csrf_token_safe = htmlspecialchars($csrf_token);
                             <?php // Display validation error for 'message' if it exists 
                             ?>
                             <?php if (isset($form_errors['message'])): ?>
-                                <span class="error-message"><?= htmlspecialchars($form_errors['message']) ?></span>
+                            <span class="error-message"><?= htmlspecialchars($form_errors['message']) ?></span>
                             <?php endif; ?>
                         </div>
 

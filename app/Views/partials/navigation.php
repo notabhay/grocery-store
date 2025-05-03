@@ -33,17 +33,17 @@
 
     <?php // Set the meta description dynamically or use a default -->
     if (isset($meta_description)): ?>
-        <meta name="description" content="<?php echo htmlspecialchars($meta_description); ?>">
+    <meta name="description" content="<?php echo htmlspecialchars($meta_description); ?>">
     <?php else: ?>
-        <meta name="description"
-            content="Fresh groceries delivered to your door. Shop vegetables, meat, and more at our online grocery store.">
+    <meta name="description"
+        content="Fresh groceries delivered to your door. Shop vegetables, meat, and more at our online grocery store.">
     <?php endif; ?>
 
     <?php // Set the meta keywords dynamically or use a default -->
     if (isset($meta_keywords)): ?>
-        <meta name="keywords" content="<?php echo htmlspecialchars($meta_keywords); ?>">
+    <meta name="keywords" content="<?php echo htmlspecialchars($meta_keywords); ?>">
     <?php else: ?>
-        <meta name="keywords" content="grocery, online shopping, vegetables, meat, fresh produce">
+    <meta name="keywords" content="grocery, online shopping, vegetables, meat, fresh produce">
     <?php endif; ?>
 
     <!-- Set the page title dynamically or use a default -->
@@ -62,10 +62,10 @@
 
     <?php // Include additional inline styles if provided -->
     if (isset($additional_styles)): ?>
-        <style>
-            <?php echo $additional_styles; // Output raw CSS string
-            ?>
-        </style>
+    <style>
+    <?php echo $additional_styles; // Output raw CSS string
+    ?>
+    </style>
     <?php endif; ?>
 
     <!-- JavaScript Files -->
@@ -75,8 +75,8 @@
     <?php // Include additional JavaScript files if provided -->
     if (isset($additional_js_files) && is_array($additional_js_files)):
         foreach ($additional_js_files as $js_file): ?>
-            <!-- Include JS file relative to the /public/assets/js/ directory (deferred execution) -->
-            <script src="<?= BASE_URL ?>assets/js/<?php echo htmlspecialchars($js_file); ?>" defer></script>
+    <!-- Include JS file relative to the /public/assets/js/ directory (deferred execution) -->
+    <script src="<?= BASE_URL ?>assets/js/<?php echo htmlspecialchars($js_file); ?>" defer></script>
     <?php endforeach;
     endif; ?>
 </head> <!-- This is likely incorrect if included within another HTML structure -->

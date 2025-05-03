@@ -48,7 +48,7 @@ class AdminAuthMiddleware
      * @param callable $next The next middleware or controller action to be executed if authorization succeeds.
      * @return mixed The result of the next middleware/controller, or void if redirected.
      */
-    public function handle(callable $next): mixed // Changed return type hint
+    public function handle(callable $next) // Changed return type hint
     {
         // 1. Check if the user is authenticated at all.
         if (!$this->session->isAuthenticated()) {

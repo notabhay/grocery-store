@@ -194,64 +194,64 @@ if (!isset($csrfToken)) {
 </main> <!-- End main content area -->
 <!-- JavaScript for Quantity Input and Dynamic Price Update -->
 <script>
-    // Wait for the DOM to be fully loaded
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get references to the relevant elements
-        const quantityInput = document.getElementById('quantity');
-        const decreaseBtn = document.querySelector('.quantity-btn.decrease-btn');
-        const increaseBtn = document.querySelector('.quantity-btn.increase-btn');
-        const quantityValueSpan = document.getElementById('quantity-value'); // Span in the summary
-        const totalPriceSpan = document.getElementById('total-price'); // Span in the summary
-        const productPrice = parseFloat(quantityInput.getAttribute('data-price')); // Get price from data attribute
-        const maxQuantity = parseInt(quantityInput.max, 10); // Get max quantity (stock)
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Get references to the relevant elements
+    const quantityInput = document.getElementById('quantity');
+    const decreaseBtn = document.querySelector('.quantity-btn.decrease-btn');
+    const increaseBtn = document.querySelector('.quantity-btn.increase-btn');
+    const quantityValueSpan = document.getElementById('quantity-value'); // Span in the summary
+    const totalPriceSpan = document.getElementById('total-price'); // Span in the summary
+    const productPrice = parseFloat(quantityInput.getAttribute('data-price')); // Get price from data attribute
+    const maxQuantity = parseInt(quantityInput.max, 10); // Get max quantity (stock)
 
-        /**
-         * Updates the quantity display in the summary and recalculates/displays the total price.
-         * Also enforces min (1) and max (stock) quantity limits on the input field itself.
-         */
-        function updateTotal() {
-            let quantity = parseInt(quantityInput.value, 10);
+    /**
+     * Updates the quantity display in the summary and recalculates/displays the total price.
+     * Also enforces min (1) and max (stock) quantity limits on the input field itself.
+     */
+    function updateTotal() {
+        let quantity = parseInt(quantityInput.value, 10);
 
-            // Validate and correct quantity input
-            if (isNaN(quantity) || quantity < 1) {
-                quantity = 1; // Reset to minimum if invalid or below 1
-                quantityInput.value = 1;
-            }
-            if (quantity > maxQuantity) {
-                quantity = maxQuantity; // Cap at maximum stock
-                quantityInput.value = maxQuantity;
-            }
-
-            // Calculate the total price
-            const total = (productPrice * quantity).toFixed(2); // Calculate and format to 2 decimal places
-
-            // Update the summary display
-            quantityValueSpan.textContent = quantity; // Update quantity span
-            totalPriceSpan.textContent = '$' + total; // Update total price span
+        // Validate and correct quantity input
+        if (isNaN(quantity) || quantity < 1) {
+            quantity = 1; // Reset to minimum if invalid or below 1
+            quantityInput.value = 1;
+        }
+        if (quantity > maxQuantity) {
+            quantity = maxQuantity; // Cap at maximum stock
+            quantityInput.value = maxQuantity;
         }
 
-        // Add event listener for the decrease button
-        decreaseBtn.addEventListener('click', function() {
-            let currentQuantity = parseInt(quantityInput.value, 10);
-            if (currentQuantity > 1) { // Can only decrease if above 1
-                quantityInput.value = currentQuantity - 1;
-                updateTotal(); // Update display after changing value
-            }
-        });
+        // Calculate the total price
+        const total = (productPrice * quantity).toFixed(2); // Calculate and format to 2 decimal places
 
-        // Add event listener for the increase button
-        increaseBtn.addEventListener('click', function() {
-            let currentQuantity = parseInt(quantityInput.value, 10);
-            if (currentQuantity < maxQuantity) { // Can only increase if below max stock
-                quantityInput.value = currentQuantity + 1;
-                updateTotal(); // Update display after changing value
-            }
-        });
+        // Update the summary display
+        quantityValueSpan.textContent = quantity; // Update quantity span
+        totalPriceSpan.textContent = '$' + total; // Update total price span
+    }
 
-        // Add event listener for direct input changes in the quantity field
-        quantityInput.addEventListener('input', updateTotal);
-
-        // Initial call to set the correct total price when the page loads
-        updateTotal();
+    // Add event listener for the decrease button
+    decreaseBtn.addEventListener('click', function() {
+        let currentQuantity = parseInt(quantityInput.value, 10);
+        if (currentQuantity > 1) { // Can only decrease if above 1
+            quantityInput.value = currentQuantity - 1;
+            updateTotal(); // Update display after changing value
+        }
     });
+
+    // Add event listener for the increase button
+    increaseBtn.addEventListener('click', function() {
+        let currentQuantity = parseInt(quantityInput.value, 10);
+        if (currentQuantity < maxQuantity) { // Can only increase if below max stock
+            quantityInput.value = currentQuantity + 1;
+            updateTotal(); // Update display after changing value
+        }
+    });
+
+    // Add event listener for direct input changes in the quantity field
+    quantityInput.addEventListener('input', updateTotal);
+
+    // Initial call to set the correct total price when the page loads
+    updateTotal();
+});
 </script>

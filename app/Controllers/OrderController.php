@@ -30,32 +30,32 @@ class OrderController extends BaseController
     /**
      * @var Session Session management instance.
      */
-    private Session $session;
+    private $session;
 
     /**
      * @var Request HTTP request handling instance.
      */
-    private Request $request;
+    private $request;
 
     /**
      * @var LoggerInterface Logger instance for recording events and errors.
      */
-    private LoggerInterface $logger;
+    private $logger;
 
     /**
      * @var Order Order model instance for database interactions.
      */
-    private Order $orderModel;
+    private $orderModel;
 
     /**
      * @var OrderItem OrderItem model instance for database interactions.
      */
-    private OrderItem $orderItemModel;
+    private $orderItemModel;
 
     /**
      * @var Product Product model instance for database interactions.
      */
-    private Product $productModel;
+    private $productModel;
 
     /**
      * OrderController constructor.
@@ -669,7 +669,7 @@ class OrderController extends BaseController
      * @param string|null $notes Optional notes provided by the user.
      * @return int|false The ID of the newly created order on success, or false on failure.
      */
-    private function createOrder(int $user_id, array $items, float $total_amount, ?string $notes = null): int|false
+    private function createOrder(int $user_id, array $items, float $total_amount, ?string $notes = null)
     {
         try {
             // Start a database transaction
@@ -755,7 +755,7 @@ class OrderController extends BaseController
      * @param int $user_id The ID of the user requesting the details (for authorization).
      * @return array|false An associative array with order details and items on success, false on failure or if not found/authorized.
      */
-    public function getOrderDetails(int $order_id, int $user_id): array|false
+    public function getOrderDetails(int $order_id, int $user_id)
     {
         try {
             // Fetch the main order data, checking ownership
@@ -802,7 +802,7 @@ class OrderController extends BaseController
      * @param int $user_id The ID of the user whose orders are to be retrieved.
      * @return array|false An array of orders (each as an associative array) on success, false on failure.
      */
-    public function getUserOrders(int $user_id): array|false
+    public function getUserOrders(int $user_id)
     {
         try {
             // Fetch orders using the Order model

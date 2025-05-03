@@ -47,12 +47,12 @@ $logged_in = isset($_SESSION['user_id']); // Simplified boolean check
                     <?php
                     // Conditionally display links based on user login status
                     if ($logged_in): ?>
-                        <!-- Links for logged-in users -->
-                        <li><a href="<?= BASE_URL ?>my-orders">My Orders</a></li>
+                    <!-- Links for logged-in users -->
+                    <li><a href="<?= BASE_URL ?>my-orders">My Orders</a></li>
                     <?php else: ?>
-                        <!-- Links for logged-out users -->
-                        <li><a href="<?= BASE_URL ?>register">Register</a></li>
-                        <li><a href="<?= BASE_URL ?>login">Login</a></li>
+                    <!-- Links for logged-out users -->
+                    <li><a href="<?= BASE_URL ?>register">Register</a></li>
+                    <li><a href="<?= BASE_URL ?>login">Login</a></li>
                     <?php endif; ?>
                 </ul>
             </div>

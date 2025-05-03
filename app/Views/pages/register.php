@@ -61,15 +61,15 @@ $input_email = $input_data['email'] ?? '';
             <!-- Display registration status messages -->
             <?php if ($registration_success): // Check if registration was successful 
             ?>
-                <div class="alert alert-success">
-                    <p>Registration successful! You can now <a href="<?= BASE_URL ?>login">login</a> to your account.</p>
-                </div>
+            <div class="alert alert-success">
+                <p>Registration successful! You can now <a href="<?= BASE_URL ?>login">login</a> to your account.</p>
+            </div>
             <?php elseif (!empty($registration_error)): // Check if there were registration errors 
             ?>
-                <div class="alert alert-error">
-                    <!-- Display error message(s), using nl2br to preserve line breaks if multiple errors are concatenated -->
-                    <p><?php echo nl2br(htmlspecialchars($registration_error)); ?></p>
-                </div>
+            <div class="alert alert-error">
+                <!-- Display error message(s), using nl2br to preserve line breaks if multiple errors are concatenated -->
+                <p><?php echo nl2br(htmlspecialchars($registration_error)); ?></p>
+            </div>
             <?php endif; // End of status message block 
             ?>
 
