@@ -249,9 +249,41 @@ try {
 
     // Determine the appropriate HTTP status code.
     // Use 404 for routing exceptions (often thrown by the router itself), otherwise default to 500.
-    $statusCode = ($e->getCode() == 404) ? 404 : 500;
-    // Set the HTTP response status code.
-    http_response_code($statusCode);
+    $statusCode = $e->getCode();
+    // Default to 500 if code is not set or invalid
+    if (!is_int($statusCode) || $statusCode < 100 || $statusCode > 599) {
+        $statusCode = 500;
+    }
+    http_response_code($statusCode); // Set status code early
+
+    // Check if it's a 404 for an API route
+    if ($statusCode == 404) {
+        // Get the requested path (relative to the application base)
+        // Need to recalculate it here as it's not passed with the exception
+        $requestUriPathForCheck = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+        $baseUrlPathForCheck = parse_url(BASE_URL, PHP_URL_PATH);
+        $requestPathCleanForCheck = trim($requestUriPathForCheck, '/');
+        $basePathCleanForCheck = trim($baseUrlPathForCheck, '/');
+        $appPathForCheck = '/';
+        if (strpos($requestPathCleanForCheck, $basePathCleanForCheck) === 0) {
+            $appPathSegmentForCheck = substr($requestPathCleanForCheck, strlen($basePathCleanForCheck));
+            $appPathForCheck = '/' . ltrim($appPathSegmentForCheck, '/');
+        } elseif (empty($basePathCleanForCheck) && !empty($requestPathCleanForCheck)) {
+            $appPathForCheck = '/' . $requestPathCleanForCheck;
+        }
+        if (empty(trim($appPathForCheck, '/'))) {
+            $appPathForCheck = '/';
+        }
+
+        // Check if the application-relative path starts with /api/
+        if (strpos($appPathForCheck, '/api/') === 0) {
+            // It's an API route 404, send JSON response
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Not Found', 'message' => $e->getMessage()]);
+            exit; // Stop execution after sending JSON response
+        }
+        // If not an API route, fall through to the existing HTML 404 handling below
+    }
 
     // Display error details based on debug mode.
     if ($config['DEBUG_MODE'] ?? false) {
@@ -273,6 +305,7 @@ try {
 
         // Display appropriate message based on the status code.
         if ($statusCode == 404) {
+            // This part only handles non-API 404s (API 404s are handled above)
             echo '<h1>404 - Page Not Found</h1>';
             echo '<p>Sorry, the page you are looking for could not be found.</p>';
         } else {

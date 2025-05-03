@@ -271,8 +271,11 @@ class Router
             $uriPathClean = '/'; // Handle root path
         }
 
-        // Attempt to match the route using the application-relative path
-        if ($this->match($appPath, $requestType) && $this->matchedController) {
+        // Trim the leading slash from the application path before matching
+        $pathForMatching = ltrim($appPath, '/');
+
+        // Attempt to match the route using the application-relative path (without leading slash)
+        if ($this->match($pathForMatching, $requestType) && $this->matchedController) {
 
             // --- Hardcoded Authentication Check ---
             // Define patterns for routes that require authentication.
