@@ -1,37 +1,24 @@
 <?php
 
-/**
- * API Documentation Generator
- *
- * This script dynamically generates an HTML page providing documentation for the
- * Fresh Grocery Store RESTful API. It outlines available endpoints,
- * expected request/response formats, authentication requirements, rate limiting,
- * and error codes.
- *
- * It fetches configuration details like API version, rate limits, and base URL
- * to keep the documentation consistent with the application settings.
- *
- * Note: This file does not contain actual API endpoint logic, but rather serves
- * as a self-documenting guide for API consumers. It directly outputs HTML content.
- */
+
 
 namespace App\Controllers\Api;
 
-// Ensure BASE_PATH is defined if accessed directly or via unusual include
+
 if (!defined('BASE_PATH')) {
     define('BASE_PATH', dirname(dirname(dirname(__DIR__))));
 }
 
-// Load application configuration to get API details
+
 $config = require BASE_PATH . '/app/config.php';
 
-// Extract configuration values for use in the documentation template
+
 $api_version = $config['API_VERSION'] ?? 'N/A';
 $api_rate_limit = $config['API_RATE_LIMIT'] ?? 'N/A';
 $api_base_url = rtrim($config['SITE_URL'] ?? 'http://localhost/', '/') . ($config['API_BASE_PATH'] ?? '/api');
-$items_per_page = $config['ITEMS_PER_PAGE'] ?? 10; // Default if not set
+$items_per_page = $config['ITEMS_PER_PAGE'] ?? 10; 
 
-// Define the HTML structure for the API documentation using HEREDOC syntax
+
 $api_doc = <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -41,15 +28,15 @@ $api_doc = <<<HTML
     <meta name="description" content="API Documentation for the Fresh Grocery Store">
     <title>Fresh Grocery Store API - Documentation</title>
     <style>
-        /* Basic styling for the documentation page */
+        
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 20px;
             color: #333;
-            max-width: 1200px; /* Limit width for better readability */
-            margin: 0 auto; /* Center the content */
+            max-width: 1200px; 
+            margin: 0 auto; 
         }
         h1 {
             color: #2c3e50;
@@ -64,7 +51,7 @@ $api_doc = <<<HTML
             color: #2980b9;
             margin-top: 25px;
         }
-        /* Styling for endpoint blocks */
+        
         .endpoint {
             background-color: #f8f9fa;
             padding: 15px;
@@ -72,7 +59,7 @@ $api_doc = <<<HTML
             margin-bottom: 20px;
             border-left: 4px solid #3498db;
         }
-        /* Styling for HTTP methods */
+        
         .method {
             font-weight: bold;
             margin-right: 10px;
@@ -81,7 +68,7 @@ $api_doc = <<<HTML
         .method-put { color: #f39c12; }
         .method-post { color: #3498db; }
         .method-delete { color: #e74c3c; }
-        /* Styling for API paths */
+        
         .path {
             font-family: monospace;
             font-size: 16px;
@@ -89,7 +76,7 @@ $api_doc = <<<HTML
         .description {
             margin-top: 10px;
         }
-        /* Styling for code snippets and blocks */
+        
         code {
             background-color: #f4f4f4;
             padding: 2px 5px;
@@ -100,9 +87,9 @@ $api_doc = <<<HTML
             background-color: #f4f4f4;
             padding: 15px;
             border-radius: 5px;
-            overflow-x: auto; /* Allow horizontal scrolling for long code lines */
+            overflow-x: auto; 
         }
-        /* Styling for tables */
+        
         table {
             border-collapse: collapse;
             width: 100%;
@@ -116,20 +103,20 @@ $api_doc = <<<HTML
         th {
             background-color: #f2f2f2;
         }
-        /* Styling for informational notes */
+        
         .note {
-            background-color: #fff8dc; /* Light yellow */
+            background-color: #fff8dc; 
             padding: 10px;
             border-radius: 5px;
-            border-left: 4px solid #f1c40f; /* Yellow border */
+            border-left: 4px solid #f1c40f; 
             margin: 20px 0;
         }
-        /* Styling for authentication notes */
+        
         .auth-note {
-            background-color: #e8f4f8; /* Light blue */
+            background-color: #e8f4f8; 
             padding: 10px;
             border-radius: 5px;
-            border-left: 4px solid #3498db; /* Blue border */
+            border-left: 4px solid #3498db; 
             margin: 20px 0;
         }
     </style>
@@ -138,12 +125,12 @@ $api_doc = <<<HTML
     <h1>Fresh Grocery Store API Documentation</h1>
     <p>Welcome to the Fresh Grocery Store API documentation. This RESTful API allows you to access order information and manage orders.</p>
 
-    <!-- API Version Note -->
+    <!
     <div class="note">
         <strong>Note:</strong> This API is currently in version {$api_version}.
     </div>
 
-    <!-- Authentication Section -->
+    <!
     <h2>Authentication</h2>
     <p>All API requests require authentication using a Bearer token in the Authorization header.</p>
     <div class="auth-note">
@@ -157,7 +144,7 @@ $api_doc = <<<HTML
         <li><strong>Manager tokens</strong> - Allow managers to view all orders and update order status</li>
     </ul>
 
-    <!-- Rate Limiting Section -->
+    <!
     <h2>Rate Limiting</h2>
     <p>This API implements rate limiting to prevent abuse. The current limit is {$api_rate_limit} requests per hour per client IP.</p>
     <p>Rate limit information is provided in the response headers:</p>
@@ -167,10 +154,10 @@ $api_doc = <<<HTML
         <li><code>X-RateLimit-Reset</code>: Timestamp (UTC epoch seconds) when the rate limit will reset</li>
     </ul>
 
-    <!-- Endpoints Section -->
+    <!
     <h2>Endpoints</h2>
 
-    <!-- GET /orders Endpoint -->
+    <!
     <div class="endpoint">
         <h3><span class="method method-get">GET</span> <span class="path">{$api_base_url}/orders</span></h3>
         <div class="description">
@@ -204,10 +191,10 @@ $api_doc = <<<HTML
             </table>
             <h4>Response Example (Manager)</h4>
             <pre>{
-  "total": 25, // Total number of orders matching the criteria
-  "page": 1, // Current page number
-  "limit": 10, // Orders per page
-  "total_pages": 3, // Total number of pages
+  "total": 25, 
+  "page": 1, 
+  "limit": 10, 
+  "total_pages": 3, 
   "orders": [
     {
       "order_id": 1,
@@ -215,10 +202,10 @@ $api_doc = <<<HTML
       "order_date": "2023-05-10 14:35:12",
       "total_amount": 45.75,
       "status": "completed",
-      "user_name": "John Doe", // Included for managers
-      "user_email": "john@example.com" // Included for managers
+      "user_name": "John Doe", 
+      "user_email": "john@example.com" 
     },
-    // ... more orders
+    
   ]
 }</pre>
             <h4>Response Example (Regular User)</h4>
@@ -236,13 +223,13 @@ $api_doc = <<<HTML
       "total_amount": 28.90,
       "status": "pending"
     }
-    // ... more orders belonging to the authenticated user
+    
   ]
 }</pre>
         </div>
     </div>
 
-    <!-- GET /orders/{order_id} Endpoint -->
+    <!
     <div class="endpoint">
         <h3><span class="method method-get">GET</span> <span class="path">{$api_base_url}/orders/{order_id}</span></h3>
         <div class="description">
@@ -275,15 +262,15 @@ $api_doc = <<<HTML
   "total_amount": 45.75,
   "status": "completed",
   "notes": "Please leave at the front door",
-  "items": [ // Array of items included in the order
+  "items": [ 
     {
       "item_id": 1,
       "product_id": 101,
       "product_name": "Russet Potato (1kg)",
-      "product_image": "vegetables/russet_potato.jpg", // Relative image path
+      "product_image": "vegetables/russet_potato.jpg", 
       "quantity": 2,
-      "price": 2.49, // Price per unit at the time of order
-      "subtotal": 4.98 // quantity * price
+      "price": 2.49, 
+      "subtotal": 4.98 
     },
     {
       "item_id": 2,
@@ -294,13 +281,13 @@ $api_doc = <<<HTML
       "price": 8.99,
       "subtotal": 8.99
     }
-    // ... more items
+    
   ]
 }</pre>
         </div>
     </div>
 
-    <!-- PUT /orders/{order_id} Endpoint -->
+    <!
     <div class="endpoint">
         <h3><span class="method method-put">PUT</span> <span class="path">{$api_base_url}/orders/{order_id}</span></h3>
         <div class="description">
@@ -324,7 +311,7 @@ $api_doc = <<<HTML
             </table>
             <h4>Request Body (JSON)</h4>
             <pre>{
-  "status": "processing" // Required. The new status for the order.
+  "status": "processing" 
 }</pre>
             <p>Valid status values:</p>
             <ul>
@@ -339,12 +326,12 @@ $api_doc = <<<HTML
 }</pre>
             <h4>Response Example (Error)</h4>
             <pre>{
-  "error": "Invalid status value provided." // Or other error messages
+  "error": "Invalid status value provided." 
 }</pre>
         </div>
     </div>
 
-    <!-- Error Responses Section -->
+    <!
     <h2>Error Responses</h2>
     <p>The API uses standard HTTP status codes to indicate the success or failure of a request. Error responses are returned in JSON format.</p>
     <table>
@@ -359,7 +346,7 @@ $api_doc = <<<HTML
             <tr>
                 <td>200 OK</td>
                 <td>Request was successful.</td>
-                <td><pre>{ "data": { ... } } // Or specific success message</pre></td>
+                <td><pre>{ "data": { ... } } 
             </tr>
             <tr>
                 <td>201 Created</td>
@@ -404,7 +391,7 @@ $api_doc = <<<HTML
         </tbody>
     </table>
 
-    <!-- Footer -->
+    <!
     <footer>
         <p>&copy; <?php echo date("Y"); ?> Fresh Grocery Store. All rights reserved.</p>
 </footer>
@@ -413,5 +400,5 @@ $api_doc = <<<HTML
 </html>
 HTML;
 
-// Output the generated HTML documentation
+
 echo $api_doc;
