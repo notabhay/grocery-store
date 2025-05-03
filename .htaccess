@@ -1,21 +1,21 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Set the base path for rewrite rules relative to the domain root
+    RewriteBase /prin/y1d13/advanced-web-technologies/grocery-store/
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
+    RewriteRule ^ %1 [L,R=301] # %1 captures the path without the trailing slash
 
-    # Handle Front Controller...
+    # If the request is NOT for an existing file or directory
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+    # Rewrite the request to public/index.php (relative to RewriteBase)
+    RewriteRule ^(.*)$ public/index.php [L]
 
-    # Handle requests for files in the public directory
-    RewriteCond %{REQUEST_URI} !^/public/
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
 
-# Optional: Improve security by preventing listing of directories if mod_rewrite fails
+# Optional: Improve security by preventing listing of directories
 Options -Indexes
