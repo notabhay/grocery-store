@@ -240,13 +240,39 @@ class Router
     public function direct(string $uri, string $requestType)
     {
         // Extract and clean the path component of the URI.
-        $uriPath = parse_url($uri, PHP_URL_PATH) ?: '/';
-        $uriPathClean = trim($uriPath, '/');
-        if ($uriPathClean === '')
-            $uriPathClean = '/'; // Handle root path.
+        $requestUriPath = parse_url($uri, PHP_URL_PATH) ?: '/';
 
-        // Attempt to match the route.
-        if ($this->match($uriPath, $requestType) && $this->matchedController) {
+        // Get the base URL path from the BASE_URL constant
+        $baseUrlPath = defined('BASE_URL') ? parse_url(BASE_URL, PHP_URL_PATH) : '';
+
+        // Normalize paths (remove leading/trailing slashes for comparison)
+        $requestPathClean = trim($requestUriPath, '/');
+        $basePathClean = trim($baseUrlPath, '/');
+
+        // Calculate the application-relative path
+        $appPath = '/'; // Default to root
+        if (!empty($basePathClean) && strpos($requestPathClean, $basePathClean) === 0) {
+            // Remove base path prefix
+            $appPathSegment = substr($requestPathClean, strlen($basePathClean));
+            $appPath = '/' . ltrim($appPathSegment, '/'); // Ensure leading slash, remove potential double slash
+        } elseif (empty($basePathClean) && !empty($requestPathClean)) {
+            // Handle case where base path is root ('/')
+            $appPath = '/' . $requestPathClean;
+        }
+
+        // Ensure $appPath always has at least a single slash if empty
+        if (empty(trim($appPath, '/'))) {
+            $appPath = '/';
+        }
+
+        // Store the cleaned path for logging and debugging
+        $uriPathClean = trim($appPath, '/');
+        if ($uriPathClean === '') {
+            $uriPathClean = '/'; // Handle root path
+        }
+
+        // Attempt to match the route using the application-relative path
+        if ($this->match($appPath, $requestType) && $this->matchedController) {
 
             // --- Hardcoded Authentication Check ---
             // Define patterns for routes that require authentication.
@@ -321,22 +347,25 @@ class Router
         }
 
         $routesInfo = [
-            'requested_uri' => $uriPath,
+            'requested_uri' => $requestUriPath,
+            'application_path' => $appPath,
             'request_method' => $requestType,
             'defined_routes' => $definedRoutes,
             'readable_routes' => $readableRoutes,
             'base_url' => defined('BASE_URL') ? BASE_URL : '/',
+            'base_path' => $basePathClean,
             'uri_path_clean' => $uriPathClean
         ];
 
         if ($logger) {
             $logger->error("404 Error: No route defined for URI", $routesInfo);
         } else {
-            error_log("404 Error: No route defined for URI: " . $uriPath . " [" . $requestType . "]" .
+            error_log("404 Error: No route defined for URI: " . $requestUriPath . " [" . $requestType . "]" .
+                " | App Path: " . $appPath .
                 " | Defined routes: " . json_encode($definedRoutes));
         }
 
-        throw new Exception("No route defined for this URI: {$uriPath} [{$requestType}]", 404);
+        throw new Exception("No route defined for this URI: {$requestUriPath} [{$requestType}]", 404);
     }
 
     /**
