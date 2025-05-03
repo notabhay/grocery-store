@@ -1,5 +1,23 @@
 <?php
 
+// --- BEGIN DIAGNOSTIC LOGGING ---
+try {
+    $logFilePath = dirname(__DIR__) . '/logs/app.log'; // Assumes BASE_PATH isn't defined yet
+    $logMessage = sprintf(
+        "[%s] Request Received: URI=[%s], SCRIPT_NAME=[%s], PHP_SELF=[%s], Calculated BASE_URL attempt starts...\n",
+        date('Y-m-d H:i:s'),
+        $_SERVER['REQUEST_URI'] ?? 'N/A',
+        $_SERVER['SCRIPT_NAME'] ?? 'N/A',
+        $_SERVER['PHP_SELF'] ?? 'N/A'
+    );
+    // Use error_log for simplicity and robustness early in execution
+    error_log($logMessage, 3, $logFilePath);
+} catch (\Throwable $e) {
+    // Log failure to log, if possible
+    error_log("Failed to write diagnostic log: " . $e->getMessage() . "\n", 3, $logFilePath);
+}
+// --- END DIAGNOSTIC LOGGING ---
+
 /**
  * Front Controller / Application Entry Point
  *
