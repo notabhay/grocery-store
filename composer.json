@@ -1,0 +1,21 @@
+{
+    "name": "abhay/grocery-store",
+    "description": "PHP Based online grocery store application for Advanced Web Technologies module.",
+    "type": "project",
+    "require": {
+        "php": "^7.0",
+        "monolog/monolog": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Abhay Sriwastawa",
+            "email": "y1d13@students.keele.ac.uk"
+        }
+    ],
+    "minimum-stability": "stable"
+}
