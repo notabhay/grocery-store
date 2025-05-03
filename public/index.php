@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
 /**
  * Front Controller / Application Entry Point
@@ -18,6 +16,20 @@ define('BASE_PATH', dirname(__DIR__));
 // Include the Composer autoloader.
 // This makes all Composer-managed libraries and application classes (following PSR-4) available.
 require_once BASE_PATH . '/vendor/autoload.php';
+
+// --- Check for required PHP extensions ---
+$required_extensions = ['pdo_mysql', 'session', 'gd', 'mbstring', 'json']; // Add other potential extensions if needed
+$missing_extensions = [];
+foreach ($required_extensions as $ext) {
+    if (!extension_loaded($ext)) {
+        $missing_extensions[] = $ext;
+    }
+}
+if (!empty($missing_extensions)) {
+    http_response_code(500); // Keep the 500 status but provide a message
+    die('ERROR: Required PHP extension(s) missing: ' . implode(', ', $missing_extensions) . '. Please contact server administrator.');
+}
+// --- End extension check ---
 
 // Load the application configuration.
 // Contains settings like database credentials, debug mode, etc.
