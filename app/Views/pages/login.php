@@ -26,7 +26,7 @@
 $page_title = $page_title ?? 'Login - GhibliGroceries';
 $meta_description = $meta_description ?? 'Login to GhibliGroceries - Access your account to place orders.';
 $meta_keywords = $meta_keywords ?? 'login, grocery, online shopping, account access';
-$additional_css_files = $additional_css_files ?? ['/assets/css/login.css']; // Specific CSS for this page
+$additional_css_files = $additional_css_files ?? ['/public/assets/css/login.css']; // Specific CSS for this page
 $email = $email ?? ''; // Repopulate email field on error
 $login_error = $login_error ?? ''; // General login error (e.g., wrong password/email)
 $captcha_error = $captcha_error ?? ''; // CAPTCHA validation error

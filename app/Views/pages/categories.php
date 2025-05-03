@@ -19,10 +19,10 @@
  */
 
 // Use null coalescing operator to ensure variables are defined, preventing errors if not passed from controller.
-$categories ??= [];
-$products ??= [];
-$logged_in ??= false;
-$activeFilter ??= null; // Stores the name of the category passed via query string, if any.
+$categories = $categories ?? [];
+$products = $products ?? [];
+$logged_in = $logged_in ?? false;
+$activeFilter = $activeFilter ?? null; // Stores the name of the category passed via query string, if any.
 ?>
 <!-- Page Header Section -->
 <section class="page-header fixed-page-header">
@@ -101,7 +101,7 @@ $activeFilter ??= null; // Stores the name of the category passed via query stri
                             <!-- Link to the individual product details page -->
                             <a href="/product/<?php echo htmlspecialchars($prod['product_id']); ?>" class="product-link">
                                 <!-- Product Image -->
-                                <img src="<?php echo htmlspecialchars($prod['image_path']); ?>"
+                                <img src="/public/<?php echo htmlspecialchars($prod['image_path']); ?>"
                                     alt="<?php echo htmlspecialchars($prod['name']); ?>" class="product-image">
                                 <!-- Product Name -->
                                 <h4 class="product-name"><?php echo htmlspecialchars($prod['name']); ?></h4>

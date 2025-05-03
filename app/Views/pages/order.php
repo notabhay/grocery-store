@@ -83,8 +83,8 @@ if (!isset($csrfToken)) {
                 <!-- Container for product image and info -->
                 <div class="product-details">
                     <!-- Product image -->
-                    <img src="/assets/images/products/<?php echo htmlspecialchars(basename($product['image_path'] ?? 'default.png')); // Use basename for security and provide default 
-                                                        ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"
+                    <img src="/public/assets/images/products/<?php echo htmlspecialchars(basename($product['image_path'] ?? 'default.png')); // Use basename for security and provide default
+                                                                ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"
                         class="product-thumbnail">
                     <!-- Product information block -->
                     <div class="product-info">

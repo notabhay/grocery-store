@@ -140,7 +140,7 @@ $session = App\Core\Registry::get('session');
             <!-- Empty state section when no orders are found -->
             <div class="empty-state-container">
                 <div class="empty-state-illustration">
-                    <img src="/assets/images/cart/empty_shopping_cart.png" alt="Empty State Illustration">
+                    <img src="/public/assets/images/cart/empty_shopping_cart.png" alt="Empty State Illustration">
                 </div>
                 <h2 class="empty-state-heading">Your order history is empty</h2>
                 <p class="empty-state-text">You haven't placed any orders with us yet. Explore our fresh selection and

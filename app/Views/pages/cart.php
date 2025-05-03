@@ -29,7 +29,7 @@
         <div class="empty-state-container">
             <div class="empty-state-illustration">
                 <!-- Image indicating an empty cart -->
-                <img src="/assets/images/cart/empty_shopping_cart.png" alt="Empty State Illustration">
+                <img src="/public/assets/images/cart/empty_shopping_cart.png" alt="Empty State Illustration">
             </div>
             <h2 class="empty-state-heading">Your cart is looking empty</h2>
             <p class="empty-state-text">Looks like you haven't added anything to your cart yet. Discover our fresh selection
@@ -61,7 +61,7 @@
                             <!-- Product Information Column -->
                             <td class="product-info">
                                 <!-- Product Thumbnail Image -->
-                                <img src="/assets/images/products/<?php echo basename(htmlspecialchars($item['image'])); ?>"
+                                <img src="/public/assets/images/products/<?php echo basename(htmlspecialchars($item['image'])); ?>"
                                     alt="<?php echo htmlspecialchars($item['name']); ?>" class="product-thumbnail">
                                 <!-- Product Name -->
                                 <div class="product-details">

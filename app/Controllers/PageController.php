@@ -96,7 +96,7 @@ class PageController extends BaseController
             // Add image URL to each product for easier access in the view
             foreach ($random_products as &$product) { // Use reference to modify directly
                 $image_filename = isset($product['image']) ? basename($product['image']) : 'default.png';
-                $product['image_url'] = '/assets/images/products/' . $image_filename;
+                $product['image_url'] = '/public/assets/images/products/' . $image_filename;
             }
             unset($product); // Unset reference after loop
 
@@ -133,7 +133,7 @@ class PageController extends BaseController
             'meta_description' => 'Learn more about GhibliGroceries, your source for fresh, quality groceries delivered fast.',
             'meta_keywords' => 'about us, grocery store, online groceries, GhibliGroceries',
             'logged_in' => $this->session->isAuthenticated(), // Pass login status
-            'additional_css_files' => ['/assets/css/about.css'], // Specific CSS for this page
+            'additional_css_files' => ['/public/assets/css/about.css'], // Specific CSS for this page
         ];
 
         // Render the 'about' view
@@ -159,7 +159,7 @@ class PageController extends BaseController
             'form_errors' => $this->session->getFlash('form_errors', []), // Validation errors from previous submission
             'old_input' => $this->session->getFlash('old_input', []), // User's previous input on validation failure
             'logged_in' => $this->session->isAuthenticated(), // Pass login status
-            'additional_css_files' => ['/assets/css/contact.css'], // Specific CSS
+            'additional_css_files' => ['/public/assets/css/contact.css'], // Specific CSS
         ];
 
         // Render the 'contact' view
@@ -271,7 +271,7 @@ class PageController extends BaseController
             'meta_description' => 'View and manage your shopping cart at GhibliGroceries.',
             'meta_keywords' => 'shopping cart, checkout, grocery store, GhibliGroceries',
             'logged_in' => $this->session->isAuthenticated(), // Pass login status (redundant check, but good practice)
-            'additional_css_files' => ['/assets/css/cart.css'], // Specific CSS
+            'additional_css_files' => ['/public/assets/css/cart.css'], // Specific CSS
         ]);
 
         // Render the cart view

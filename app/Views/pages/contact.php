@@ -27,7 +27,7 @@ $page_title_safe = htmlspecialchars($page_title);
 $csrf_token_safe = htmlspecialchars($csrf_token);
 ?>
 <!-- Link to the specific stylesheet for the contact page -->
-<link rel="stylesheet" href="/assets/css/contact.css">
+<link rel="stylesheet" href="/public/assets/css/contact.css">
 
 <!-- Main content area -->
 <main>

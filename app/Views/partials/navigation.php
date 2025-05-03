@@ -52,7 +52,7 @@
 
     <!-- CSS Links -->
     <!-- Main application stylesheet -->
-    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/public/assets/css/styles.css">
     <!-- Google Fonts (Poppins) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,13 +70,13 @@
 
     <!-- JavaScript Files -->
     <!-- Main site-wide script file (deferred execution) -->
-    <script src="/assets/js/script.js" defer></script>
+    <script src="/public/assets/js/script.js" defer></script>
 
     <?php // Include additional JavaScript files if provided -->
     if (isset($additional_js_files) && is_array($additional_js_files)):
         foreach ($additional_js_files as $js_file): ?>
             <!-- Include JS file relative to the /public/assets/js/ directory (deferred execution) -->
-            <script src="/assets/js/<?php echo htmlspecialchars($js_file); ?>" defer></script>
+            <script src="/public/assets/js/<?php echo htmlspecialchars($js_file); ?>" defer></script>
     <?php endforeach;
     endif; ?>
 </head> <!-- This is likely incorrect if included within another HTML structure -->

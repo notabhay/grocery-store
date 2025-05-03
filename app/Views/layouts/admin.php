@@ -32,7 +32,7 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Main application stylesheet -->
-    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/public/assets/css/styles.css">
 
     <!-- Inline Styles specific to the Admin Layout -->
     <style>

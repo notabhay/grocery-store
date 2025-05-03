@@ -67,7 +67,8 @@ $session = App\Core\Registry::get('session');
         <?php if (empty($cartItems)): ?>
             <!-- Display empty cart message -->
             <div class="empty-cart">
-                <img src="/assets/images/cart/empty_shopping_cart.png" alt="Empty Shopping Cart" class="empty-cart-image">
+                <img src="/public/assets/images/cart/empty_shopping_cart.png" alt="Empty Shopping Cart"
+                    class="empty-cart-image">
                 <p>Your cart is currently empty.</p>
                 <!-- Link to browse products -->
                 <a href="/categories" class="btn btn-primary">Browse Products</a>

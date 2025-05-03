@@ -144,7 +144,7 @@ class OrderController extends BaseController
             'page_title' => 'Place Order - ' . htmlspecialchars($productData['name']),
             'meta_description' => 'Place your order for ' . htmlspecialchars($productData['name']) . ' at GhibliGroceries',
             'meta_keywords' => 'order, grocery, purchase, ' . htmlspecialchars($productData['name']),
-            'additional_css_files' => ['/assets/css/order.css'], // Specific CSS for this page
+            'additional_css_files' => ['/public/assets/css/order.css'], // Specific CSS for this page
         ];
 
         // Render the view
@@ -303,7 +303,7 @@ class OrderController extends BaseController
                                 'name' => $product['name'],
                                 'price' => $product['price'],
                                 // Construct image URL safely
-                                'image_url' => '/assets/images/products/' . basename($product['image'] ?? 'default.png'),
+                                'image_url' => '/public/assets/images/products/' . basename($product['image'] ?? 'default.png'),
                                 'quantity' => $quantity,
                                 'subtotal' => $subtotal
                             ];
@@ -348,7 +348,7 @@ class OrderController extends BaseController
             'page_title' => 'Place Your Order',
             'meta_description' => 'Review your cart and place your order.',
             'meta_keywords' => 'order, checkout, cart, grocery',
-            'additional_css_files' => ['/assets/css/order.css'],
+            'additional_css_files' => ['/public/assets/css/order.css'],
         ];
 
         // Render the order form view
@@ -510,7 +510,7 @@ class OrderController extends BaseController
             'page_title' => 'My Orders',
             'meta_description' => 'View your past orders with GhibliGroceries.',
             'meta_keywords' => 'orders, history, purchase history, grocery',
-            'additional_css_files' => ['/assets/css/order.css'],
+            'additional_css_files' => ['/public/assets/css/order.css'],
         ];
 
         // Render the 'my orders' view
@@ -556,7 +556,7 @@ class OrderController extends BaseController
             'page_title' => 'Order Confirmation #' . $orderId,
             'meta_description' => 'Your GhibliGroceries order #' . $orderId . ' has been placed successfully.',
             'meta_keywords' => 'order confirmation, grocery, purchase',
-            'additional_css_files' => ['/assets/css/order.css'],
+            'additional_css_files' => ['/public/assets/css/order.css'],
         ];
 
         // Render the confirmation view
@@ -601,7 +601,7 @@ class OrderController extends BaseController
             'page_title' => 'Order Details #' . $orderId,
             'meta_description' => 'Details for your GhibliGroceries order #' . $orderId . '.',
             'meta_keywords' => 'order details, grocery, purchase',
-            'additional_css_files' => ['/assets/css/order.css'],
+            'additional_css_files' => ['/public/assets/css/order.css'],
             'csrfToken' => $this->session->getCsrfToken() // For the cancel button form
         ];
 
@@ -1023,7 +1023,7 @@ class OrderController extends BaseController
                     $item['subtotal_formatted'] = '$' . number_format($item['subtotal'] ?? 0, 2);
                     // Construct image URL safely using basename
                     $image_filename = $item['product_image'] ?? ($item['image'] ?? 'default.png'); // Check multiple possible field names
-                    $item['image_url'] = '/assets/images/products/' . basename($image_filename);
+                    $item['image_url'] = '/public/assets/images/products/' . basename($image_filename);
                     // Sanitize product name
                     $item['product_name'] = htmlspecialchars($item['product_name'] ?? 'N/A');
                 }
