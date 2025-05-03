@@ -102,7 +102,7 @@ $activeFilter = $activeFilter ?? null; // Stores the name of the category passed
                             <a href="<?= BASE_URL ?>product/<?php echo htmlspecialchars($prod['product_id']); ?>"
                                 class="product-link">
                                 <!-- Product Image -->
-                                <img src="<?= BASE_URL ?><?php echo htmlspecialchars($prod['image_path']); ?>"
+                                <img src="<?= BASE_URL ?>public/<?php echo htmlspecialchars($prod['image_path']); ?>"
                                     alt="<?php echo htmlspecialchars($prod['name']); ?>" class="product-image">
                                 <!-- Product Name -->
                                 <h4 class="product-name"><?php echo htmlspecialchars($prod['name']); ?></h4>

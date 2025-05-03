@@ -70,13 +70,13 @@
 
     <!-- JavaScript Files -->
     <!-- Main site-wide script file (deferred execution) -->
-    <script src="<?= BASE_URL ?>assets/js/script.js" defer></script>
+    <script src="<?= BASE_URL ?>public/assets/js/script.js" defer></script>
 
     <?php // Include additional JavaScript files if provided -->
     if (isset($additional_js_files) && is_array($additional_js_files)):
         foreach ($additional_js_files as $js_file): ?>
             <!-- Include JS file relative to the /public/assets/js/ directory (deferred execution) -->
-            <script src="<?= BASE_URL ?>assets/js/<?php echo htmlspecialchars($js_file); ?>" defer></script>
+            <script src="<?= BASE_URL ?>public/assets/js/<?php echo htmlspecialchars($js_file); ?>" defer></script>
     <?php endforeach;
     endif; ?>
 </head> <!-- This is likely incorrect if included within another HTML structure -->
