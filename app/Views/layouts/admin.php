@@ -1,3 +1,7 @@
+<?php
+
+use App\Core\Registry;
+?>
 <!--
  * Admin Layout File
  *
@@ -303,7 +307,7 @@
     </script>
     <!-- Make Base URL available to JavaScript -->
     <script>
-        window.baseUrl = '<?= BASE_URL ?>';
+        window.baseUrl = '<?= Registry::get('config')['SITE_URL'] ?>';
     </script>
 </body>
 

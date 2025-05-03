@@ -1,3 +1,7 @@
+<?php
+
+use App\Core\Registry;
+?>
 <!--
  * Default Layout File
  *
@@ -118,7 +122,7 @@
 
     <!-- Pass BASE_URL to JavaScript -->
     <script>
-        window.baseUrl = '<?= BASE_URL ?>';
+        window.baseUrl = '<?= Registry::get('config')['SITE_URL'] ?>';
     </script>
 
     <!-- Note: Global JavaScript files are likely included within navigation.php or header.php -->
@@ -128,5 +132,5 @@
 </html>
 <!-- Make Base URL available to JavaScript -->
 <script>
-    window.baseUrl = '<?= BASE_URL ?>';
+    window.baseUrl = '<?= Registry::get('config')['SITE_URL'] ?>';
 </script>

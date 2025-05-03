@@ -40,7 +40,7 @@ return [
 
     // --- Site Information ---
     'SITE_NAME' => 'GhibliGroceries', // The name of the website.
-    'SITE_URL' => 'https://teach.scam.keele.ac.uk/prin/y1d13/advanced-web-technologies-website/grocery-store/', // The base URL of the website. Include trailing slash.
+    'SITE_URL' => 'https://teach.scam.keele.ac.uk/prin/y1d13/advanced-web-technologies/grocery-store/', // The base URL of the website. Include trailing slash.
     'ADMIN_EMAIL' => 'admin@ghibligroceries.com', // Email address for administrative notifications.
 
     // --- Database Configuration ---
