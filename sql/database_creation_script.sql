@@ -357,7 +357,7 @@ DELIMITER ;
 -- Supports order management functionality
 -- ---------------------------------------------------------------------
 DELIMITER //
-CREATE TRIGGER IF NOT EXISTS order_status_change_trigger
+CREATE TRIGGER order_status_change_trigger
 AFTER UPDATE ON orders
 FOR EACH ROW
 BEGIN
@@ -388,7 +388,7 @@ DELIMITER ;
 -- Implements inventory management functionality
 -- ---------------------------------------------------------------------
 DELIMITER //
-CREATE TRIGGER IF NOT EXISTS inventory_order_trigger
+CREATE TRIGGER inventory_order_trigger
 AFTER INSERT ON order_items
 FOR EACH ROW
 BEGIN
