@@ -16,7 +16,7 @@ define('BASE_PATH', dirname(__DIR__));
 // --- Define Base URL ---
 // Hardcoded Base URL for the university server environment.
 // Ensure this path ends with a slash '/'.
-define('BASE_URL', '/prin/y1d13/advanced-web-technologies/grocery-store/');
+define('BASE_URL', 'https://teach.scam.keele.ac.uk/prin/y1d13/advanced-web-technologies/grocery-store/');
 // --- End Base URL Definition ---
 
 // Include the Composer autoloader.

@@ -110,8 +110,7 @@ class Request
     public function uri(): string
     {
         // Use the globally defined BASE_URL constant.
-        // Ensure BASE_URL is defined (should be in public/index.php).
-        $baseUrlPath = defined('BASE_URL') ? BASE_URL : '/'; // Fallback to root if not defined
+        $baseUrlPath = defined('BASE_URL') ? BASE_URL : '/';
 
         // Get the full request URI path component from the server variable.
         $fullUri = parse_url($this->server['REQUEST_URI'] ?? '', PHP_URL_PATH);
@@ -119,19 +118,19 @@ class Request
         // Check if the full URI starts with the defined base URL path.
         if ($fullUri !== null && $baseUrlPath !== '/' && strpos($fullUri, $baseUrlPath) === 0) {
             // If it does, remove the base URL path to get the relative URI.
-            // Use substr() starting from the length of the base URL path.
             $relativePath = substr($fullUri, strlen($baseUrlPath));
         } else {
-            // If it doesn't start with the base URL path (e.g., running locally at root or BASE_URL is '/'),
-            // use the full URI as the relative path.
+            // If it doesn't start with the base URL path, use the full URI as the relative path.
             $relativePath = $fullUri;
         }
 
-        // Trim leading/trailing slashes from the final relative path.
-        // Return an empty string for the root ('/') or if the path is null/empty.
+        // ADDED: Check if the relative path starts with "public/" and remove it
+        if (strpos($relativePath, 'public/') === 0) {
+            $relativePath = substr($relativePath, strlen('public/'));
+        }
 
         // Log the URI components for debugging
-        if (defined('BASE_PATH')) { // Ensure BASE_PATH is defined before using it
+        if (defined('BASE_PATH')) {
             error_log(
                 "Request URI: " . ($this->server['REQUEST_URI'] ?? 'N/A') .
                     " | BASE_URL: " . $baseUrlPath .

@@ -302,7 +302,26 @@ class Router
             return $this->callAction($controllerClass, $action, $this->params);
         }
 
-        // If no route matched, throw a 404 exception.
+        // If no route matched, log detailed information and throw a 404 exception.
+        $logger = Registry::has('logger') ? Registry::get('logger') : null;
+
+        // Log all defined routes for the current request type to help with debugging
+        $definedRoutes = isset($this->routes[$requestType]) ? array_keys($this->routes[$requestType]) : [];
+        $routesInfo = [
+            'requested_uri' => $uriPath,
+            'request_method' => $requestType,
+            'defined_routes' => $definedRoutes,
+            'base_url' => defined('BASE_URL') ? BASE_URL : '/',
+            'uri_path_clean' => $uriPathClean
+        ];
+
+        if ($logger) {
+            $logger->error("404 Error: No route defined for URI", $routesInfo);
+        } else {
+            error_log("404 Error: No route defined for URI: " . $uriPath . " [" . $requestType . "]" .
+                " | Defined routes: " . json_encode($definedRoutes));
+        }
+
         throw new Exception("No route defined for this URI: {$uriPath} [{$requestType}]", 404);
     }
 
