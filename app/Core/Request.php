@@ -111,7 +111,7 @@ class Request
     {
         // Define the known base path where the application is hosted on the server.
         // IMPORTANT: Ensure this matches the actual deployment path exactly, including trailing slash.
-        $basePath = '/prin/y1d13/advanced-web-technologies/grocery-store/public/';
+        $basePath = '/grocery-store/';
 
         // Get the full request URI path component from the server variable.
         $fullUri = parse_url($this->server['REQUEST_URI'] ?? '', PHP_URL_PATH);

@@ -635,8 +635,12 @@ class CartApiController extends BaseController
      */
     public function getCartCount()
     {
-        // Log entry to the method
-        $this->logger->info(date('[Y-m-d H:i:s] ') . "CartApiController::getCartCount - Entered method.");
+        // Log entry to the method with detailed request information
+        $this->logger->info(date('[Y-m-d H:i:s] ') . "CartApiController::getCartCount - Entered method.", [
+            'request_uri' => $_SERVER['REQUEST_URI'] ?? 'unknown',
+            'request_method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown',
+            'base_url' => BASE_URL ?? 'unknown'
+        ]);
 
         // Ensure GET request
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
