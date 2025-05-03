@@ -72,7 +72,7 @@ $logged_in = $logged_in ?? false; // User login status
                 <!-- Individual Product Card -->
                 <article class="product-card">
                     <!-- Product Image (uses placeholder if path is missing) -->
-                    <img src="<?= BASE_URL ?>public/<?php echo htmlspecialchars($product['image_path'] ?? 'assets/images/placeholder.png'); ?>"
+                    <img src="<?= BASE_URL ?><?php echo htmlspecialchars($product['image_path'] ?? 'assets/images/placeholder.png'); ?>"
                         alt="<?php echo htmlspecialchars($product['name'] ?? 'Product'); ?>">
                     <!-- Product Name (uses 'N/A' if missing) -->
                     <div class="product-name"><?php echo htmlspecialchars($product['name'] ?? 'N/A'); ?></div>
