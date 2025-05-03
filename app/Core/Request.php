@@ -103,16 +103,33 @@ class Request
      * Gets the request URI path, excluding the query string.
      *
      * Parses the 'REQUEST_URI' server variable and returns only the path component,
-     * with leading/trailing slashes trimmed.
+     * with leading/trailing slashes trimmed. Also strips the known base path from the URI.
      *
      * @return string The cleaned request URI path (e.g., 'users/profile', 'about'). Returns '' for the root '/'.
      */
     public function uri(): string
     {
-        // Parse the URI and get the path component.
-        $uri = parse_url($this->server['REQUEST_URI'] ?? '', PHP_URL_PATH);
-        // Trim slashes from the path.
-        return trim($uri ?: '', '/');
+        // Define the known base path where the application is hosted on the server.
+        // IMPORTANT: Ensure this matches the actual deployment path exactly, including trailing slash.
+        $basePath = '/prin/y1d13/advanced-web-technologies/grocery-store/public/';
+
+        // Get the full request URI path component from the server variable.
+        $fullUri = parse_url($this->server['REQUEST_URI'] ?? '', PHP_URL_PATH);
+
+        // Check if the full URI starts with the defined base path.
+        if ($fullUri !== null && strpos($fullUri, $basePath) === 0) {
+            // If it does, remove the base path to get the relative URI.
+            // Use substr() starting from the length of the base path.
+            $relativePath = substr($fullUri, strlen($basePath));
+        } else {
+            // If it doesn't start with the base path (e.g., running locally at root),
+            // use the full URI as the relative path.
+            $relativePath = $fullUri;
+        }
+
+        // Trim leading/trailing slashes from the final relative path.
+        // Return an empty string for the root ('/') or if the path is null/empty.
+        return trim($relativePath ?: '', '/');
     }
 
     /**
