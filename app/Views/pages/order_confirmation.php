@@ -243,9 +243,9 @@ $items = $order['items'] ?? [];
         <!-- Action buttons section -->
         <div class="confirmation-actions">
             <!-- Link to continue shopping -->
-            <a href="/categories" class="btn btn-primary">Continue Shopping</a>
+            <a href="<?= BASE_URL ?>categories" class="btn btn-primary">Continue Shopping</a>
             <!-- Link to view user's order history -->
-            <a href="/orders" class="btn btn-secondary">View My Orders</a>
+            <a href="<?= BASE_URL ?>orders" class="btn btn-secondary">View My Orders</a>
             <!-- Button to trigger browser's print dialog -->
             <button class="btn btn-secondary print-confirmation" onclick="window.print(); return false;">
                 <i class="fas fa-print"></i> Print Confirmation

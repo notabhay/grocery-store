@@ -99,9 +99,10 @@ $activeFilter = $activeFilter ?? null; // Stores the name of the category passed
                         <!-- Individual Product Card -->
                         <article class="product-card">
                             <!-- Link to the individual product details page -->
-                            <a href="/product/<?php echo htmlspecialchars($prod['product_id']); ?>" class="product-link">
+                            <a href="<?= BASE_URL ?>product/<?php echo htmlspecialchars($prod['product_id']); ?>"
+                                class="product-link">
                                 <!-- Product Image -->
-                                <img src="/public/<?php echo htmlspecialchars($prod['image_path']); ?>"
+                                <img src="<?= BASE_URL ?><?php echo htmlspecialchars($prod['image_path']); ?>"
                                     alt="<?php echo htmlspecialchars($prod['name']); ?>" class="product-image">
                                 <!-- Product Name -->
                                 <h4 class="product-name"><?php echo htmlspecialchars($prod['name']); ?></h4>
@@ -117,7 +118,7 @@ $activeFilter = $activeFilter ?? null; // Stores the name of the category passed
                                 </button>
                             <?php else: ?>
                                 <!-- Login Link (for logged-out users) -->
-                                <a href="/login" class="login-to-purchase-btn">
+                                <a href="<?= BASE_URL ?>login" class="login-to-purchase-btn">
                                     Login to Purchase
                                 </a>
                             <?php endif; ?>

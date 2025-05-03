@@ -57,7 +57,7 @@ $logged_in = $logged_in ?? false; // User login status
     </div>
     <!-- Right side visual element: Hero image -->
     <div class="hero-visual">
-        <img src="/public/assets/images/hero_image.png" alt="Delivery person with groceries" class="hero-image">
+        <img src="<?= BASE_URL ?>assets/images/hero_image.png" alt="Delivery person with groceries" class="hero-image">
     </div>
 
     <!-- Featured Product Showcase Section (within the hero section structure) -->
@@ -72,7 +72,7 @@ $logged_in = $logged_in ?? false; // User login status
                 <!-- Individual Product Card -->
                 <article class="product-card">
                     <!-- Product Image (uses placeholder if path is missing) -->
-                    <img src="/public/<?php echo htmlspecialchars($product['image_path'] ?? 'public/assets/images/placeholder.png'); ?>"
+                    <img src="<?= BASE_URL ?><?php echo htmlspecialchars($product['image_path'] ?? 'assets/images/placeholder.png'); ?>"
                         alt="<?php echo htmlspecialchars($product['name'] ?? 'Product'); ?>">
                     <!-- Product Name (uses 'N/A' if missing) -->
                     <div class="product-name"><?php echo htmlspecialchars($product['name'] ?? 'N/A'); ?></div>
@@ -88,7 +88,7 @@ $logged_in = $logged_in ?? false; // User login status
                         </button>
                     <?php else: ?>
                         <!-- Login Link (for logged-out users) -->
-                        <a href="/login" class="login-to-purchase-btn">
+                        <a href="<?= BASE_URL ?>login" class="login-to-purchase-btn">
                             Login to Purchase
                         </a>
                     <?php endif; ?>
@@ -107,50 +107,51 @@ $logged_in = $logged_in ?? false; // User login status
 <section class="category-section">
     <!-- Each category is presented as a clickable article linking to the filtered categories page -->
     <!-- Link to Dairy Products category -->
-    <a href="/categories?filter=Dairy%20Products" class="category-link">
+    <a href="<?= BASE_URL ?>categories?filter=Dairy%20Products" class="category-link">
         <article class="category-item">
             <div class="category-icon">
-                <img src="/public/assets/images/categories/dairy_products_icon.png" alt="Dairy Products">
+                <img src="<?= BASE_URL ?>assets/images/categories/dairy_products_icon.png" alt="Dairy Products">
             </div>
             <div class="category-title">Dairy Products</div>
             <div class="category-description">Fresh milk, cheese, yogurt, and more.</div>
         </article>
     </a>
     <!-- Link to Fruits & Veggies category -->
-    <a href="/categories?filter=Fruits%20%26%20Veggies" class="category-link">
+    <a href="<?= BASE_URL ?>categories?filter=Fruits%20%26%20Veggies" class="category-link">
         <article class="category-item">
             <div class="category-icon">
-                <img src="/public/assets/images/categories/fruits_and_veggies_icon.png" alt="Fruits & Veggies">
+                <img src="<?= BASE_URL ?>assets/images/categories/fruits_and_veggies_icon.png" alt="Fruits & Veggies">
             </div>
             <div class="category-title">Fruits & Veggies</div>
             <div class="category-description">Farm-fresh seasonal produce.</div>
         </article>
     </a>
     <!-- Link to Spices & Seasonings category -->
-    <a href="/categories?filter=Spices%20%26%20Seasonings" class="category-link">
+    <a href="<?= BASE_URL ?>categories?filter=Spices%20%26%20Seasonings" class="category-link">
         <article class="category-item">
             <div class="category-icon">
-                <img src="/public/assets/images/categories/spices_and_seasonings_icon.png" alt="Spices & Seasonings">
+                <img src="<?= BASE_URL ?>assets/images/categories/spices_and_seasonings_icon.png"
+                    alt="Spices & Seasonings">
             </div>
             <div class="category-title">Spices & Seasonings</div>
             <div class="category-description">Flavorful additions for your cooking.</div>
         </article>
     </a>
     <!-- Link to Meat category -->
-    <a href="/categories?filter=Meat" class="category-link">
+    <a href="<?= BASE_URL ?>categories?filter=Meat" class="category-link">
         <article class="category-item">
             <div class="category-icon">
-                <img src="/public/assets/images/categories/meat_icon.png" alt="Meat">
+                <img src="<?= BASE_URL ?>assets/images/categories/meat_icon.png" alt="Meat">
             </div>
             <div class="category-title">Meat</div>
             <div class="category-description">Quality cuts of chicken, beef, and pork.</div>
         </article>
     </a>
     <!-- Link to Baked Goods category -->
-    <a href="/categories?filter=Baked%20Goods" class="category-link">
+    <a href="<?= BASE_URL ?>categories?filter=Baked%20Goods" class="category-link">
         <article class="category-item">
             <div class="category-icon">
-                <img src="/public/assets/images/categories/baked_goods_icon.png" alt="Baked Goods">
+                <img src="<?= BASE_URL ?>assets/images/categories/baked_goods_icon.png" alt="Baked Goods">
             </div>
             <div class="category-title">Baked Goods</div>
             <div class="category-description">Delicious bread, pastries, and cookies.</div>

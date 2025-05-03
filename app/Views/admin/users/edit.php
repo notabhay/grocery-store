@@ -23,11 +23,11 @@
         <h2>Edit User</h2>
         <!-- Action Buttons: Back to List, View User -->
         <div class="user-actions">
-            <a href="/admin/users" class="btn btn-secondary">
+            <a href="<?= BASE_URL ?>admin/users" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back to Users
             </a>
-            <a href="/admin/users/<?php echo $user['user_id']; // Link to the user's detail view 
-                                    ?>" class="btn btn-info">
+            <a href="<?= BASE_URL ?>admin/users/<?php echo $user['user_id']; // Link to the user's detail view
+                                                ?>" class="btn btn-info">
                 <i class="fas fa-eye"></i> View User
             </a>
         </div>
@@ -58,7 +58,7 @@
     <div class="user-edit-card">
         <?php // Form submits to /admin/users/{user_id} via POST 
         ?>
-        <form action="/admin/users/<?php echo $user['user_id']; ?>" method="post" class="user-edit-form">
+        <form action="<?= BASE_URL ?>admin/users/<?php echo $user['user_id']; ?>" method="post" class="user-edit-form">
             <!-- CSRF Token Hidden Input -->
             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
 
@@ -124,8 +124,8 @@
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> Save Changes
                 </button>
-                <a href="/admin/users/<?php echo $user['user_id']; // Link back to user view 
-                                        ?>" class="btn btn-secondary">
+                <a href="<?= BASE_URL ?>admin/users/<?php echo $user['user_id']; // Link back to user view
+                                                    ?>" class="btn btn-secondary">
                     <i class="fas fa-times"></i> Cancel
                 </a>
             </div>

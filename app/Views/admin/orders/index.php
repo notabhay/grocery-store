@@ -21,7 +21,7 @@
         </div>
         <!-- Back to Dashboard Button -->
         <div class="col-md-6 text-end">
-            <a href="/admin/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+            <a href="<?= BASE_URL ?>admin/dashboard" class="btn btn-secondary">Back to Dashboard</a>
         </div>
     </div>
 
@@ -32,7 +32,7 @@
         </div>
         <div class="card-body">
             <!-- Filter Form (Submits via GET to the same page) -->
-            <form action="/admin/orders" method="get" class="row g-3">
+            <form action="<?= BASE_URL ?>admin/orders" method="get" class="row g-3">
                 <!-- Status Filter Dropdown -->
                 <div class="col-md-3">
                     <label for="status" class="form-label">Status</label>
@@ -69,7 +69,7 @@
                 <!-- Filter Action Buttons -->
                 <div class="col-md-3 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary me-2">Apply Filters</button>
-                    <a href="/admin/orders" class="btn btn-outline-secondary">Reset</a>
+                    <a href="<?= BASE_URL ?>admin/orders" class="btn btn-outline-secondary">Reset</a>
                 </div>
             </form>
         </div>
@@ -136,8 +136,8 @@
                                     <!-- Action Buttons -->
                                     <td>
                                         <!-- View Order Details Button -->
-                                        <a href="/admin/orders/<?= $order['order_id'] // Link to the specific order view 
-                                                                ?>" class="btn btn-sm btn-primary">View</a>
+                                        <a href="<?= BASE_URL ?>admin/orders/<?= $order['order_id'] // Link to the specific order view
+                                                                                ?>" class="btn btn-sm btn-primary">View</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

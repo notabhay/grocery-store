@@ -23,10 +23,10 @@
         <h2>User Details</h2>
         <!-- Action Buttons: Back to List, Edit User -->
         <div class="user-actions">
-            <a href="/admin/users" class="btn btn-secondary">
+            <a href="<?= BASE_URL ?>admin/users" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back to Users
             </a>
-            <a href="/admin/users/<?php echo $user['user_id']; ?>/edit" class="btn btn-primary">
+            <a href="<?= BASE_URL ?>admin/users/<?php echo $user['user_id']; ?>/edit" class="btn btn-primary">
                 <i class="fas fa-edit"></i> Edit User
             </a>
         </div>
@@ -114,7 +114,7 @@
             <h3>Password Management</h3>
             <p>Use this option to send a password reset email to the user.</p>
             <!-- Password Reset Form -->
-            <form action="/admin/users/<?php echo $user['user_id']; ?>/reset-password" method="post"
+            <form action="<?= BASE_URL ?>admin/users/<?php echo $user['user_id']; ?>/reset-password" method="post"
                 class="reset-password-form">
                 <!-- CSRF Token Hidden Input -->
                 <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">

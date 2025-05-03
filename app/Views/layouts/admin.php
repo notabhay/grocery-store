@@ -32,7 +32,7 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Main application stylesheet -->
-    <link rel="stylesheet" href="/public/assets/css/styles.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/styles.css">
 
     <!-- Inline Styles specific to the Admin Layout -->
     <style>
@@ -200,35 +200,35 @@
             <ul class="admin-sidebar-nav">
                 <li>
                     <!-- Dashboard Link - Active state based on $currentPath -->
-                    <a href="/admin/dashboard"
+                    <a href="<?= BASE_URL ?>admin/dashboard"
                         class="<?php echo (isset($currentPath) && $currentPath === '/admin/dashboard') ? 'active' : ''; ?>">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
                 </li>
                 <li>
                     <!-- Users Link - Active state if $currentPath starts with /admin/users -->
-                    <a href="/admin/users"
+                    <a href="<?= BASE_URL ?>admin/users"
                         class="<?php echo (isset($currentPath) && strpos($currentPath, '/admin/users') === 0) ? 'active' : ''; ?>">
                         <i class="fas fa-users"></i> Users
                     </a>
                 </li>
                 <li>
                     <!-- Orders Link - Active state if $currentPath starts with /admin/orders -->
-                    <a href="/admin/orders"
+                    <a href="<?= BASE_URL ?>admin/orders"
                         class="<?php echo (isset($currentPath) && strpos($currentPath, '/admin/orders') === 0) ? 'active' : ''; ?>">
                         <i class="fas fa-shopping-cart"></i> Orders
                     </a>
                 </li>
                 <li>
                     <!-- Products Link - Active state if $currentPath starts with /admin/products -->
-                    <a href="/admin/products"
+                    <a href="<?= BASE_URL ?>admin/products"
                         class="<?php echo (isset($currentPath) && strpos($currentPath, '/admin/products') === 0) ? 'active' : ''; ?>">
                         <i class="fas fa-box"></i> Products
                     </a>
                 </li>
                 <li>
                     <!-- Categories Link - Active state if $currentPath starts with /admin/categories -->
-                    <a href="/admin/categories"
+                    <a href="<?= BASE_URL ?>admin/categories"
                         class="<?php echo (isset($currentPath) && strpos($currentPath, '/admin/categories') === 0) ? 'active' : ''; ?>">
                         <i class="fas fa-tags"></i> Categories
                     </a>
@@ -241,7 +241,7 @@
                 </li>
                 <li>
                     <!-- Logout Link -->
-                    <a href="/logout">
+                    <a href="<?= BASE_URL ?>logout">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </li>
@@ -300,6 +300,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Admin layout specific JavaScript could go here
         });
+    </script>
+    <!-- Make Base URL available to JavaScript -->
+    <script>
+        window.baseUrl = '<?= BASE_URL ?>';
     </script>
 </body>
 

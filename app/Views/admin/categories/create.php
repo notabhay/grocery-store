@@ -21,7 +21,7 @@ Expected PHP Variables:
     <h2>Add New Category</h2>
     <!-- Action Button: Link back to the category list -->
     <div class="admin-content-actions">
-        <a href="/admin/categories" class="btn btn-secondary">
+        <a href="<?= BASE_URL ?>admin/categories" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to Categories
         </a>
     </div>
@@ -56,7 +56,7 @@ Expected PHP Variables:
 <div class="card">
     <div class="card-body">
         <!-- Form submits to the category creation endpoint -->
-        <form action="/admin/categories" method="POST">
+        <form action="<?= BASE_URL ?>admin/categories" method="POST">
             <!-- CSRF Token: Essential for security -->
             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
 
@@ -98,7 +98,7 @@ Expected PHP Variables:
                     <i class="fas fa-save"></i> Save Category
                 </button>
                 <!-- Cancel button links back to the category list -->
-                <a href="/admin/categories" class="btn btn-outline-secondary">Cancel</a>
+                <a href="<?= BASE_URL ?>admin/categories" class="btn btn-outline-secondary">Cancel</a>
             </div>
             <!-- /Form Action Buttons -->
         </form>

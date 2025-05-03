@@ -151,7 +151,7 @@ Expected PHP Variables:
         </div>
         <div class="quick-actions-grid">
             <!-- Manage Users Action Card -->
-            <a href="/admin/users" class="action-card">
+            <a href="<?= BASE_URL ?>admin/users" class="action-card">
                 <div class="action-icon">
                     <i class="fas fa-user-plus"></i>
                 </div>
@@ -163,7 +163,7 @@ Expected PHP Variables:
             <!-- /Manage Users Action Card -->
 
             <!-- View Orders Action Card -->
-            <a href="/admin/orders" class="action-card">
+            <a href="<?= BASE_URL ?>admin/orders" class="action-card">
                 <div class="action-icon">
                     <i class="fas fa-clipboard-list"></i>
                 </div>
@@ -175,7 +175,7 @@ Expected PHP Variables:
             <!-- /View Orders Action Card -->
 
             <!-- Manage Products Action Card -->
-            <a href="/admin/products" class="action-card">
+            <a href="<?= BASE_URL ?>admin/products" class="action-card">
                 <div class="action-icon">
                     <i class="fas fa-plus-circle"></i>
                 </div>
@@ -187,7 +187,7 @@ Expected PHP Variables:
             <!-- /Manage Products Action Card -->
 
             <!-- Manage Categories Action Card -->
-            <a href="/admin/categories" class="action-card">
+            <a href="<?= BASE_URL ?>admin/categories" class="action-card">
                 <div class="action-icon">
                     <i class="fas fa-sitemap"></i>
                 </div>
@@ -249,7 +249,7 @@ Expected PHP Variables:
                                 </td>
                                 <td>
                                     <!-- Link to view the full order details -->
-                                    <a href="/admin/orders/<?= $order['order_id'] ?>" class="view-order-btn">
+                                    <a href="<?= BASE_URL ?>admin/orders/<?= $order['order_id'] ?>" class="view-order-btn">
                                         View
                                     </a>
                                 </td>
@@ -260,7 +260,8 @@ Expected PHP Variables:
             </table>
             <!-- Link to view all orders -->
             <div class="view-all-orders">
-                <a href="/admin/orders" class="view-all-link">View All Orders <i class="fas fa-arrow-right"></i></a>
+                <a href="<?= BASE_URL ?>admin/orders" class="view-all-link">View All Orders <i
+                        class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </div>

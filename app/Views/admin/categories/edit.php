@@ -24,7 +24,7 @@ Expected PHP Variables:
     <h2>Edit Category</h2>
     <!-- Action Button: Link back to the category list -->
     <div class="admin-content-actions">
-        <a href="/admin/categories" class="btn btn-secondary">
+        <a href="<?= BASE_URL ?>admin/categories" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to Categories
         </a>
     </div>
@@ -59,7 +59,7 @@ Expected PHP Variables:
 <div class="card">
     <div class="card-body">
         <!-- Form submits to the category update endpoint, including the category ID in the URL -->
-        <form action="/admin/categories/<?php echo $category['id']; ?>" method="POST">
+        <form action="<?= BASE_URL ?>admin/categories/<?php echo $category['id']; ?>" method="POST">
             <!-- CSRF Token: Essential for security -->
             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
 
@@ -84,9 +84,8 @@ Expected PHP Variables:
                         <?php // Prevent selecting the category itself as its parent 
                         ?>
                         <?php if ($parentCategory['id'] != $category['id']): ?>
-                            <option value="<?php echo $parentCategory['id']; ?>"
-                                <?php // Select the current parent ID
-                                echo ($category['parent_id'] == $parentCategory['id']) ? 'selected' : ''; ?>>
+                            <option value="<?php echo $parentCategory['id']; ?>" <?php // Select the current parent ID
+                                                                                    echo ($category['parent_id'] == $parentCategory['id']) ? 'selected' : ''; ?>>
                                 <?php echo htmlspecialchars($parentCategory['category_name']); // Display category name (escaped) 
                                 ?>
                             </option>
@@ -104,7 +103,7 @@ Expected PHP Variables:
                     <i class="fas fa-save"></i> Update Category
                 </button>
                 <!-- Cancel button links back to the category list -->
-                <a href="/admin/categories" class="btn btn-outline-secondary">Cancel</a>
+                <a href="<?= BASE_URL ?>admin/categories" class="btn btn-outline-secondary">Cancel</a>
             </div>
             <!-- /Form Action Buttons -->
         </form>
@@ -125,7 +124,7 @@ Expected PHP Variables:
             <p class="card-text">Warning: This action cannot be undone. Only categories with no associated products can be
                 deleted.</p>
             <!-- Delete form submits to the category delete endpoint -->
-            <form action="/admin/categories/<?php echo $category['id']; ?>/delete" method="POST"
+            <form action="<?= BASE_URL ?>admin/categories/<?php echo $category['id']; ?>/delete" method="POST"
                 onsubmit="return confirm('Are you sure you want to delete this category? This action cannot be undone.');">
                 <!-- CSRF Token for delete action -->
                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">

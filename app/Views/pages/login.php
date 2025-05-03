@@ -54,7 +54,7 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
             <!-- Container for the login form and registration link -->
             <div class="login-form-container">
                 <!-- Login form submitting data via POST to /login -->
-                <form action="/login" method="post" class="login-form">
+                <form action="<?= BASE_URL ?>login" method="post" class="login-form">
                     <!-- CSRF Token (hidden input for security) -->
                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
 
@@ -83,7 +83,7 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
                         <div class="captcha-container">
                             <!-- CAPTCHA Image and Refresh Button -->
                             <div class="captcha-image">
-                                <img src="/captcha" alt="CAPTCHA Image" id="captcha-img">
+                                <img src="<?= BASE_URL ?>captcha" alt="CAPTCHA Image" id="captcha-img">
                                 <!-- Button to refresh CAPTCHA (controlled by JS) -->
                                 <button type="button" class="refresh-captcha">
                                     <i class="fas fa-sync-alt"></i> <!-- Refresh icon -->
@@ -106,7 +106,7 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
                         <label>
                             <input type="checkbox" name="remember_me"> Remember me
                         </label>
-                        <a href="/forgot-password" class="forgot-password">Forgot Password?</a>
+                        <a href="<?= BASE_URL ?>forgot-password" class="forgot-password">Forgot Password?</a>
                     </div>
 
                     <!-- Form Group: Submit Button -->
@@ -117,7 +117,7 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
 
                 <!-- Link to Registration Page -->
                 <aside class="register-link">
-                    <p>Don't have an account? <a href="/register">Register here</a></p>
+                    <p>Don't have an account? <a href="<?= BASE_URL ?>register">Register here</a></p>
                 </aside>
             </div> <!-- End login-form-container -->
         </div> <!-- End container -->
@@ -154,7 +154,7 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
             refreshCaptcha.addEventListener('click', function(e) {
                 e.preventDefault(); // Prevent default button behavior
                 // Update the image source with a timestamp to bypass browser cache
-                captchaImage.src = '/captcha?' + new Date().getTime();
+                captchaImage.src = '<?= BASE_URL ?>captcha?' + new Date().getTime();
             });
         }
     });

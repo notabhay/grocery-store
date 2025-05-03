@@ -62,7 +62,7 @@ $input_email = $input_data['email'] ?? '';
             <?php if ($registration_success): // Check if registration was successful 
             ?>
                 <div class="alert alert-success">
-                    <p>Registration successful! You can now <a href="/login">login</a> to your account.</p>
+                    <p>Registration successful! You can now <a href="<?= BASE_URL ?>login">login</a> to your account.</p>
                 </div>
             <?php elseif (!empty($registration_error)): // Check if there were registration errors 
             ?>
@@ -87,7 +87,7 @@ $input_email = $input_data['email'] ?? '';
                 <!-- Container for the basic HTML fallback form -->
                 <div class="register-form-container">
                     <!-- Basic HTML registration form -->
-                    <form action="/register" method="post" class="register-form">
+                    <form action="<?= BASE_URL ?>register" method="post" class="register-form">
                         <!-- CSRF token for security -->
                         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
 
@@ -129,7 +129,7 @@ $input_email = $input_data['email'] ?? '';
 
                     <!-- Link to the login page for existing users -->
                     <aside class="login-link">
-                        <p>Already have an account? <a href="/login">Login here</a></p>
+                        <p>Already have an account? <a href="<?= BASE_URL ?>login">Login here</a></p>
                     </aside>
                 </div> <!-- End of noscript form container -->
             </noscript> <!-- End of noscript block -->
@@ -144,7 +144,7 @@ $input_email = $input_data['email'] ?? '';
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
 <!-- Include the external React component file (needs type="text/babel" for Babel transpilation) -->
-<script type="text/babel" src="/public/assets/js/react_components/RegistrationForm.js"></script>
+<script type="text/babel" src="<?= BASE_URL ?>assets/js/react_components/RegistrationForm.js"></script>
 
 <!-- Inline Babel script to render the React component -->
 <script type="text/babel">

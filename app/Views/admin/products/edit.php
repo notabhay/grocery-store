@@ -22,7 +22,7 @@
     <h2>Edit Product</h2>
     <!-- Back Button -->
     <div class="admin-content-actions">
-        <a href="/admin/products" class="btn btn-secondary">
+        <a href="<?= BASE_URL ?>admin/products" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to Products
         </a>
     </div>
@@ -59,7 +59,7 @@
     <div class="card-body">
         <?php // Form submits to /admin/products/{product_id} via POST, allows file uploads 
         ?>
-        <form action="/admin/products/<?php echo $product['product_id']; ?>" method="POST"
+        <form action="<?= BASE_URL ?>admin/products/<?php echo $product['product_id']; ?>" method="POST"
             enctype="multipart/form-data">
             <!-- CSRF Token Hidden Input -->
             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
@@ -121,8 +121,8 @@
                 <div class="current-image-container">
                     <?php // Display the image using the path stored in the database 
                     ?>
-                    <img src="/<?php echo htmlspecialchars($product['image_path']); // Prepend '/' assuming image_path is relative to public root 
-                                ?>" alt="<?php echo htmlspecialchars($product['name']); // Use product name as alt text 
+                    <img src="<?= BASE_URL ?><?php echo htmlspecialchars($product['image_path']); // Prepend BASE_URL assuming image_path is relative to public root
+                                                ?>" alt="<?php echo htmlspecialchars($product['name']); // Use product name as alt text 
                                             ?>" class="current-product-image">
                 </div>
             </div>
@@ -155,7 +155,7 @@
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> Update Product
                 </button>
-                <a href="/admin/products" class="btn btn-secondary">Cancel</a>
+                <a href="<?= BASE_URL ?>admin/products" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div> <!-- End card-body -->

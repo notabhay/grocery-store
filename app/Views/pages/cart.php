@@ -29,13 +29,13 @@
         <div class="empty-state-container">
             <div class="empty-state-illustration">
                 <!-- Image indicating an empty cart -->
-                <img src="/public/assets/images/cart/empty_shopping_cart.png" alt="Empty State Illustration">
+                <img src="<?= BASE_URL ?>assets/images/cart/empty_shopping_cart.png" alt="Empty State Illustration">
             </div>
             <h2 class="empty-state-heading">Your cart is looking empty</h2>
             <p class="empty-state-text">Looks like you haven't added anything to your cart yet. Discover our fresh selection
                 of products and start filling your basket!</p>
             <!-- Link to browse products -->
-            <a href="/categories" class="btn btn-primary empty-state-cta">Browse Products</a>
+            <a href="<?= BASE_URL ?>categories" class="btn btn-primary empty-state-cta">Browse Products</a>
         </div>
     <?php else: ?>
         <!-- Cart Items Display: Shown when the cart has items -->
@@ -61,7 +61,7 @@
                             <!-- Product Information Column -->
                             <td class="product-info">
                                 <!-- Product Thumbnail Image -->
-                                <img src="/public/assets/images/products/<?php echo basename(htmlspecialchars($item['image'])); ?>"
+                                <img src="<?= BASE_URL ?>assets/images/products/<?php echo basename(htmlspecialchars($item['image'])); ?>"
                                     alt="<?php echo htmlspecialchars($item['name']); ?>" class="product-thumbnail">
                                 <!-- Product Name -->
                                 <div class="product-details">
@@ -112,13 +112,13 @@
             <!-- Cart Actions Section (below the table) -->
             <div class="cart-actions">
                 <!-- Link to continue shopping -->
-                <a href="/categories" class="continue-shopping-btn">Continue Shopping</a>
+                <a href="<?= BASE_URL ?>categories" class="continue-shopping-btn">Continue Shopping</a>
                 <!-- Right-aligned actions: Clear Cart and Checkout -->
                 <div class="cart-actions-right">
                     <!-- Clear Cart Button (JS interaction) -->
                     <button id="clear-cart-btn" class="clear-cart-btn">Clear Cart</button>
                     <!-- Proceed to Checkout Link -->
-                    <a href="/order" class="checkout-btn">Proceed to Checkout</a>
+                    <a href="<?= BASE_URL ?>order" class="checkout-btn">Proceed to Checkout</a>
                 </div>
             </div>
         </div> <!-- End of cart-items -->

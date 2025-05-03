@@ -123,7 +123,8 @@ $session = App\Core\Registry::get('session');
                                         <!-- Action buttons -->
                                         <td class="text-center">
                                             <!-- Link to view order details -->
-                                            <a href="/order/details/<?= $order_id_safe ?>" class="btn btn-secondary btn-sm">
+                                            <a href="<?= BASE_URL ?>order/details/<?= $order_id_safe ?>"
+                                                class="btn btn-secondary btn-sm">
                                                 View Details
                                             </a>
                                         </td>
@@ -140,13 +141,13 @@ $session = App\Core\Registry::get('session');
             <!-- Empty state section when no orders are found -->
             <div class="empty-state-container">
                 <div class="empty-state-illustration">
-                    <img src="/public/assets/images/cart/empty_shopping_cart.png" alt="Empty State Illustration">
+                    <img src="<?= BASE_URL ?>assets/images/cart/empty_shopping_cart.png" alt="Empty State Illustration">
                 </div>
                 <h2 class="empty-state-heading">Your order history is empty</h2>
                 <p class="empty-state-text">You haven't placed any orders with us yet. Explore our fresh selection and
                     enjoy convenient delivery to your doorstep!</p>
                 <!-- Call to action button to browse products -->
-                <a href="/categories" class="btn btn-primary empty-state-cta">Browse Products</a>
+                <a href="<?= BASE_URL ?>categories" class="btn btn-primary empty-state-cta">Browse Products</a>
             </div>
         <?php endif; // End of check for empty orders 
         ?>

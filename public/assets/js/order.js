@@ -171,7 +171,7 @@ function initOrderForm() {
                 };
 
                 // Send POST request to the server endpoint.
-                fetch('/order/product/' + orderData.product_id, {
+                fetch(window.baseUrl + 'order/product/' + orderData.product_id, {
                     method: 'POST',
                     headers: {
                         // Use form-urlencoded for compatibility with typical PHP backend.
@@ -186,7 +186,7 @@ function initOrderForm() {
                     .then(data => {
                         if (data.success) {
                             // On success, redirect to the confirmation page or provided redirect URL.
-                            window.location.href = data.redirect || '/order/confirmation/' + data.order_id;
+                            window.location.href = data.redirect || (window.baseUrl + 'order/confirmation/' + data.order_id);
                         } else {
                             // On failure, show error message and re-enable the button.
                             showMessage('error', data.message || 'An error occurred while processing your order.');
@@ -255,7 +255,7 @@ function initOrderCancellation() {
                 const orderId = form.getAttribute('action').split('/').pop();
 
                 // Send POST request to the cancellation endpoint.
-                fetch('/order/cancel/' + orderId, {
+                fetch(window.baseUrl + 'order/cancel/' + orderId, {
                     method: 'POST',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest' // Identify as AJAX.

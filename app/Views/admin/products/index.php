@@ -22,7 +22,7 @@
     <h2>Product Management</h2>
     <!-- Add New Product Button -->
     <div class="admin-content-actions">
-        <a href="/admin/products/create" class="btn btn-primary">
+        <a href="<?= BASE_URL ?>admin/products/create" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Product
         </a>
     </div>
@@ -50,7 +50,7 @@
 <!-- Filter Section -->
 <div class="filter-container">
     <!-- Filter Form (Submits via GET to the same page) -->
-    <form action="/admin/products" method="GET" class="filter-form">
+    <form action="<?= BASE_URL ?>admin/products" method="GET" class="filter-form">
         <!-- Category Filter Dropdown -->
         <div class="filter-group">
             <label for="category_id">Category:</label>
@@ -86,7 +86,7 @@
         <!-- Filter Action Buttons -->
         <div class="filter-group">
             <button type="submit" class="btn btn-secondary">Filter</button>
-            <a href="/admin/products" class="btn btn-outline-secondary">Reset</a>
+            <a href="<?= BASE_URL ?>admin/products" class="btn btn-outline-secondary">Reset</a>
         </div>
     </form>
 </div>
@@ -124,8 +124,8 @@
                         <td><?php echo $product['product_id']; ?></td>
                         <!-- Product Image Thumbnail -->
                         <td>
-                            <img src="/<?php echo htmlspecialchars($product['image_path']); // Escape HTML 
-                                        ?>" alt="<?php echo htmlspecialchars($product['name']); // Escape HTML 
+                            <img src="<?= BASE_URL ?><?php echo htmlspecialchars($product['image_path']); // Escape HTML
+                                                        ?>" alt="<?php echo htmlspecialchars($product['name']); // Escape HTML 
                                                     ?>" class="product-thumbnail" width="50" height="50">
                         </td>
                         <!-- Product Name -->
@@ -150,14 +150,14 @@
                         <td>
                             <div class="btn-group">
                                 <!-- Edit Button -->
-                                <a href="/admin/products/<?php echo $product['product_id']; ?>/edit"
+                                <a href="<?= BASE_URL ?>admin/products/<?php echo $product['product_id']; ?>/edit"
                                     class="btn btn-sm btn-primary">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                                 <!-- Activate/Deactivate Form & Button -->
-                                <form action="/admin/products/<?php echo $product['product_id']; ?>/toggle-active" method="POST"
-                                    class="d-inline"> <?php // Form submitted inline 
-                                                        ?>
+                                <form action="<?= BASE_URL ?>admin/products/<?php echo $product['product_id']; ?>/toggle-active"
+                                    method="POST" class="d-inline"> <?php // Form submitted inline 
+                                                                    ?>
                                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
                                     <button type="submit" class="btn btn-sm <?php echo $product['is_active'] ? 'btn-warning' : 'btn-success'; // Dynamic button class 
                                                                             ?>">
@@ -191,7 +191,7 @@
                         <?php // Build URL with previous page number and existing filters 
                         ?>
                         <a class="page-link"
-                            href="/admin/products?page=<?php echo $pagination['current_page'] - 1; ?><?php echo isset($filters['category_id']) ? '&category_id=' . urlencode($filters['category_id']) : ''; ?><?php echo isset($filters['is_active']) ? '&is_active=' . urlencode($filters['is_active']) : ''; ?>"
+                            href="<?= BASE_URL ?>admin/products?page=<?php echo $pagination['current_page'] - 1; ?><?php echo isset($filters['category_id']) ? '&category_id=' . urlencode($filters['category_id']) : ''; ?><?php echo isset($filters['is_active']) ? '&is_active=' . urlencode($filters['is_active']) : ''; ?>"
                             aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
@@ -206,7 +206,7 @@
                         <?php // Build URL with page number and existing filters 
                         ?>
                         <a class="page-link"
-                            href="/admin/products?page=<?php echo $i; ?><?php echo isset($filters['category_id']) ? '&category_id=' . urlencode($filters['category_id']) : ''; ?><?php echo isset($filters['is_active']) ? '&is_active=' . urlencode($filters['is_active']) : ''; ?>">
+                            href="<?= BASE_URL ?>admin/products?page=<?php echo $i; ?><?php echo isset($filters['category_id']) ? '&category_id=' . urlencode($filters['category_id']) : ''; ?><?php echo isset($filters['is_active']) ? '&is_active=' . urlencode($filters['is_active']) : ''; ?>">
                             <?php echo $i; ?>
                         </a>
                     </li>
@@ -219,7 +219,7 @@
                         <?php // Build URL with next page number and existing filters 
                         ?>
                         <a class="page-link"
-                            href="/admin/products?page=<?php echo $pagination['current_page'] + 1; ?><?php echo isset($filters['category_id']) ? '&category_id=' . urlencode($filters['category_id']) : ''; ?><?php echo isset($filters['is_active']) ? '&is_active=' . urlencode($filters['is_active']) : ''; ?>"
+                            href="<?= BASE_URL ?>admin/products?page=<?php echo $pagination['current_page'] + 1; ?><?php echo isset($filters['category_id']) ? '&category_id=' . urlencode($filters['category_id']) : ''; ?><?php echo isset($filters['is_active']) ? '&is_active=' . urlencode($filters['is_active']) : ''; ?>"
                             aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>

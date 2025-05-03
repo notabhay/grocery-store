@@ -83,9 +83,9 @@ if (!isset($csrfToken)) {
                 <!-- Container for product image and info -->
                 <div class="product-details">
                     <!-- Product image -->
-                    <img src="/public/assets/images/products/<?php echo htmlspecialchars(basename($product['image_path'] ?? 'default.png')); // Use basename for security and provide default
-                                                                ?>" alt="<?php echo htmlspecialchars($product['name']); ?>"
-                        class="product-thumbnail">
+                    <img src="<?= BASE_URL ?>assets/images/products/<?php echo htmlspecialchars(basename($product['image_path'] ?? 'default.png')); // Use basename for security and provide default
+                                                                    ?>"
+                        alt="<?php echo htmlspecialchars($product['name']); ?>" class="product-thumbnail">
                     <!-- Product information block -->
                     <div class="product-info">
                         <h3 class="product-name"><?php echo htmlspecialchars($product['name']); ?></h3>
@@ -127,8 +127,8 @@ if (!isset($csrfToken)) {
             <section class="shipping-payment-section">
                 <h2>Order Details</h2>
                 <!-- Form to submit the single product order -->
-                <form action="/order/product/<?php echo htmlspecialchars($product['product_id']); // Action URL includes product ID 
-                                                ?>" method="post" class="order-form">
+                <form action="<?= BASE_URL ?>order/product/<?php echo htmlspecialchars($product['product_id']); // Action URL includes product ID
+                                                            ?>" method="post" class="order-form">
                     <!-- CSRF token for security -->
                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrfToken); ?>">
                     <!-- Hidden field for product ID -->
@@ -183,7 +183,7 @@ if (!isset($csrfToken)) {
                     <!-- Form action buttons -->
                     <div class="form-actions">
                         <!-- Link to continue shopping (goes to categories) -->
-                        <a href="/categories" class="btn btn-secondary">Continue Shopping</a>
+                        <a href="<?= BASE_URL ?>categories" class="btn btn-secondary">Continue Shopping</a>
                         <!-- Button to submit the order -->
                         <button type="submit" name="place_order" class="btn btn-primary">Place Order</button>
                     </div>

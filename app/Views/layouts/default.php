@@ -38,7 +38,7 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Main application stylesheet -->
-    <link rel="stylesheet" href="/public/assets/css/styles.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/css/styles.css">
 
     <?php
     // Conditionally include additional CSS files if specified by the controller
@@ -116,8 +116,17 @@
         </div>
     </div>
 
+    <!-- Pass BASE_URL to JavaScript -->
+    <script>
+        window.baseUrl = '<?= BASE_URL ?>';
+    </script>
+
     <!-- Note: Global JavaScript files are likely included within navigation.php or header.php -->
     <!-- Specific page JS might be included via $additional_js_files in navigation.php -->
 </body>
 
 </html>
+<!-- Make Base URL available to JavaScript -->
+<script>
+    window.baseUrl = '<?= BASE_URL ?>';
+</script>

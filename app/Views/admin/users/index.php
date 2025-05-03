@@ -102,13 +102,13 @@
                             <!-- Action Buttons (View/Edit) -->
                             <td class="actions">
                                 <!-- View User Button -->
-                                <a href="/admin/users/<?php echo $user['user_id']; // Link to user detail view 
-                                                        ?>" class="btn btn-sm btn-view" title="View User">
+                                <a href="<?= BASE_URL ?>admin/users/<?php echo $user['user_id']; // Link to user detail view
+                                                                    ?>" class="btn btn-sm btn-view" title="View User">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <!-- Edit User Button -->
-                                <a href="/admin/users/<?php echo $user['user_id']; ?>/edit" class="btn btn-sm btn-edit"
-                                    title="Edit User">
+                                <a href="<?= BASE_URL ?>admin/users/<?php echo $user['user_id']; ?>/edit"
+                                    class="btn btn-sm btn-edit" title="Edit User">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>
@@ -128,8 +128,9 @@
             <?php // First and Previous Page Links 
             ?>
             <?php if ($pagination['current_page'] > 1): ?>
-                <a href="/admin/users?page=1" class="pagination-link">&laquo; First</a>
-                <a href="/admin/users?page=<?php echo $pagination['current_page'] - 1; ?>" class="pagination-link">&lsaquo;
+                <a href="<?= BASE_URL ?>admin/users?page=1" class="pagination-link">&laquo; First</a>
+                <a href="<?= BASE_URL ?>admin/users?page=<?php echo $pagination['current_page'] - 1; ?>"
+                    class="pagination-link">&lsaquo;
                     Previous</a>
             <?php endif; ?>
 
@@ -140,8 +141,8 @@
             // Generate page number links within the calculated range
             for ($i = $startPage; $i <= $endPage; $i++):
             ?>
-                <a href="/admin/users?page=<?php echo $i; ?>" class="pagination-link <?php echo $i === $pagination['current_page'] ? 'active' : ''; // Highlight current page 
-                                                                                        ?>">
+                <a href="<?= BASE_URL ?>admin/users?page=<?php echo $i; ?>" class="pagination-link <?php echo $i === $pagination['current_page'] ? 'active' : ''; // Highlight current page
+                                                                                                    ?>">
                     <?php echo $i; ?>
                 </a>
             <?php endfor; ?>
@@ -149,9 +150,11 @@
             <?php // Next and Last Page Links 
             ?>
             <?php if ($pagination['current_page'] < $pagination['total_pages']): ?>
-                <a href="/admin/users?page=<?php echo $pagination['current_page'] + 1; ?>" class="pagination-link">Next
+                <a href="<?= BASE_URL ?>admin/users?page=<?php echo $pagination['current_page'] + 1; ?>"
+                    class="pagination-link">Next
                     &rsaquo;</a>
-                <a href="/admin/users?page=<?php echo $pagination['total_pages']; ?>" class="pagination-link">Last &raquo;</a>
+                <a href="<?= BASE_URL ?>admin/users?page=<?php echo $pagination['total_pages']; ?>" class="pagination-link">Last
+                    &raquo;</a>
             <?php endif; ?>
         </div> <!-- End pagination -->
     <?php endif; // End pagination check 

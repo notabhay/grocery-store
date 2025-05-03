@@ -67,11 +67,11 @@ $session = App\Core\Registry::get('session');
         <?php if (empty($cartItems)): ?>
             <!-- Display empty cart message -->
             <div class="empty-cart">
-                <img src="/public/assets/images/cart/empty_shopping_cart.png" alt="Empty Shopping Cart"
+                <img src="<?= BASE_URL ?>assets/images/cart/empty_shopping_cart.png" alt="Empty Shopping Cart"
                     class="empty-cart-image">
                 <p>Your cart is currently empty.</p>
                 <!-- Link to browse products -->
-                <a href="/categories" class="btn btn-primary">Browse Products</a>
+                <a href="<?= BASE_URL ?>categories" class="btn btn-primary">Browse Products</a>
             </div>
         <?php else: // Display order form if cart is not empty 
         ?>
@@ -144,7 +144,7 @@ $session = App\Core\Registry::get('session');
                 <section class="shipping-payment-section">
                     <h2>Shipping & Payment Details</h2>
                     <!-- Order processing form -->
-                    <form action="/order/process" method="POST" id="order-form">
+                    <form action="<?= BASE_URL ?>order/process" method="POST" id="order-form">
                         <!-- CSRF token for security -->
                         <input type="hidden" name="csrf_token" value="<?= $csrfToken_safe ?>">
 
@@ -177,7 +177,7 @@ $session = App\Core\Registry::get('session');
                         <!-- Form action buttons -->
                         <div class="form-actions">
                             <!-- Link to go back to the cart page -->
-                            <a href="/cart" class="btn btn-secondary">Back to Cart</a>
+                            <a href="<?= BASE_URL ?>cart" class="btn btn-secondary">Back to Cart</a>
                             <!-- Button to submit the order -->
                             <button type="submit" class="btn btn-primary">Place Order</button>
                         </div>

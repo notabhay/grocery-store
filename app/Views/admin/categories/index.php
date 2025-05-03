@@ -22,7 +22,7 @@ Expected PHP Variables:
     <h2>Category Management</h2>
     <!-- Action Button: Link to the category creation page -->
     <div class="admin-content-actions">
-        <a href="/admin/categories/create" class="btn btn-primary">
+        <a href="<?= BASE_URL ?>admin/categories/create" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Category
         </a>
     </div>
@@ -91,7 +91,8 @@ Expected PHP Variables:
                             <!-- Action Buttons Group -->
                             <div class="btn-group">
                                 <!-- Edit Button: Links to the edit page for this category -->
-                                <a href="/admin/categories/<?php echo $category['id']; ?>/edit" class="btn btn-sm btn-primary">
+                                <a href="<?= BASE_URL ?>admin/categories/<?php echo $category['id']; ?>/edit"
+                                    class="btn btn-sm btn-primary">
                                     <i class="fas fa-edit"></i> Edit
                                 </a>
                                 <!-- Note: Delete button might be added here or on the edit page -->
@@ -117,7 +118,8 @@ Expected PHP Variables:
                 ?>
                 <?php if ($pagination['has_previous']): ?>
                     <li class="page-item">
-                        <a class="page-link" href="/admin/categories?page=<?php echo $pagination['current_page'] - 1; ?>"
+                        <a class="page-link"
+                            href="<?= BASE_URL ?>admin/categories?page=<?php echo $pagination['current_page'] - 1; ?>"
                             aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
@@ -129,7 +131,7 @@ Expected PHP Variables:
                 <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
                     <li class="page-item <?php echo $i === $pagination['current_page'] ? 'active' : ''; // Highlight current page 
                                             ?>">
-                        <a class="page-link" href="/admin/categories?page=<?php echo $i; ?>">
+                        <a class="page-link" href="<?= BASE_URL ?>admin/categories?page=<?php echo $i; ?>">
                             <?php echo $i; ?>
                         </a>
                     </li>
@@ -139,7 +141,8 @@ Expected PHP Variables:
                 ?>
                 <?php if ($pagination['has_next']): ?>
                     <li class="page-item">
-                        <a class="page-link" href="/admin/categories?page=<?php echo $pagination['current_page'] + 1; ?>"
+                        <a class="page-link"
+                            href="<?= BASE_URL ?>admin/categories?page=<?php echo $pagination['current_page'] + 1; ?>"
                             aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>

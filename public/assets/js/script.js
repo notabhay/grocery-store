@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Fetch and render products for the selected main category (if display area exists)
             if (productDisplayArea) {
-                fetch(`/ajax/products-by-category?categoryId=${encodeURIComponent(categoryId)}`)
+                fetch(`${window.baseUrl}/ajax/products-by-category?categoryId=${encodeURIComponent(categoryId)}`)
                     .then(response => {
                         // Check for HTTP errors
                         if (!response.ok) {
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 productDisplayArea.innerHTML = '<p>Loading products...</p>'; // Show loading message
                 // Fetch products only if a valid sub-category is selected
                 if (subCategoryId && subCategoryId !== "") {
-                    fetch(`/ajax/products-by-category?categoryId=${encodeURIComponent(subCategoryId)}`)
+                    fetch(`${window.baseUrl}/ajax/products-by-category?categoryId=${encodeURIComponent(subCategoryId)}`)
                         .then(response => {
                             // Check for HTTP errors
                             if (!response.ok) {
@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Fetch sub-categories from the server
-        fetch(`/ajax/subcategories?parentId=${encodeURIComponent(categoryId)}`)
+        fetch(`${window.baseUrl}/ajax/subcategories?parentId=${encodeURIComponent(categoryId)}`)
             .then(response => {
                 // Check for HTTP errors
                 if (!response.ok) {
@@ -364,14 +364,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Generate product card HTML
                 html += `
                     <div class="product-card">
-                        <a href="/product/${escapeHTML(prod.product_id)}" class="product-link">
-                            <img src="/${escapeHTML(prod.image_path)}" alt="${escapeHTML(prod.name)}" class="product-image">
+                        <a href="${window.baseUrl}product/${escapeHTML(prod.product_id)}" class="product-link">
+                            <img src="${window.baseUrl}/${escapeHTML(prod.image_path)}" alt="${escapeHTML(prod.name)}" class="product-image">
                             <h4 class="product-name">${escapeHTML(prod.name)}</h4>
                             <p class="product-price">$${formattedPrice}</p>
                         </a>
                         ${isLoggedIn
                         ? `<button class="add-to-cart-btn" data-product-id="${escapeHTML(prod.product_id)}">Add to Cart</button>` // Show Add to Cart if logged in
-                        : `<a href="/login" class="login-to-purchase-btn">Login to Purchase</a>` // Show Login link if not logged in
+                        : `<a href="${window.baseUrl}/login" class="login-to-purchase-btn">Login to Purchase</a>` // Show Login link if not logged in
                     }
                     </div>
                 `;
@@ -491,7 +491,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             // Send request to the add-to-cart API endpoint
-            fetch('/api/cart/add', {
+            fetch(`${window.baseUrl}/api/cart/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -624,7 +624,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             const allButtons = document.querySelectorAll('button');
                             allButtons.forEach(btn => { btn.disabled = true; });
 
-                            const deleteUrl = `/api/cart/item/${productId}`;
+                            const deleteUrl = `${window.baseUrl}/api/cart/item/${productId}`;
                             console.log('Making DELETE request from decrease-to-zero callback to:', deleteUrl);
                             // Use POST with empty body for item removal (as per API design)
                             fetch(deleteUrl, {
@@ -731,7 +731,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     allButtons.forEach(btn => { btn.disabled = true; });
 
                     // Send request to the clear cart API endpoint
-                    fetch('/api/cart/clear', {
+                    fetch(`${window.baseUrl}/api/cart/clear`, {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
@@ -813,7 +813,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         // Send request to update cart API endpoint
-        fetch('/api/cart/update', {
+        fetch(window.baseUrl + 'api/cart/update', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -886,9 +886,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 cartContainer.innerHTML = `
                     <h1>Your Shopping Cart</h1>
                     <div class="empty-cart">
-                        <img src="/assets/images/cart/empty_shopping_cart.png" alt="Empty Shopping Cart" class="empty-cart-image">
+                        <img src="${window.baseUrl}/assets/images/cart/empty_shopping_cart.png" alt="Empty Shopping Cart" class="empty-cart-image">
                         <p>Your shopping cart is empty.</p>
-                        <a href="/categories" class="continue-shopping-btn">Continue Shopping</a>
+                        <a href="${window.baseUrl}/categories" class="continue-shopping-btn">Continue Shopping</a>
                     </div>
                 `;
             }
@@ -942,11 +942,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (cartImage) {
             if (filled) {
                 // Set to filled cart icon
-                cartImage.src = '/assets/images/cart/filled_shopping_cart.png';
+                cartImage.src = `${window.baseUrl}/assets/images/cart/filled_shopping_cart.png`;
                 cartImage.alt = 'Shopping Cart';
             } else {
                 // Set to empty cart icon
-                cartImage.src = '/assets/images/cart/empty_shopping_cart.png';
+                cartImage.src = `${window.baseUrl}/assets/images/cart/empty_shopping_cart.png`;
                 cartImage.alt = 'Empty Shopping Cart';
             }
         }
@@ -967,7 +967,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const allButtons = document.querySelectorAll('button');
         allButtons.forEach(btn => { btn.disabled = true; });
 
-        const deleteUrl = `/api/cart/item/${productId}`;
+        const deleteUrl = `${window.baseUrl}/api/cart/item/${productId}`;
         console.log('Making DELETE request to:', deleteUrl);
 
         // Send request to remove item API endpoint (using POST as per previous logic)
@@ -1057,7 +1057,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         try {
             // Fetch count from API
-            const response = await fetch('/api/cart/count', {
+            const response = await fetch(`${window.baseUrl}/api/cart/count`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'

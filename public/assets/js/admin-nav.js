@@ -20,11 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const adminLi = document.createElement('li');
             // Create the anchor tag (a) for the admin link.
             const adminLink = document.createElement('a');
-            adminLink.href = '/admin/dashboard'; // Set the link destination.
+            adminLink.href = window.baseUrl + 'admin/dashboard'; // Set the link destination.
             adminLink.textContent = 'Admin Dashboard'; // Set the visible text of the link.
 
             // Check if the current page URL path starts with '/admin/dashboard'.
-            if (window.location.pathname.startsWith('/admin/dashboard')) {
+            if (window.location.pathname.startsWith(window.baseUrl + 'admin/dashboard')) {
                 // Add the 'active' class to the link if it's the current section.
                 adminLink.classList.add('active');
             }
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
             adminLi.appendChild(adminLink);
 
             // Find the existing "Contact" link's list item to insert the admin link before it.
-            const contactLi = desktopNav.querySelector('li a[href="/contact"]');
+            const contactLi = desktopNav.querySelector('li a[href="' + window.baseUrl + 'contact"]');
             if (contactLi && contactLi.parentElement) {
                 // If the "Contact" link exists, insert the new admin list item before it.
                 desktopNav.insertBefore(adminLi, contactLi.parentElement);
@@ -51,11 +51,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const adminLi = document.createElement('li');
             // Create the anchor tag (a) for the admin link.
             const adminLink = document.createElement('a');
-            adminLink.href = '/admin/dashboard'; // Set the link destination.
+            adminLink.href = window.baseUrl + 'admin/dashboard'; // Set the link destination.
             adminLink.textContent = 'Admin Dashboard'; // Set the visible text of the link.
 
             // Check if the current page URL path starts with '/admin/dashboard'.
-            if (window.location.pathname.startsWith('/admin/dashboard')) {
+            if (window.location.pathname.startsWith(window.baseUrl + 'admin/dashboard')) {
                 // Add the 'active' class to the link if it's the current section.
                 adminLink.classList.add('active');
             }
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
             adminLi.appendChild(adminLink);
 
             // Find the existing "Contact" link's list item in the mobile menu.
-            const contactLi = mobileNav.querySelector('li a[href="/contact"]');
+            const contactLi = mobileNav.querySelector('li a[href="' + window.baseUrl + 'contact"]');
             if (contactLi && contactLi.parentElement) {
                 // If the "Contact" link exists, insert the new admin list item before it.
                 mobileNav.insertBefore(adminLi, contactLi.parentElement);

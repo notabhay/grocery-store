@@ -22,7 +22,7 @@
     <h2>Add New Product</h2>
     <!-- Back Button -->
     <div class="admin-content-actions">
-        <a href="/admin/products" class="btn btn-secondary">
+        <a href="<?= BASE_URL ?>admin/products" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to Products
         </a>
     </div>
@@ -58,7 +58,7 @@
 <div class="card">
     <div class="card-body">
         <!-- Form submits to /admin/products via POST, allows file uploads -->
-        <form action="/admin/products" method="POST" enctype="multipart/form-data">
+        <form action="<?= BASE_URL ?>admin/products" method="POST" enctype="multipart/form-data">
             <!-- CSRF Token Hidden Input -->
             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
 
@@ -141,7 +141,7 @@
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> Save Product
                 </button>
-                <a href="/admin/products" class="btn btn-secondary">Cancel</a>
+                <a href="<?= BASE_URL ?>admin/products" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div> <!-- End card-body -->

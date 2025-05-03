@@ -27,7 +27,7 @@ $page_title_safe = htmlspecialchars($page_title);
 $csrf_token_safe = htmlspecialchars($csrf_token);
 ?>
 <!-- Link to the specific stylesheet for the contact page -->
-<link rel="stylesheet" href="/public/assets/css/contact.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>assets/css/contact.css">
 
 <!-- Main content area -->
 <main>
@@ -101,7 +101,7 @@ $csrf_token_safe = htmlspecialchars($csrf_token);
                 <div class="contact-form-wrapper">
                     <h3>Send Us a Message</h3>
                     <!-- The contact form itself, submitting data via POST to '/contact/submit' -->
-                    <form class="contact-form" method="POST" action="/contact/submit">
+                    <form class="contact-form" method="POST" action="<?= BASE_URL ?>contact/submit">
                         <!-- CSRF Token (hidden input for security) -->
                         <input type="hidden" name="csrf_token" value="<?= $csrf_token_safe // Output pre-escaped CSRF token 
                                                                         ?>">

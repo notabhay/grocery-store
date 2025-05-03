@@ -33,7 +33,7 @@
         </div>
         <!-- Back to Orders List Button -->
         <div class="col-md-6 text-end">
-            <a href="/admin/orders" class="btn btn-secondary">Back to Orders</a>
+            <a href="<?= BASE_URL ?>admin/orders" class="btn btn-secondary">Back to Orders</a>
         </div>
     </div>
 
@@ -92,7 +92,8 @@
                                             ?></div>
                     </div>
                     <!-- Update Status Form -->
-                    <form action="/admin/orders/<?= $order['order_id'] ?>/status" method="post" class="mt-4">
+                    <form action="<?= BASE_URL ?>admin/orders/<?= $order['order_id'] ?>/status" method="post"
+                        class="mt-4">
                         <?php // CSRF Token for security 
                         ?>
                         <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">

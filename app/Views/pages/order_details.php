@@ -114,14 +114,14 @@ $items = $order['items'] ?? [];
                 <!-- Action buttons -->
                 <div class="order-actions">
                     <!-- Back button to the main orders list -->
-                    <a href="/orders" class="btn btn-secondary btn-sm">
+                    <a href="<?= BASE_URL ?>orders" class="btn btn-secondary btn-sm">
                         <i class="fas fa-arrow-left"></i> Back to Orders
                     </a>
                     <!-- Cancel Order button (only shown if status is 'pending') -->
                     <?php if (isset($order['status']) && $order['status'] === 'pending'): ?>
                         <!-- Form to submit the cancellation request -->
-                        <form action="/order/cancel/<?= $order_id_safe ?>" method="post" class="d-inline cancel-form"
-                            id="cancelOrderForm">
+                        <form action="<?= BASE_URL ?>order/cancel/<?= $order_id_safe ?>" method="post"
+                            class="d-inline cancel-form" id="cancelOrderForm">
                             <!-- CSRF token for security -->
                             <input type="hidden" name="csrf_token" value="<?= $csrfToken_safe ?>">
                             <!-- Button to trigger the cancellation confirmation modal -->

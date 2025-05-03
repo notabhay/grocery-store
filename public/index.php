@@ -13,6 +13,20 @@
 // dirname(__DIR__) gets the parent directory of the current file's directory (public -> project root).
 define('BASE_PATH', dirname(__DIR__));
 
+// --- Define Base URL ---
+// Dynamically determine the base URL (scheme, host, and path)
+$scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+$host = $_SERVER['HTTP_HOST'];
+// Get the directory path of the script, ensuring forward slashes
+$script_dir = str_replace('\\\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+// Normalize the path to always end with a single slash (e.g., / or /subdir/)
+$base_path_url = rtrim($script_dir, '/') . '/';
+// Construct the full base URL
+$base_url = $scheme . '://' . $host . $base_path_url;
+// Define the constant, making it available globally
+define('BASE_URL', $base_url);
+// --- End Base URL Definition ---
+
 // Include the Composer autoloader.
 // This makes all Composer-managed libraries and application classes (following PSR-4) available.
 require_once BASE_PATH . '/vendor/autoload.php';
