@@ -34,7 +34,6 @@ if (!empty($missing_extensions)) {
 // Load the application configuration.
 // Contains settings like database credentials, debug mode, etc.
 $config = require_once BASE_PATH . '/app/config.php';
-die('DEBUG: Config loaded successfully!');
 
 // --- Dependency Imports ---
 // Import necessary classes from the application's core, helpers, and external libraries.
@@ -61,6 +60,7 @@ Registry::bind('config', $config);
 // --- Core Services Initialization (Dependency Injection Setup) ---
 // This block sets up essential services and binds them to the Registry.
 // It's wrapped in a try-catch to handle critical initialization errors.
+die('DEBUG: Reached before core services initialization try block.');
 try {
     // --- Logger Setup ---
     // Define the path for the application log file.
