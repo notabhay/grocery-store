@@ -48,7 +48,7 @@ use App\Core\Registry;
     // Conditionally include additional CSS files if specified by the controller
     if (!empty($additional_css_files) && is_array($additional_css_files)):
         foreach ($additional_css_files as $css_file): ?>
-            <link rel="stylesheet" href="<?= BASE_URL ?><?php echo htmlspecialchars($css_file); ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?><?php echo htmlspecialchars($css_file); ?>">
     <?php endforeach;
     endif;
     ?>
@@ -122,7 +122,17 @@ use App\Core\Registry;
 
     <!-- Pass BASE_URL to JavaScript -->
     <script>
-        window.baseUrl = '<?= Registry::get('config')['SITE_URL'] ?>';
+    <?php
+        // Calculate the base path for JS, removing /public/ if present
+        $jsBaseUrl = BASE_URL; // Start with the full BASE_URL from public/index.php
+        $publicSuffix = '/public/';
+        if (substr($jsBaseUrl, -strlen($publicSuffix)) === $publicSuffix) {
+            $jsBaseUrl = substr($jsBaseUrl, 0, -strlen($publicSuffix)); // Remove /public/
+        }
+        // Ensure it ends with a slash for easy concatenation in JS
+        $jsBaseUrl = rtrim($jsBaseUrl, '/') . '/';
+        ?>
+    window.baseUrl = '<?= $jsBaseUrl ?>';
     </script>
 
     <!-- Note: Global JavaScript files are likely included within navigation.php or header.php -->

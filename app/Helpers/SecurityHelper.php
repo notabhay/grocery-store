@@ -232,10 +232,11 @@ class SecurityHelper
         if (substr($connectSrcBase, -strlen($publicSuffix)) === $publicSuffix) {
             $connectSrcBase = substr($connectSrcBase, 0, -strlen($publicSuffix)); // Remove /public/
         }
-        $connectSrcBase = rtrim($connectSrcBase, '/'); // Ensure no trailing slash
+        // Ensure it DOES end with a single trailing slash for path matching in CSP
+        $connectSrcBasePath = rtrim($connectSrcBase, '/') . '/';
 
-        // Add the directive, allowing 'self' and the calculated base path
-        $csp .= "connect-src 'self' " . $connectSrcBase . "; ";
+        // Add the directive, allowing 'self' and the calculated base path with a trailing slash
+        $csp .= "connect-src 'self' " . $connectSrcBasePath . "; ";
         // Allow form submissions only to self.
         $csp .= "form-action 'self'; ";
         // Disallow framing of the page by any other page (stronger than X-Frame-Options).
