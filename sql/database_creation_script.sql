@@ -336,7 +336,7 @@ CREATE TABLE IF NOT EXISTS order_history (
 -- Enhances security features for task T4
 -- ---------------------------------------------------------------------
 DELIMITER //
-CREATE TRIGGER IF NOT EXISTS password_history_trigger
+CREATE TRIGGER password_history_trigger
 AFTER UPDATE ON users
 FOR EACH ROW
 BEGIN
