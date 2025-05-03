@@ -456,7 +456,7 @@ DELIMITER ;
 -- Implements security features for task T4
 -- ---------------------------------------------------------------------
 DELIMITER //
-CREATE PROCEDURE IF NOT EXISTS record_login_attempt(
+CREATE PROCEDURE record_login_attempt(
     IN p_email VARCHAR(100),
     IN p_ip_address VARCHAR(45),
     IN p_user_agent VARCHAR(255),
@@ -507,7 +507,7 @@ DELIMITER ;
 -- Enhances security audit trail for task T4
 -- ---------------------------------------------------------------------
 DELIMITER //
-CREATE PROCEDURE IF NOT EXISTS log_security_event(
+CREATE PROCEDURE log_security_event(
     IN p_user_id INT,
     IN p_event_type VARCHAR(50),
     IN p_ip_address VARCHAR(45),
@@ -531,7 +531,7 @@ DELIMITER ;
 -- Enhances session security for task T3 and T4
 -- ---------------------------------------------------------------------
 DELIMITER //
-CREATE PROCEDURE IF NOT EXISTS clean_expired_sessions()
+CREATE PROCEDURE clean_expired_sessions()
 BEGIN
 DELETE FROM
     user_sessions
@@ -545,14 +545,14 @@ DELIMITER ;
 -- Create scheduled event to clean up expired sessions hourly
 -- Automates security maintenance
 -- ---------------------------------------------------------------------
-CREATE EVENT IF NOT EXISTS clean_sessions_event ON SCHEDULE EVERY 1 HOUR DO CALL clean_expired_sessions();
+CREATE EVENT clean_sessions_event ON SCHEDULE EVERY 1 HOUR DO CALL clean_expired_sessions();
 
 -- ---------------------------------------------------------------------
 -- Create Order Procedure: Comprehensive order processing logic
 -- Supports order placement functionality in task T7
 -- ---------------------------------------------------------------------
 DELIMITER //
-CREATE PROCEDURE IF NOT EXISTS create_order(
+CREATE PROCEDURE create_order(
     IN p_user_id INT,
     -- User placing the order
     IN p_items JSON,
