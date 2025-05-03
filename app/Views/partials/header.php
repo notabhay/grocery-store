@@ -29,7 +29,7 @@ $logged_in = isset($_SESSION['user_id']); // Simplified boolean check
         <div class="logo">
             <a href="<?= BASE_URL ?>/">
                 <!-- Link to homepage -->
-                <img src="<?= BASE_URL ?>/public/assets/images/Logo.png" alt="GhibliGroceries Logo" class="logo-image">
+                <img src="<?= BASE_URL ?>assets/images/Logo.png" alt="GhibliGroceries Logo" class="logo-image">
                 <span class="logo-text">GhibliGroceries</span>
             </a>
         </div>
@@ -96,11 +96,11 @@ $logged_in = isset($_SESSION['user_id']); // Simplified boolean check
                     <?php
                     // Display filled or empty cart icon based on session cart status
                     if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0): ?>
-                        <img src="<?= BASE_URL ?>/public/assets/images/cart/filled_shopping_cart.png" alt="Shopping Cart"
+                        <img src="<?= BASE_URL ?>assets/images/cart/filled_shopping_cart.png" alt="Shopping Cart"
                             class="cart-image">
                     <?php else: ?>
-                        <img src="<?= BASE_URL ?>/public/assets/images/cart/empty_shopping_cart.png"
-                            alt="Empty Shopping Cart" class="cart-image">
+                        <img src="<?= BASE_URL ?>assets/images/cart/empty_shopping_cart.png" alt="Empty Shopping Cart"
+                            class="cart-image">
                     <?php endif; ?>
                     <!-- Cart count badge - likely updated by JavaScript -->
                     <span id="cart-count-badge"></span>
@@ -156,11 +156,11 @@ $logged_in = isset($_SESSION['user_id']); // Simplified boolean check
                     <a href="<?= BASE_URL ?>/cart" class="mobile-cart-button">
                         <?php // Display filled/empty cart icon
                         if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0): ?>
-                            <img src="<?= BASE_URL ?>/public/assets/images/cart/filled_shopping_cart.png" alt="Shopping Cart"
+                            <img src="<?= BASE_URL ?>assets/images/cart/filled_shopping_cart.png" alt="Shopping Cart"
                                 class="cart-image">
                         <?php else: ?>
-                            <img src="<?= BASE_URL ?>/public/assets/images/cart/empty_shopping_cart.png"
-                                alt="Empty Shopping Cart" class="cart-image">
+                            <img src="<?= BASE_URL ?>assets/images/cart/empty_shopping_cart.png" alt="Empty Shopping Cart"
+                                class="cart-image">
                         <?php endif; ?>
                         <span>Cart</span>
                         <!-- Note: Mobile cart count might need separate JS handling if badge isn't reused -->
