@@ -33,28 +33,28 @@
         </div>
         <!-- Back to Orders List Button -->
         <div class="col-md-6 text-end">
-            <a href="<?= BASE_URL ?>admin/orders" class="btn btn-secondary">Back to Orders</a>
+            <a href="/admin/orders" class="btn btn-secondary">Back to Orders</a>
         </div>
     </div>
 
     <?php // Display flash messages if they exist 
     ?>
     <?php if (isset($_SESSION['flash_success'])): ?>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <?= $_SESSION['flash_success'] // Display success message 
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= $_SESSION['flash_success'] // Display success message 
             ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php // unset($_SESSION['flash_success']); // Optional: Unset flash message after displaying 
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php // unset($_SESSION['flash_success']); // Optional: Unset flash message after displaying 
         ?>
     <?php endif; ?>
     <?php if (isset($_SESSION['flash_error'])): ?>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <?= $_SESSION['flash_error'] // Display error message 
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= $_SESSION['flash_error'] // Display error message 
             ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php // unset($_SESSION['flash_error']); // Optional: Unset flash message after displaying 
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php // unset($_SESSION['flash_error']); // Optional: Unset flash message after displaying 
         ?>
     <?php endif; ?>
 
@@ -92,8 +92,7 @@
                                             ?></div>
                     </div>
                     <!-- Update Status Form -->
-                    <form action="<?= BASE_URL ?>admin/orders/<?= $order['order_id'] ?>/status" method="post"
-                        class="mt-4">
+                    <form action="/admin/orders/<?= $order['order_id'] ?>/status" method="post" class="mt-4">
                         <?php // CSRF Token for security 
                         ?>
                         <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
@@ -164,12 +163,12 @@
                     <?php // Check if order notes exist 
                     ?>
                     <?php if (!empty($order['notes'])): ?>
-                    <?php // Display notes, preserve line breaks, escape HTML 
+                        <?php // Display notes, preserve line breaks, escape HTML 
                         ?>
-                    <div class="text-wrap"><?= nl2br(htmlspecialchars($order['notes'])) ?></div>
+                        <div class="text-wrap"><?= nl2br(htmlspecialchars($order['notes'])) ?></div>
                     <?php else: ?>
-                    <!-- Message if no notes are present -->
-                    <p class="text-muted">No notes for this order.</p>
+                        <!-- Message if no notes are present -->
+                        <p class="text-muted">No notes for this order.</p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -185,25 +184,25 @@
             <?php // Check if there are items in the order 
             ?>
             <?php if (empty($order['items'])): ?>
-            <!-- Message if no items are found -->
-            <div class="alert alert-info">No items found for this order.</div>
+                <!-- Message if no items are found -->
+                <div class="alert alert-info">No items found for this order.</div>
             <?php else: ?>
-            <!-- Responsive table container for items -->
-            <div class="table-responsive">
-                <!-- Order Items Table -->
-                <table class="table table-striped">
-                    <!-- Table Header -->
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th class="text-end">Line Total</th>
-                        </tr>
-                    </thead>
-                    <!-- Table Body -->
-                    <tbody>
-                        <?php
+                <!-- Responsive table container for items -->
+                <div class="table-responsive">
+                    <!-- Order Items Table -->
+                    <table class="table table-striped">
+                        <!-- Table Header -->
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th class="text-end">Line Total</th>
+                            </tr>
+                        </thead>
+                        <!-- Table Body -->
+                        <tbody>
+                            <?php
                             // Initialize a variable to calculate the subtotal from items
                             $calculatedTotal = 0;
                             // Loop through each item in the order
@@ -213,56 +212,56 @@
                                 // Add the line total to the overall calculated total
                                 $calculatedTotal += $lineTotal;
                             ?>
-                        <tr>
-                            <!-- Product Details (Image and Name) -->
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <?php // Display product image if available 
+                                <tr>
+                                    <!-- Product Details (Image and Name) -->
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <?php // Display product image if available 
                                             ?>
-                                    <?php if (!empty($item['product_image'])): ?>
-                                    <img src="<?= htmlspecialchars($item['product_image']) // Escape image URL 
+                                            <?php if (!empty($item['product_image'])): ?>
+                                                <img src="<?= htmlspecialchars($item['product_image']) // Escape image URL 
                                                             ?>" alt="<?= htmlspecialchars($item['product_name']) // Escape alt text 
                                                                         ?>" class="me-3"
-                                        style="width: 50px; height: 50px; object-fit: cover;">
-                                    <?php endif; ?>
-                                    <div>
-                                        <div><?= htmlspecialchars($item['product_name']) // Escape product name 
+                                                    style="width: 50px; height: 50px; object-fit: cover;">
+                                            <?php endif; ?>
+                                            <div>
+                                                <div><?= htmlspecialchars($item['product_name']) // Escape product name 
                                                         ?></div>
-                                        <div class="text-muted small">Product ID:
-                                            <?= htmlspecialchars($item['product_id']) // Escape product ID 
+                                                <div class="text-muted small">Product ID:
+                                                    <?= htmlspecialchars($item['product_id']) // Escape product ID 
                                                     ?></div>
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- Item Price -->
-                            <td>$<?= number_format($item['price'], 2) // Format currency 
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- Item Price -->
+                                    <td>$<?= number_format($item['price'], 2) // Format currency 
                                             ?></td>
-                            <!-- Item Quantity -->
-                            <td><?= htmlspecialchars($item['quantity']) // Escape quantity 
+                                    <!-- Item Quantity -->
+                                    <td><?= htmlspecialchars($item['quantity']) // Escape quantity 
                                         ?></td>
-                            <!-- Line Total -->
-                            <td class="text-end">$<?= number_format($lineTotal, 2) // Format currency 
+                                    <!-- Line Total -->
+                                    <td class="text-end">$<?= number_format($lineTotal, 2) // Format currency 
                                                             ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                    <!-- Table Footer -->
-                    <tfoot>
-                        <!-- Calculated Subtotal Row -->
-                        <tr>
-                            <th colspan="3" class="text-end">Subtotal:</th>
-                            <th class="text-end">$<?= number_format($calculatedTotal, 2) // Display calculated subtotal 
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                        <!-- Table Footer -->
+                        <tfoot>
+                            <!-- Calculated Subtotal Row -->
+                            <tr>
+                                <th colspan="3" class="text-end">Subtotal:</th>
+                                <th class="text-end">$<?= number_format($calculatedTotal, 2) // Display calculated subtotal 
                                                         ?></th>
-                        </tr>
-                        <!-- Order Total Row (from main order data) -->
-                        <tr>
-                            <th colspan="3" class="text-end">Total:</th>
-                            <th class="text-end">$<?= number_format($order['total_amount'], 2) // Display final order total 
+                            </tr>
+                            <!-- Order Total Row (from main order data) -->
+                            <tr>
+                                <th colspan="3" class="text-end">Total:</th>
+                                <th class="text-end">$<?= number_format($order['total_amount'], 2) // Display final order total 
                                                         ?></th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             <?php endif; // End items check 
             ?>
         </div> <!-- End card-body -->

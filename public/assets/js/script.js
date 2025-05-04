@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Fetch and render products for the selected main category (if display area exists)
             if (productDisplayArea) {
-                fetch(`${window.baseUrl}ajax/products-by-category?categoryId=${encodeURIComponent(categoryId)}`)
+                fetch(`/ajax/products-by-category?categoryId=${encodeURIComponent(categoryId)}`)
                     .then(response => {
                         // Check for HTTP errors
                         if (!response.ok) {
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 productDisplayArea.innerHTML = '<p>Loading products...</p>'; // Show loading message
                 // Fetch products only if a valid sub-category is selected
                 if (subCategoryId && subCategoryId !== "") {
-                    fetch(`${window.baseUrl}ajax/products-by-category?categoryId=${encodeURIComponent(subCategoryId)}`)
+                    fetch(`/ajax/products-by-category?categoryId=${encodeURIComponent(subCategoryId)}`)
                         .then(response => {
                             // Check for HTTP errors
                             if (!response.ok) {
@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Fetch sub-categories from the server
-        fetch(`${window.baseUrl}get_data/subcategories?parentId=${encodeURIComponent(categoryId)}`)
+        fetch(`/ajax/subcategories?parentId=${encodeURIComponent(categoryId)}`)
             .then(response => {
                 // Check for HTTP errors
                 if (!response.ok) {
@@ -364,14 +364,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Generate product card HTML
                 html += `
                     <div class="product-card">
-                        <a href="${window.baseUrl}product/${escapeHTML(prod.product_id)}" class="product-link">
-                            <img src="${window.baseUrl}${escapeHTML(prod.image_path)}" alt="${escapeHTML(prod.name)}" class="product-image">
+                        <a href="/product/${escapeHTML(prod.product_id)}" class="product-link">
+                            <img src="/${escapeHTML(prod.image_path)}" alt="${escapeHTML(prod.name)}" class="product-image">
                             <h4 class="product-name">${escapeHTML(prod.name)}</h4>
                             <p class="product-price">$${formattedPrice}</p>
                         </a>
                         ${isLoggedIn
                         ? `<button class="add-to-cart-btn" data-product-id="${escapeHTML(prod.product_id)}">Add to Cart</button>` // Show Add to Cart if logged in
-                        : `<a href="${window.baseUrl}login" class="login-to-purchase-btn">Login to Purchase</a>` // Show Login link if not logged in
+                        : `<a href="/login" class="login-to-purchase-btn">Login to Purchase</a>` // Show Login link if not logged in
                     }
                     </div>
                 `;
@@ -491,7 +491,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             // Send request to the add-to-cart API endpoint
-            fetch(`${window.baseUrl}api/cart/add`, {
+            fetch('/api/cart/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -624,7 +624,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             const allButtons = document.querySelectorAll('button');
                             allButtons.forEach(btn => { btn.disabled = true; });
 
-                            const deleteUrl = `${window.baseUrl}api/cart/item/${productId}`;
+                            const deleteUrl = `/api/cart/item/${productId}`;
                             console.log('Making DELETE request from decrease-to-zero callback to:', deleteUrl);
                             // Use POST with empty body for item removal (as per API design)
                             fetch(deleteUrl, {
@@ -731,7 +731,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     allButtons.forEach(btn => { btn.disabled = true; });
 
                     // Send request to the clear cart API endpoint
-                    fetch(`${window.baseUrl}api/cart/clear`, {
+                    fetch('/api/cart/clear', {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
@@ -813,7 +813,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         // Send request to update cart API endpoint
-        fetch(window.baseUrl + 'api/cart/update', {
+        fetch('/api/cart/update', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -886,9 +886,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 cartContainer.innerHTML = `
                     <h1>Your Shopping Cart</h1>
                     <div class="empty-cart">
-                        <img src="${window.baseUrl}assets/images/cart/empty_shopping_cart.png" alt="Empty Shopping Cart" class="empty-cart-image">
+                        <img src="/assets/images/cart/empty_shopping_cart.png" alt="Empty Shopping Cart" class="empty-cart-image">
                         <p>Your shopping cart is empty.</p>
-                        <a href="${window.baseUrl}categories" class="continue-shopping-btn">Continue Shopping</a>
+                        <a href="/categories" class="continue-shopping-btn">Continue Shopping</a>
                     </div>
                 `;
             }
@@ -942,11 +942,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (cartImage) {
             if (filled) {
                 // Set to filled cart icon
-                cartImage.src = `${window.baseUrl}assets/images/cart/filled_shopping_cart.png`;
+                cartImage.src = '/assets/images/cart/filled_shopping_cart.png';
                 cartImage.alt = 'Shopping Cart';
             } else {
                 // Set to empty cart icon
-                cartImage.src = `${window.baseUrl}assets/images/cart/empty_shopping_cart.png`;
+                cartImage.src = '/assets/images/cart/empty_shopping_cart.png';
                 cartImage.alt = 'Empty Shopping Cart';
             }
         }
@@ -967,7 +967,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const allButtons = document.querySelectorAll('button');
         allButtons.forEach(btn => { btn.disabled = true; });
 
-        const deleteUrl = `${window.baseUrl}api/cart/item/${productId}`;
+        const deleteUrl = `/api/cart/item/${productId}`;
         console.log('Making DELETE request to:', deleteUrl);
 
         // Send request to remove item API endpoint (using POST as per previous logic)
@@ -1056,11 +1056,8 @@ document.addEventListener('DOMContentLoaded', function () {
             return 0;
         }
         try {
-            // Log the exact URL being requested
-            console.log('Attempting to fetch cart count from URL:', `${window.baseUrl}api/cart/count`);
-
             // Fetch count from API
-            const response = await fetch(`${window.baseUrl}api/cart/count`, {
+            const response = await fetch('/api/cart/count', {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'
@@ -1088,10 +1085,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error("Expected JSON response for cart count, got non-JSON: " + text);
             }
         } catch (error) {
-            // Handle fetch errors - log the full error object for more details
-            console.error('Error fetching cart count:', error); // Log the full error object
-            // Keep the existing error message log as well if desired, or combine them.
-            console.error(`Error message: ${error.message}. Status: ${error.response ? error.response.status : 'N/A'}`);
+            // Handle fetch errors
+            console.error('Error fetching cart count:', error);
             return 0; // Return 0 on error
         }
     }
@@ -1134,114 +1129,111 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Order Cancellation Modal (My Orders Page) ---
     const cancelOrderModal = document.getElementById('cancelOrderModal');
+    const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+    const modalCloseBtn = document.getElementById('modalCloseBtn'); // Assumes a close button with this ID
+    const cancelOrderForm = document.getElementById('cancelOrderForm'); // The form inside the modal
+    let previouslyFocusedElement = null; // To restore focus after closing modal
 
-    // Only proceed if the main modal element exists
-    if (cancelOrderModal) {
-        const confirmCancelBtn = document.getElementById('confirmCancelBtn');
-        const modalCloseBtn = document.getElementById('modalCloseBtn'); // Assumes a close button with this ID
-        const cancelOrderForm = document.getElementById('cancelOrderForm'); // The form inside the modal
-        let previouslyFocusedElement = null; // To restore focus after closing modal
+    // Check if all necessary modal elements exist
+    if (cancelOrderModal && confirmCancelBtn && modalCloseBtn && cancelOrderForm) {
 
-        // Check if the other necessary modal elements also exist
-        if (confirmCancelBtn && modalCloseBtn && cancelOrderForm) {
-
-            // Event listener for buttons that trigger the cancel modal
-            document.addEventListener('click', function (event) {
-                // Check if the clicked element is a cancel button using data attributes
-                if (event.target.matches('[data-bs-toggle="modal"][data-bs-target="#cancelOrderModal"]')) {
-                    const cancelUrl = event.target.getAttribute('data-cancel-url'); // Get the specific cancel URL
-                    if (cancelUrl) {
-                        cancelOrderForm.action = cancelUrl; // Set the form's action dynamically
-                    }
-                    previouslyFocusedElement = event.target; // Store the button that was clicked
-                    openModal(); // Open the modal
+        // Event listener for buttons that trigger the cancel modal
+        document.addEventListener('click', function (event) {
+            // Check if the clicked element is a cancel button using data attributes
+            if (event.target.matches('[data-bs-toggle="modal"][data-bs-target="#cancelOrderModal"]')) {
+                const cancelUrl = event.target.getAttribute('data-cancel-url'); // Get the specific cancel URL
+                if (cancelUrl) {
+                    cancelOrderForm.action = cancelUrl; // Set the form's action dynamically
                 }
-            });
+                previouslyFocusedElement = event.target; // Store the button that was clicked
+                openModal(); // Open the modal
+            }
+        });
 
-            // Event listener for the confirmation button inside the modal
-            confirmCancelBtn.addEventListener('click', function () {
-                cancelOrderForm.submit(); // Submit the form to perform cancellation
-            });
+        // Event listener for the confirmation button inside the modal
+        confirmCancelBtn.addEventListener('click', function () {
+            cancelOrderForm.submit(); // Submit the form to perform cancellation
+        });
 
-            // Event listener for the modal's close button
-            modalCloseBtn.addEventListener('click', function () {
+        // Event listener for the modal's close button
+        modalCloseBtn.addEventListener('click', function () {
+            closeModal();
+        });
+
+        // Event listener to close modal if backdrop is clicked
+        cancelOrderModal.addEventListener('click', function (event) {
+            if (event.target === cancelOrderModal) { // Clicked on the modal background itself
                 closeModal();
-            });
-
-            // Event listener to close modal if backdrop is clicked
-            cancelOrderModal.addEventListener('click', function (event) {
-                if (event.target === cancelOrderModal) { // Clicked on the modal background itself
-                    closeModal();
-                }
-            });
-
-            // Event listener to close modal with the Escape key
-            document.addEventListener('keydown', function (event) {
-                if (event.key === 'Escape' && cancelOrderModal.classList.contains('modal-visible')) {
-                    closeModal();
-                }
-            });
-
-            // --- Accessibility: Trap focus within the modal ---
-            cancelOrderModal.addEventListener('keydown', function (event) {
-                if (event.key === 'Tab' && cancelOrderModal.classList.contains('modal-visible')) {
-                    // Find all focusable elements within the modal
-                    const focusableElements = cancelOrderModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-                    const firstElement = focusableElements[0];
-                    const lastElement = focusableElements[focusableElements.length - 1];
-
-                    // If Shift+Tab is pressed on the first element, wrap focus to the last
-                    if (event.shiftKey && document.activeElement === firstElement) {
-                        event.preventDefault();
-                        lastElement.focus();
-                    }
-                    // If Tab is pressed on the last element, wrap focus to the first
-                    else if (!event.shiftKey && document.activeElement === lastElement) {
-                        event.preventDefault();
-                        firstElement.focus();
-                    }
-                }
-            });
-
-            /**
-             * Opens the order cancellation modal and handles accessibility attributes.
-             */
-            function openModal() {
-                cancelOrderModal.inert = false; // Make modal content interactive
-                cancelOrderModal.removeAttribute('aria-hidden');
-                cancelOrderModal.classList.add('modal-visible');
-                cancelOrderModal.setAttribute('aria-modal', 'true');
-                cancelOrderModal.setAttribute('role', 'dialog');
-                // Set focus to the close button after a short delay
-                setTimeout(() => {
-                    modalCloseBtn.focus();
-                }, 50);
             }
+        });
 
-            /**
-             * Closes the order cancellation modal, restores focus, and handles accessibility attributes.
-             */
-            function closeModal() {
-                // Restore focus to the element that opened the modal, or body if unavailable
-                const elementToFocus = previouslyFocusedElement || document.body;
-                try {
-                    elementToFocus.focus();
-                } catch (e) {
-                    console.error("Error focusing element:", e);
-                    document.body.focus(); // Fallback to body
-                }
-                cancelOrderModal.inert = true; // Make modal content non-interactive
-                cancelOrderModal.classList.remove('modal-visible');
-                cancelOrderModal.removeAttribute('aria-modal');
-                cancelOrderModal.setAttribute('aria-hidden', 'true'); // Hide from screen readers
-                previouslyFocusedElement = null; // Clear stored element
+        // Event listener to close modal with the Escape key
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && cancelOrderModal.classList.contains('modal-visible')) {
+                closeModal();
             }
-        } else {
-            // Log warnings if *secondary* modal elements are missing, but only if the main modal was found
-            if (!confirmCancelBtn) console.warn("Confirm cancel button (#confirmCancelBtn) not found inside existing #cancelOrderModal.");
-            if (!modalCloseBtn) console.warn("Modal close button (#modalCloseBtn) not found inside existing #cancelOrderModal.");
-            if (!cancelOrderForm) console.warn("Cancel order form (#cancelOrderForm) not found inside existing #cancelOrderModal.");
+        });
+
+        // --- Accessibility: Trap focus within the modal ---
+        cancelOrderModal.addEventListener('keydown', function (event) {
+            if (event.key === 'Tab' && cancelOrderModal.classList.contains('modal-visible')) {
+                // Find all focusable elements within the modal
+                const focusableElements = cancelOrderModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+
+                // If Shift+Tab is pressed on the first element, wrap focus to the last
+                if (event.shiftKey && document.activeElement === firstElement) {
+                    event.preventDefault();
+                    lastElement.focus();
+                }
+                // If Tab is pressed on the last element, wrap focus to the first
+                else if (!event.shiftKey && document.activeElement === lastElement) {
+                    event.preventDefault();
+                    firstElement.focus();
+                }
+            }
+        });
+
+        /**
+         * Opens the order cancellation modal and handles accessibility attributes.
+         */
+        function openModal() {
+            cancelOrderModal.inert = false; // Make modal content interactive
+            cancelOrderModal.removeAttribute('aria-hidden');
+            cancelOrderModal.classList.add('modal-visible');
+            cancelOrderModal.setAttribute('aria-modal', 'true');
+            cancelOrderModal.setAttribute('role', 'dialog');
+            // Set focus to the close button after a short delay
+            setTimeout(() => {
+                modalCloseBtn.focus();
+            }, 50);
         }
-    } // End of check for cancelOrderModal
+
+        /**
+         * Closes the order cancellation modal, restores focus, and handles accessibility attributes.
+         */
+        function closeModal() {
+            // Restore focus to the element that opened the modal, or body if unavailable
+            const elementToFocus = previouslyFocusedElement || document.body;
+            try {
+                elementToFocus.focus();
+            } catch (e) {
+                console.error("Error focusing element:", e);
+                document.body.focus(); // Fallback to body
+            }
+            cancelOrderModal.inert = true; // Make modal content non-interactive
+            cancelOrderModal.classList.remove('modal-visible');
+            cancelOrderModal.removeAttribute('aria-modal');
+            cancelOrderModal.setAttribute('aria-hidden', 'true'); // Hide from screen readers
+            previouslyFocusedElement = null; // Clear stored element
+        }
+    } else {
+        // Log warnings if any modal elements are missing
+        if (!cancelOrderModal) console.warn("Cancel order modal (#cancelOrderModal) not found.");
+        if (!confirmCancelBtn) console.warn("Confirm cancel button (#confirmCancelBtn) not found.");
+        if (!modalCloseBtn) console.warn("Modal close button (#modalCloseBtn) not found.");
+        if (!cancelOrderForm) console.warn("Cancel order form (#cancelOrderForm) not found.");
+    }
 
 }); // End DOMContentLoaded

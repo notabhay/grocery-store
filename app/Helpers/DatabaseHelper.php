@@ -250,7 +250,7 @@ function db_query(PDO $conn, string $query, array $params = []): PDOStatement|fa
  * @param mixed $value The value whose PDO parameter type needs to be determined.
  * @return int The corresponding PDO::PARAM_* constant (PARAM_INT, PARAM_BOOL, PARAM_NULL, PARAM_STR).
  */
-function getParamType($value): int
+function getParamType(mixed $value): int
 {
     if (is_int($value)) {
         return PDO::PARAM_INT;

@@ -358,7 +358,7 @@ const RegistrationForm = ({ csrfToken }) => {
                     setTouched({ name: false, phone: false, email: false, password: false });
                     // Redirect to login page after a short delay
                     setTimeout(() => {
-                        window.location.href = window.baseUrl + 'login'; // Redirect
+                        window.location.href = '/login'; // Redirect
                     }, 2000); // 2-second delay
                 } else {
                     // --- Handle Server-Side Failure ---
@@ -470,7 +470,7 @@ const RegistrationForm = ({ csrfToken }) => {
                     </form>
                     {/* Link to login page */}
                     <div className="login-link">
-                        <p>Already have an account? <a href={window.baseUrl + 'login'}>Login here</a></p>
+                        <p>Already have an account? <a href="/login">Login here</a></p>
                     </div>
                 </React.Fragment>
             )}

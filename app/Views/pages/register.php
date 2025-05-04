@@ -31,7 +31,7 @@ $page_title = $page_title ?? 'Register - GhibliGroceries';
 $meta_description = $meta_description ?? 'Create an account with GhibliGroceries to start ordering fresh groceries online.';
 $meta_keywords = $meta_keywords ?? 'register, grocery, create account, sign up';
 // Define specific CSS for this page
-$additional_css_files = $additional_css_files ?? ['assets/css/register.css'];
+$additional_css_files = $additional_css_files ?? ['/assets/css/register.css'];
 
 // Initialize variables related to form state and data
 $csrf_token = $csrf_token ?? ''; // CSRF token from controller
@@ -61,15 +61,15 @@ $input_email = $input_data['email'] ?? '';
             <!-- Display registration status messages -->
             <?php if ($registration_success): // Check if registration was successful 
             ?>
-            <div class="alert alert-success">
-                <p>Registration successful! You can now <a href="<?= BASE_URL ?>login">login</a> to your account.</p>
-            </div>
+                <div class="alert alert-success">
+                    <p>Registration successful! You can now <a href="/login">login</a> to your account.</p>
+                </div>
             <?php elseif (!empty($registration_error)): // Check if there were registration errors 
             ?>
-            <div class="alert alert-error">
-                <!-- Display error message(s), using nl2br to preserve line breaks if multiple errors are concatenated -->
-                <p><?php echo nl2br(htmlspecialchars($registration_error)); ?></p>
-            </div>
+                <div class="alert alert-error">
+                    <!-- Display error message(s), using nl2br to preserve line breaks if multiple errors are concatenated -->
+                    <p><?php echo nl2br(htmlspecialchars($registration_error)); ?></p>
+                </div>
             <?php endif; // End of status message block 
             ?>
 
@@ -87,7 +87,7 @@ $input_email = $input_data['email'] ?? '';
                 <!-- Container for the basic HTML fallback form -->
                 <div class="register-form-container">
                     <!-- Basic HTML registration form -->
-                    <form action="<?= BASE_URL ?>register" method="post" class="register-form">
+                    <form action="/register" method="post" class="register-form">
                         <!-- CSRF token for security -->
                         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
 
@@ -129,7 +129,7 @@ $input_email = $input_data['email'] ?? '';
 
                     <!-- Link to the login page for existing users -->
                     <aside class="login-link">
-                        <p>Already have an account? <a href="<?= BASE_URL ?>login">Login here</a></p>
+                        <p>Already have an account? <a href="/login">Login here</a></p>
                     </aside>
                 </div> <!-- End of noscript form container -->
             </noscript> <!-- End of noscript block -->
@@ -144,7 +144,7 @@ $input_email = $input_data['email'] ?? '';
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
 <!-- Include the external React component file (needs type="text/babel" for Babel transpilation) -->
-<script type="text/babel" src="<?= BASE_URL ?>assets/js/react_components/RegistrationForm.js"></script>
+<script type="text/babel" src="/assets/js/react_components/RegistrationForm.js"></script>
 
 <!-- Inline Babel script to render the React component -->
 <script type="text/babel">

@@ -21,7 +21,7 @@
         </div>
         <!-- Back to Dashboard Button -->
         <div class="col-md-6 text-end">
-            <a href="<?= BASE_URL ?>admin/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+            <a href="/admin/dashboard" class="btn btn-secondary">Back to Dashboard</a>
         </div>
     </div>
 
@@ -32,7 +32,7 @@
         </div>
         <div class="card-body">
             <!-- Filter Form (Submits via GET to the same page) -->
-            <form action="<?= BASE_URL ?>admin/orders" method="get" class="row g-3">
+            <form action="/admin/orders" method="get" class="row g-3">
                 <!-- Status Filter Dropdown -->
                 <div class="col-md-3">
                     <label for="status" class="form-label">Status</label>
@@ -69,7 +69,7 @@
                 <!-- Filter Action Buttons -->
                 <div class="col-md-3 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary me-2">Apply Filters</button>
-                    <a href="<?= BASE_URL ?>admin/orders" class="btn btn-outline-secondary">Reset</a>
+                    <a href="/admin/orders" class="btn btn-outline-secondary">Reset</a>
                 </div>
             </form>
         </div>
@@ -84,94 +84,93 @@
             <?php // Check if there are any orders to display 
             ?>
             <?php if (empty($orders)): ?>
-            <!-- Display message if no orders are found -->
-            <div class="alert alert-info">No orders found matching your criteria.</div>
+                <!-- Display message if no orders are found -->
+                <div class="alert alert-info">No orders found matching your criteria.</div>
             <?php else: ?>
-            <!-- Responsive table container -->
-            <div class="table-responsive">
-                <!-- Orders Table -->
-                <table class="table table-striped table-hover">
-                    <!-- Table Header -->
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Customer</th>
-                            <th>Order Date</th>
-                            <th>Total Amount</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <!-- Table Body -->
-                    <tbody>
-                        <?php // Loop through each order and display its details 
+                <!-- Responsive table container -->
+                <div class="table-responsive">
+                    <!-- Orders Table -->
+                    <table class="table table-striped table-hover">
+                        <!-- Table Header -->
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Order Date</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <!-- Table Body -->
+                        <tbody>
+                            <?php // Loop through each order and display its details 
                             ?>
-                        <?php foreach ($orders as $order): ?>
-                        <tr>
-                            <!-- Order ID -->
-                            <td>#<?= htmlspecialchars($order['order_id']) // Display Order ID, escape HTML 
+                            <?php foreach ($orders as $order): ?>
+                                <tr>
+                                    <!-- Order ID -->
+                                    <td>#<?= htmlspecialchars($order['order_id']) // Display Order ID, escape HTML 
                                             ?></td>
-                            <!-- Customer Name and Email -->
-                            <td>
-                                <?= htmlspecialchars($order['user_name']) // Display User Name, escape HTML 
+                                    <!-- Customer Name and Email -->
+                                    <td>
+                                        <?= htmlspecialchars($order['user_name']) // Display User Name, escape HTML 
                                         ?><br>
-                                <small class="text-muted"><?= htmlspecialchars($order['user_email']) // Display User Email, escape HTML 
+                                        <small class="text-muted"><?= htmlspecialchars($order['user_email']) // Display User Email, escape HTML 
                                                                     ?></small>
-                            </td>
-                            <!-- Order Date (Formatted) -->
-                            <td><?= date('M d, Y H:i', strtotime($order['order_date'])) // Format date 
+                                    </td>
+                                    <!-- Order Date (Formatted) -->
+                                    <td><?= date('M d, Y H:i', strtotime($order['order_date'])) // Format date 
                                         ?></td>
-                            <!-- Total Amount (Formatted as Currency) -->
-                            <td>$<?= number_format($order['total_amount'], 2) // Format currency 
+                                    <!-- Total Amount (Formatted as Currency) -->
+                                    <td>$<?= number_format($order['total_amount'], 2) // Format currency 
                                             ?></td>
-                            <!-- Order Status with Badge -->
-                            <td>
-                                <?php // Use helper function to get the appropriate badge class based on status 
+                                    <!-- Order Status with Badge -->
+                                    <td>
+                                        <?php // Use helper function to get the appropriate badge class based on status 
                                         ?>
-                                <span class="badge bg-<?= getStatusBadgeClass($order['status']) ?>">
-                                    <?= ucfirst(htmlspecialchars($order['status'])) // Display capitalized status, escape HTML 
+                                        <span class="badge bg-<?= getStatusBadgeClass($order['status']) ?>">
+                                            <?= ucfirst(htmlspecialchars($order['status'])) // Display capitalized status, escape HTML 
                                             ?>
-                                </span>
-                            </td>
-                            <!-- Action Buttons -->
-                            <td>
-                                <!-- View Order Details Button -->
-                                <a href="<?= BASE_URL ?>admin/orders/<?= $order['order_id'] // Link to the specific order view
-                                                                                ?>"
-                                    class="btn btn-sm btn-primary">View</a>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                                        </span>
+                                    </td>
+                                    <!-- Action Buttons -->
+                                    <td>
+                                        <!-- View Order Details Button -->
+                                        <a href="/admin/orders/<?= $order['order_id'] // Link to the specific order view 
+                                                                ?>" class="btn btn-sm btn-primary">View</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
 
-            <?php // Check if pagination data exists and if there's more than one page 
+                <?php // Check if pagination data exists and if there's more than one page 
                 ?>
-            <?php if (isset($pagination) && $pagination['total_pages'] > 1): ?>
-            <!-- Pagination Navigation -->
-            <nav aria-label="Page navigation" class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <?php // Previous Page Link 
+                <?php if (isset($pagination) && $pagination['total_pages'] > 1): ?>
+                    <!-- Pagination Navigation -->
+                    <nav aria-label="Page navigation" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <?php // Previous Page Link 
                             ?>
-                    <?php if ($pagination['current_page'] > 1): ?>
-                    <li class="page-item">
-                        <?php // Build URL with current page - 1 and existing filters 
+                            <?php if ($pagination['current_page'] > 1): ?>
+                                <li class="page-item">
+                                    <?php // Build URL with current page - 1 and existing filters 
                                     ?>
-                        <a class="page-link"
-                            href="?page=<?= $pagination['current_page'] - 1 ?><?= buildFilterQueryString($filters) ?>"
-                            aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <?php else: ?>
-                    <!-- Disabled Previous Page Link -->
-                    <li class="page-item disabled">
-                        <span class="page-link">&laquo;</span>
-                    </li>
-                    <?php endif; ?>
+                                    <a class="page-link"
+                                        href="?page=<?= $pagination['current_page'] - 1 ?><?= buildFilterQueryString($filters) ?>"
+                                        aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            <?php else: ?>
+                                <!-- Disabled Previous Page Link -->
+                                <li class="page-item disabled">
+                                    <span class="page-link">&laquo;</span>
+                                </li>
+                            <?php endif; ?>
 
-                    <?php
+                            <?php
                             // Calculate pagination range (show 2 pages before and after current page)
                             $startPage = max(1, $pagination['current_page'] - 2);
                             $endPage = min($pagination['total_pages'], $pagination['current_page'] + 2);
@@ -204,27 +203,27 @@
                             }
                             ?>
 
-                    <?php // Next Page Link 
+                            <?php // Next Page Link 
                             ?>
-                    <?php if ($pagination['current_page'] < $pagination['total_pages']): ?>
-                    <li class="page-item">
-                        <?php // Build URL with current page + 1 and existing filters 
+                            <?php if ($pagination['current_page'] < $pagination['total_pages']): ?>
+                                <li class="page-item">
+                                    <?php // Build URL with current page + 1 and existing filters 
                                     ?>
-                        <a class="page-link"
-                            href="?page=<?= $pagination['current_page'] + 1 ?><?= buildFilterQueryString($filters) ?>"
-                            aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                    <?php else: ?>
-                    <!-- Disabled Next Page Link -->
-                    <li class="page-item disabled">
-                        <span class="page-link">&raquo;</span>
-                    </li>
-                    <?php endif; ?>
-                </ul>
-            </nav>
-            <?php endif; // End pagination check 
+                                    <a class="page-link"
+                                        href="?page=<?= $pagination['current_page'] + 1 ?><?= buildFilterQueryString($filters) ?>"
+                                        aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            <?php else: ?>
+                                <!-- Disabled Next Page Link -->
+                                <li class="page-item disabled">
+                                    <span class="page-link">&raquo;</span>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                <?php endif; // End pagination check 
                 ?>
             <?php endif; // End orders check 
             ?>

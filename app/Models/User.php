@@ -103,7 +103,7 @@ class User
      * @param string $password The hashed password for the user.
      * @return int|false The ID of the newly created user on success, false on failure.
      */
-    public function create(string $name, string $phone, string $email, string $password)
+    public function create(string $name, string $phone, string $email, string $password): int|false
     {
         // Consider adding checks for email uniqueness before attempting insert, or handle potential PDOException for unique constraint violation.
         $stmt = $this->db->prepare("INSERT INTO users (name, phone, email, password) VALUES (:name, :phone, :email, :password)");
@@ -348,7 +348,7 @@ class User
      * @param int $userId The ID of the user requesting the password reset.
      * @return string|bool The generated reset token string on success, false on failure.
      */
-    public function generatePasswordResetToken(int $userId)
+    public function generatePasswordResetToken(int $userId): string|bool
     {
         try {
             $token = bin2hex(random_bytes(32)); // Generate a secure random token

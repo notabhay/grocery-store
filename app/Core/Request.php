@@ -14,15 +14,15 @@ namespace App\Core;
 class Request
 {
     /** @var array Filtered GET parameters ($_GET). */
-    private $getParams;
+    private array $getParams;
     /** @var array Filtered POST parameters ($_POST). */
-    private $postParams;
+    private array $postParams;
     /** @var array Uploaded file information ($_FILES). */
-    private $files;
+    private array $files;
     /** @var array Server environment variables ($_SERVER). */
-    private $server;
+    private array $server;
     /** @var array Parsed HTTP request headers. */
-    private $headers;
+    private array $headers;
     /** @var string|null|false Cached raw input stream content. */
     private $inputStream;
 
@@ -103,57 +103,16 @@ class Request
      * Gets the request URI path, excluding the query string.
      *
      * Parses the 'REQUEST_URI' server variable and returns only the path component,
-     * with leading/trailing slashes trimmed. Also strips the known base path from the URI.
+     * with leading/trailing slashes trimmed.
      *
      * @return string The cleaned request URI path (e.g., 'users/profile', 'about'). Returns '' for the root '/'.
      */
     public function uri(): string
     {
-        // Use the globally defined BASE_URL constant.
-        $baseUrlPath = defined('BASE_URL') ? BASE_URL : '/';
-
-        // Get the full request URI path component from the server variable.
-        $fullUri = parse_url($this->server['REQUEST_URI'] ?? '', PHP_URL_PATH);
-
-        // Check if the full URI starts with the defined base URL path.
-        if ($fullUri !== null && $baseUrlPath !== '/' && strpos($fullUri, $baseUrlPath) === 0) {
-            // If it does, remove the base URL path to get the relative URI.
-            $relativePath = substr($fullUri, strlen($baseUrlPath));
-        } else {
-            // If it doesn't start with the base URL path, use the full URI as the relative path.
-            $relativePath = $fullUri;
-        }
-
-        // ADDED: Check if the relative path starts with "public/" and remove it
-        $originalRelativePath = $relativePath;
-        if (strpos($relativePath, 'public/') === 0) {
-            $relativePath = substr($relativePath, strlen('public/'));
-        }
-
-        // Log the URI components for debugging
-        if (defined('BASE_PATH')) {
-            $logMessage = "Request URI: " . ($this->server['REQUEST_URI'] ?? 'N/A') .
-                " | BASE_URL: " . $baseUrlPath .
-                " | Original Relative Path: " . ($originalRelativePath ?: 'N/A') .
-                " | Final Relative Path: " . ($relativePath ?: 'N/A');
-
-            if (Registry::has('logger')) {
-                Registry::get('logger')->debug($logMessage);
-            } else {
-                error_log($logMessage . "\n", 3, BASE_PATH . '/logs/app.log');
-            }
-        } else {
-            // Fallback if BASE_PATH is not defined (e.g., log to default PHP error log)
-            error_log(
-                "Request URI: " . ($this->server['REQUEST_URI'] ?? 'N/A') .
-                    " | BASE_URL: " . $baseUrlPath .
-                    " | Original Relative Path: " . ($originalRelativePath ?: 'N/A') .
-                    " | Final Relative Path: " . ($relativePath ?: 'N/A') .
-                    " | WARNING: BASE_PATH not defined, logging to default log."
-            );
-        }
-
-        return trim($relativePath ?: '', '/');
+        // Parse the URI and get the path component.
+        $uri = parse_url($this->server['REQUEST_URI'] ?? '', PHP_URL_PATH);
+        // Trim slashes from the path.
+        return trim($uri ?: '', '/');
     }
 
     /**

@@ -226,17 +226,7 @@ class SecurityHelper
         // Allow fonts from self and specific CDNs.
         $csp .= "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; ";
         // Allow connections (XHR, WebSockets) only to self.
-        // Calculate the base origin/path without the trailing /public/
-        $connectSrcBase = BASE_URL; // Start with the full BASE_URL
-        $publicSuffix = '/public/';
-        if (substr($connectSrcBase, -strlen($publicSuffix)) === $publicSuffix) {
-            $connectSrcBase = substr($connectSrcBase, 0, -strlen($publicSuffix)); // Remove /public/
-        }
-        // Ensure it DOES end with a single trailing slash for path matching in CSP
-        $connectSrcBasePath = rtrim($connectSrcBase, '/') . '/';
-
-        // Add the directive, allowing 'self' and the calculated base path with a trailing slash
-        $csp .= "connect-src 'self' " . $connectSrcBasePath . "; ";
+        $csp .= "connect-src 'self'; ";
         // Allow form submissions only to self.
         $csp .= "form-action 'self'; ";
         // Disallow framing of the page by any other page (stronger than X-Frame-Options).

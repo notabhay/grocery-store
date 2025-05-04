@@ -24,18 +24,18 @@ class OrderApiController extends BaseController
     /**
      * @var Order Instance of the Order model for database interactions.
      */
-    private $orderModel;
+    private Order $orderModel;
 
     /**
      * @var OrderItem Instance of the OrderItem model for retrieving order items.
      */
-    private $orderItemModel;
+    private OrderItem $orderItemModel;
 
     /**
      * @var \App\Controllers\OrderController Instance of the standard OrderController
      *                                       (potentially for reusing business logic like status updates).
      */
-    private $orderController;
+    private \App\Controllers\OrderController $orderController;
 
     /**
      * Constructor for OrderApiController.

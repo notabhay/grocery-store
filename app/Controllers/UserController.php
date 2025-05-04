@@ -27,32 +27,32 @@ class UserController extends BaseController
     /**
      * @var Database Database connection wrapper instance.
      */
-    private $db;
+    private Database $db;
 
     /**
      * @var Session Session management instance.
      */
-    private $session;
+    private Session $session;
 
     /**
      * @var Request HTTP request handling instance.
      */
-    private $request;
+    private Request $request;
 
     /**
      * @var User User model instance for database interactions.
      */
-    private $userModel;
+    private User $userModel;
 
     /**
      * @var LoggerInterface Logger instance for recording events and errors.
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * @var CaptchaHelper Helper for generating and validating CAPTCHA images/text.
      */
-    private $captchaHelper;
+    private CaptchaHelper $captchaHelper;
 
     /**
      * UserController constructor.
@@ -115,7 +115,7 @@ class UserController extends BaseController
             'page_title' => 'Login - GhibliGroceries',
             'meta_description' => 'Login to GhibliGroceries - Access your account to place orders.',
             'meta_keywords' => 'login, grocery, online shopping, account access',
-            'additional_css_files' => ['assets/css/login.css'], // Specific CSS
+            'additional_css_files' => ['/assets/css/login.css'], // Specific CSS
             'email' => $email ?? '', // Email input value (for repopulation)
             'login_error' => $login_error ?? '', // Login error message
             'captcha_error' => $captcha_error ?? '', // CAPTCHA error message
@@ -238,7 +238,7 @@ class UserController extends BaseController
             'page_title' => 'Register - GhibliGroceries',
             'meta_description' => 'Create an account with GhibliGroceries to start ordering fresh groceries online.',
             'meta_keywords' => 'register, grocery, create account, sign up',
-            'additional_css_files' => ['assets/css/register.css'], // Specific CSS
+            'additional_css_files' => ['/assets/css/register.css'], // Specific CSS
             'csrf_token' => $this->session->getCsrfToken(), // CSRF token for form
             'registration_error' => $registration_error ?? '', // Registration error message(s)
             'registration_success' => $registration_success ?? false, // Success flag (optional)

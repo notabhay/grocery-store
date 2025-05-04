@@ -30,32 +30,32 @@ class OrderController extends BaseController
     /**
      * @var Session Session management instance.
      */
-    private $session;
+    private Session $session;
 
     /**
      * @var Request HTTP request handling instance.
      */
-    private $request;
+    private Request $request;
 
     /**
      * @var LoggerInterface Logger instance for recording events and errors.
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * @var Order Order model instance for database interactions.
      */
-    private $orderModel;
+    private Order $orderModel;
 
     /**
      * @var OrderItem OrderItem model instance for database interactions.
      */
-    private $orderItemModel;
+    private OrderItem $orderItemModel;
 
     /**
      * @var Product Product model instance for database interactions.
      */
-    private $productModel;
+    private Product $productModel;
 
     /**
      * OrderController constructor.
@@ -144,7 +144,7 @@ class OrderController extends BaseController
             'page_title' => 'Place Order - ' . htmlspecialchars($productData['name']),
             'meta_description' => 'Place your order for ' . htmlspecialchars($productData['name']) . ' at GhibliGroceries',
             'meta_keywords' => 'order, grocery, purchase, ' . htmlspecialchars($productData['name']),
-            'additional_css_files' => ['assets/css/order.css'], // Specific CSS for this page
+            'additional_css_files' => ['/assets/css/order.css'], // Specific CSS for this page
         ];
 
         // Render the view
@@ -303,7 +303,7 @@ class OrderController extends BaseController
                                 'name' => $product['name'],
                                 'price' => $product['price'],
                                 // Construct image URL safely
-                                'image_url' => BASE_URL . 'assets/images/products/' . basename($product['image'] ?? 'default.png'),
+                                'image_url' => '/assets/images/products/' . basename($product['image'] ?? 'default.png'),
                                 'quantity' => $quantity,
                                 'subtotal' => $subtotal
                             ];
@@ -348,7 +348,7 @@ class OrderController extends BaseController
             'page_title' => 'Place Your Order',
             'meta_description' => 'Review your cart and place your order.',
             'meta_keywords' => 'order, checkout, cart, grocery',
-            'additional_css_files' => ['assets/css/order.css'],
+            'additional_css_files' => ['/assets/css/order.css'],
         ];
 
         // Render the order form view
@@ -510,7 +510,7 @@ class OrderController extends BaseController
             'page_title' => 'My Orders',
             'meta_description' => 'View your past orders with GhibliGroceries.',
             'meta_keywords' => 'orders, history, purchase history, grocery',
-            'additional_css_files' => ['assets/css/order.css'],
+            'additional_css_files' => ['/assets/css/order.css'],
         ];
 
         // Render the 'my orders' view
@@ -556,7 +556,7 @@ class OrderController extends BaseController
             'page_title' => 'Order Confirmation #' . $orderId,
             'meta_description' => 'Your GhibliGroceries order #' . $orderId . ' has been placed successfully.',
             'meta_keywords' => 'order confirmation, grocery, purchase',
-            'additional_css_files' => ['assets/css/order.css'],
+            'additional_css_files' => ['/assets/css/order.css'],
         ];
 
         // Render the confirmation view
@@ -601,7 +601,7 @@ class OrderController extends BaseController
             'page_title' => 'Order Details #' . $orderId,
             'meta_description' => 'Details for your GhibliGroceries order #' . $orderId . '.',
             'meta_keywords' => 'order details, grocery, purchase',
-            'additional_css_files' => ['assets/css/order.css'],
+            'additional_css_files' => ['/assets/css/order.css'],
             'csrfToken' => $this->session->getCsrfToken() // For the cancel button form
         ];
 
@@ -669,7 +669,7 @@ class OrderController extends BaseController
      * @param string|null $notes Optional notes provided by the user.
      * @return int|false The ID of the newly created order on success, or false on failure.
      */
-    private function createOrder(int $user_id, array $items, float $total_amount, ?string $notes = null)
+    private function createOrder(int $user_id, array $items, float $total_amount, ?string $notes = null): int|false
     {
         try {
             // Start a database transaction
@@ -755,7 +755,7 @@ class OrderController extends BaseController
      * @param int $user_id The ID of the user requesting the details (for authorization).
      * @return array|false An associative array with order details and items on success, false on failure or if not found/authorized.
      */
-    public function getOrderDetails(int $order_id, int $user_id)
+    public function getOrderDetails(int $order_id, int $user_id): array|false
     {
         try {
             // Fetch the main order data, checking ownership
@@ -802,7 +802,7 @@ class OrderController extends BaseController
      * @param int $user_id The ID of the user whose orders are to be retrieved.
      * @return array|false An array of orders (each as an associative array) on success, false on failure.
      */
-    public function getUserOrders(int $user_id)
+    public function getUserOrders(int $user_id): array|false
     {
         try {
             // Fetch orders using the Order model
@@ -1023,7 +1023,7 @@ class OrderController extends BaseController
                     $item['subtotal_formatted'] = '$' . number_format($item['subtotal'] ?? 0, 2);
                     // Construct image URL safely using basename
                     $image_filename = $item['product_image'] ?? ($item['image'] ?? 'default.png'); // Check multiple possible field names
-                    $item['image_url'] = BASE_URL . 'assets/images/products/' . basename($image_filename);
+                    $item['image_url'] = '/assets/images/products/' . basename($image_filename);
                     // Sanitize product name
                     $item['product_name'] = htmlspecialchars($item['product_name'] ?? 'N/A');
                 }

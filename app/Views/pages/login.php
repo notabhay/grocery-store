@@ -26,7 +26,7 @@
 $page_title = $page_title ?? 'Login - GhibliGroceries';
 $meta_description = $meta_description ?? 'Login to GhibliGroceries - Access your account to place orders.';
 $meta_keywords = $meta_keywords ?? 'login, grocery, online shopping, account access';
-$additional_css_files = $additional_css_files ?? ['assets/css/login.css']; // Specific CSS for this page
+$additional_css_files = $additional_css_files ?? ['/assets/css/login.css']; // Specific CSS for this page
 $email = $email ?? ''; // Repopulate email field on error
 $login_error = $login_error ?? ''; // General login error (e.g., wrong password/email)
 $captcha_error = $captcha_error ?? ''; // CAPTCHA validation error
@@ -46,15 +46,15 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
             <?php // Display general login error message if it exists 
             ?>
             <?php if (!empty($login_error)): ?>
-            <div class="alert alert-error">
-                <p><?php echo htmlspecialchars($login_error); ?></p>
-            </div>
+                <div class="alert alert-error">
+                    <p><?php echo htmlspecialchars($login_error); ?></p>
+                </div>
             <?php endif; ?>
 
             <!-- Container for the login form and registration link -->
             <div class="login-form-container">
                 <!-- Login form submitting data via POST to /login -->
-                <form action="<?= BASE_URL ?>login" method="post" class="login-form">
+                <form action="/login" method="post" class="login-form">
                     <!-- CSRF Token (hidden input for security) -->
                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token); ?>">
 
@@ -83,7 +83,7 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
                         <div class="captcha-container">
                             <!-- CAPTCHA Image and Refresh Button -->
                             <div class="captcha-image">
-                                <img src="<?= BASE_URL ?>captcha" alt="CAPTCHA Image" id="captcha-img">
+                                <img src="/captcha" alt="CAPTCHA Image" id="captcha-img">
                                 <!-- Button to refresh CAPTCHA (controlled by JS) -->
                                 <button type="button" class="refresh-captcha">
                                     <i class="fas fa-sync-alt"></i> <!-- Refresh icon -->
@@ -95,9 +95,9 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
                         <?php // Display CAPTCHA error message if it exists 
                         ?>
                         <?php if (!empty($captcha_error)): ?>
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-circle"></i> <?php echo htmlspecialchars($captcha_error); ?>
-                        </div>
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-circle"></i> <?php echo htmlspecialchars($captcha_error); ?>
+                            </div>
                         <?php endif; ?>
                     </div>
 
@@ -106,7 +106,7 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
                         <label>
                             <input type="checkbox" name="remember_me"> Remember me
                         </label>
-                        <a href="<?= BASE_URL ?>forgot-password" class="forgot-password">Forgot Password?</a>
+                        <a href="/forgot-password" class="forgot-password">Forgot Password?</a>
                     </div>
 
                     <!-- Form Group: Submit Button -->
@@ -117,7 +117,7 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
 
                 <!-- Link to Registration Page -->
                 <aside class="register-link">
-                    <p>Don't have an account? <a href="<?= BASE_URL ?>register">Register here</a></p>
+                    <p>Don't have an account? <a href="/register">Register here</a></p>
                 </aside>
             </div> <!-- End login-form-container -->
         </div> <!-- End container -->
@@ -126,36 +126,36 @@ $csrf_token = $csrf_token ?? ''; // CSRF protection token
 
 <!-- Inline JavaScript for specific login page functionalities -->
 <script>
-// Wait for the DOM to be fully loaded before running script
-document.addEventListener('DOMContentLoaded', function() {
-    // --- Password Visibility Toggle ---
-    const togglePassword = document.querySelector('.toggle-password');
-    if (togglePassword) { // Check if the element exists
-        togglePassword.addEventListener('click', function() {
-            const passwordInput = document.getElementById('password');
-            const icon = this.querySelector('i'); // Get the icon inside the span
-            // Check current type and toggle
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text'; // Show password
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash'); // Change icon to slashed eye
-            } else {
-                passwordInput.type = 'password'; // Hide password
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye'); // Change icon back to eye
-            }
-        });
-    }
+    // Wait for the DOM to be fully loaded before running script
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Password Visibility Toggle ---
+        const togglePassword = document.querySelector('.toggle-password');
+        if (togglePassword) { // Check if the element exists
+            togglePassword.addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                const icon = this.querySelector('i'); // Get the icon inside the span
+                // Check current type and toggle
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text'; // Show password
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash'); // Change icon to slashed eye
+                } else {
+                    passwordInput.type = 'password'; // Hide password
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye'); // Change icon back to eye
+                }
+            });
+        }
 
-    // --- CAPTCHA Refresh ---
-    const refreshCaptcha = document.querySelector('.refresh-captcha');
-    const captchaImage = document.getElementById('captcha-img');
-    if (refreshCaptcha && captchaImage) { // Check if both elements exist
-        refreshCaptcha.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent default button behavior
-            // Update the image source with a timestamp to bypass browser cache
-            captchaImage.src = '<?= BASE_URL ?>captcha?' + new Date().getTime();
-        });
-    }
-});
+        // --- CAPTCHA Refresh ---
+        const refreshCaptcha = document.querySelector('.refresh-captcha');
+        const captchaImage = document.getElementById('captcha-img');
+        if (refreshCaptcha && captchaImage) { // Check if both elements exist
+            refreshCaptcha.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent default button behavior
+                // Update the image source with a timestamp to bypass browser cache
+                captchaImage.src = '/captcha?' + new Date().getTime();
+            });
+        }
+    });
 </script>

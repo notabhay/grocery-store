@@ -8,8 +8,9 @@ use App\Core\Session;
 use App\Models\Product;
 use App\Core\Registry;
 use App\Helpers\CartHelper;
-// use Monolog\Logger; // Commented out
-// use Monolog\Handler\StreamHandler; // Commented out
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
 
 /**
  * Cart API Controller
@@ -38,7 +39,7 @@ class CartApiController extends BaseController
     /**
      * @var Logger Instance of the Monolog logger.
      */
-    // private $logger; // Commented out
+    private $logger;
 
     /**
      * Constructor for CartApiController.
@@ -52,8 +53,7 @@ class CartApiController extends BaseController
         $this->db = Registry::get('database');
         $this->cartHelper = new CartHelper($this->session, Registry::get('database'));
 
-        // Initialize Logger - COMMENTED OUT BLOCK
-        /*
+        // Initialize Logger
         $this->logger = new Logger('cart_api');
         $logFilePath = BASE_PATH . '/logs/app.log'; // Use BASE_PATH constant
         $logDir = dirname($logFilePath);
@@ -62,8 +62,7 @@ class CartApiController extends BaseController
             mkdir($logDir, 0777, true);
         }
         // Add a handler to log messages to the application log file
-        $this->logger->pushHandler(new StreamHandler($logFilePath, Logger::DEBUG));
-        */
+        $this->logger->pushHandler(new StreamHandler($logFilePath, Level::Debug));
     }
 
     /**
@@ -493,39 +492,39 @@ class CartApiController extends BaseController
      */
     public function removeItem($params)
     {
-        // $this->logger->info('Received request to delete item from cart via URL parameter.', ['params_received' => $params]); // Commented out
+        $this->logger->info('Received request to delete item from cart via URL parameter.', ['params_received' => $params]);
 
         // Although the route might imply DELETE, web forms often use POST for this.
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            // $this->logger->warning('Invalid request method for removeItem.', ['method' => $_SERVER['REQUEST_METHOD']]); // Commented out
+            $this->logger->warning('Invalid request method for removeItem.', ['method' => $_SERVER['REQUEST_METHOD']]);
             $this->jsonResponse(['error' => 'Invalid request method. Only POST is allowed for this action.'], 405);
             return;
         }
 
         // Check authentication
         if (!$this->session->isAuthenticated()) {
-            // $this->logger->warning('Authentication required for removeItem.', ['params_received' => $params]); // Commented out
+            $this->logger->warning('Authentication required for removeItem.', ['params_received' => $params]);
             $this->jsonResponse(['error' => 'Authentication required.'], 401);
             return;
         }
 
         // Validate the product ID from the route parameters
         if (!isset($params['product_id']) || !is_numeric($params['product_id']) || (int)$params['product_id'] <= 0) {
-            // $this->logger->warning('Invalid or missing product ID received for removeItem.', ['params_received' => $params]); // Commented out
+            $this->logger->warning('Invalid or missing product ID received for removeItem.', ['params_received' => $params]);
             $this->jsonResponse(['success' => false, 'error' => 'Invalid product ID.'], 400);
             return;
         }
 
         $actualProductId = (int) $params['product_id'];
-        // $this->logger->info('Validated product ID.', ['productId' => $actualProductId]); // Commented out
+        $this->logger->info('Validated product ID.', ['productId' => $actualProductId]);
 
         // Attempt to remove the item using CartHelper
-        // $this->logger->info('Attempting to remove item from session/cart helper.', ['productId' => $actualProductId]); // Commented out
+        $this->logger->info('Attempting to remove item from session/cart helper.', ['productId' => $actualProductId]);
         $result = $this->cartHelper->removeCartItem($actualProductId);
 
         // Prepare response based on the result
         if ($result['success']) {
-            // $this->logger->info('Successfully removed item from cart.', ['productId' => $actualProductId, 'result' => $result]); // Commented out
+            $this->logger->info('Successfully removed item from cart.', ['productId' => $actualProductId, 'result' => $result]);
             $responseData = [
                 'success' => true,
                 'message' => $result['message'] ?? 'Item removed from cart.',
@@ -536,7 +535,7 @@ class CartApiController extends BaseController
             ];
             $statusCode = 200;
         } else {
-            // $this->logger->warning('Failed to remove item from cart (item might not exist?).', ['productId' => $actualProductId, 'result' => $result]); // Commented out
+            $this->logger->warning('Failed to remove item from cart (item might not exist?).', ['productId' => $actualProductId, 'result' => $result]);
             // Determine status code: 404 if specifically "not found", 400 otherwise
             $statusCode = ($result['message'] === 'Item not found in cart.') ? 404 : 400;
             $responseData = [
@@ -545,7 +544,7 @@ class CartApiController extends BaseController
             ];
         }
 
-        // $this->logger->info('Sending JSON response for delete request.', ['response' => $responseData, 'statusCode' => $statusCode]); // Commented out
+        $this->logger->info('Sending JSON response for delete request.', ['response' => $responseData, 'statusCode' => $statusCode]);
         $this->jsonResponse($responseData, $statusCode);
     }
 
@@ -637,22 +636,11 @@ class CartApiController extends BaseController
      */
     public function getCartCount()
     {
-        error_log("[DEBUG] CartApiController::getCartCount - Entered method."); // ADDED DEBUG LOG
-
-        // Log entry to the method with detailed request information
-        // $this->logger->info(date('[Y-m-d H:i:s] ') . "CartApiController::getCartCount - Entered method.", [
-        //     'request_uri' => $_SERVER['REQUEST_URI'] ?? 'unknown',
-        //     'request_method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown',
-        //     'base_url' => BASE_URL ?? 'unknown'
-        // ]); // COMMENTED OUT MONOLOG
-
         // Ensure GET request
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            error_log("[DEBUG] CartApiController::getCartCount - Invalid method: " . ($_SERVER['REQUEST_METHOD'] ?? 'unknown')); // ADDED DEBUG LOG
             $this->jsonResponse(['error' => 'Invalid request method. Only GET is allowed.'], 405);
             return;
         }
-        error_log("[DEBUG] CartApiController::getCartCount - Method check passed."); // ADDED DEBUG LOG
 
         // Note: Depending on requirements, this might not strictly need authentication
         // if the cart count is displayed even for logged-out users (session-based cart).
@@ -663,30 +651,12 @@ class CartApiController extends BaseController
         // }
 
         // Retrieve cart data using the helper
-        error_log("[DEBUG] CartApiController::getCartCount - Calling cartHelper->getCartData()."); // ADDED DEBUG LOG
-        try {
-            $cartData = $this->cartHelper->getCartData();
-            error_log("[DEBUG] CartApiController::getCartCount - cartHelper->getCartData() returned: " . print_r($cartData, true)); // ADDED DEBUG LOG
-        } catch (\Throwable $e) {
-            error_log("[ERROR] CartApiController::getCartCount - Exception during getCartData(): " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED ERROR LOG
-            $this->jsonResponse(['error' => 'Failed to retrieve cart data.'], 500);
-            return;
-        }
-
-
-        // Get the count value
-        $count = $cartData['total_items'] ?? 0; // Default to 0 if cart is empty/not set
-
-        // Log the count being returned
-        // $this->logger->info(date('[Y-m-d H:i:s] ') . "CartApiController::getCartCount - Returning count: " . $count); // COMMENTED OUT MONOLOG
-        error_log("[DEBUG] CartApiController::getCartCount - Calculated count: " . $count); // ADDED DEBUG LOG
+        $cartData = $this->cartHelper->getCartData();
 
         // Respond with just the count
-        error_log("[DEBUG] CartApiController::getCartCount - Sending JSON response."); // ADDED DEBUG LOG
         $this->jsonResponse([
-            'count' => $count
+            'count' => $cartData['total_items'] ?? 0 // Default to 0 if cart is empty/not set
         ], 200);
-        error_log("[DEBUG] CartApiController::getCartCount - JSON response sent."); // ADDED DEBUG LOG
     }
 
     /**

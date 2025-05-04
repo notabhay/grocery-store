@@ -2,11 +2,11 @@
     RewriteEngine On
 
     # Set the base path for rewrite rules relative to the domain root
-    RewriteBase /prin/y1d13/advanced-web-technologies/grocery-store/
+    RewriteBase /
 
     # Rewrite rule to route requests through public/
     # If the request is NOT for the public directory itself or files within it
-    RewriteCond %{REQUEST_URI} !^/prin/y1d13/advanced-web-technologies/grocery-store/public/
+    RewriteCond %{REQUEST_URI} !^/public/
     # Then rewrite the request to prepend public/
     RewriteRule ^(.*)$ public/$1 [L]
 

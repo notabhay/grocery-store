@@ -40,14 +40,14 @@ return [
 
     // --- Site Information ---
     'SITE_NAME' => 'GhibliGroceries', // The name of the website.
-    'SITE_URL' => 'https://teach.scam.keele.ac.uk/prin/y1d13/advanced-web-technologies/grocery-store/', // The base URL of the website. Include trailing slash.
+    'SITE_URL' => 'https://teach.scam.keele.ac.uk/prin/y1d13/advanced-web-technologies-website/grocery-store/', // The base URL of the website. Include trailing slash.
     'ADMIN_EMAIL' => 'admin@ghibligroceries.com', // Email address for administrative notifications.
 
     // --- Database Configuration ---
     'DB_HOST' => 'localhost', // Database host address (e.g., 'localhost' or IP address).
     'DB_NAME' => 'y1d13', // Name of the database to connect to.
     'DB_USER' => 'y1d13', // Database username.
-    'DB_PASS' => 'y1d13y1d13', // Database password.
+    'DB_PASS' => 'y1d13y1d13!', // Database password.
 
     // --- Security and Authentication ---
     'AUTH_TIMEOUT' => 3600, // Session timeout in seconds for authenticated users (1 hour).

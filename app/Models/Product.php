@@ -39,7 +39,6 @@ class Product
         } else {
             throw new \InvalidArgumentException("Invalid database connection provided.");
         }
-
     }
 
     /**
@@ -82,23 +81,19 @@ class Product
      */
     public function findByCategory(int $categoryId): array
     {
-        error_log("[DEBUG] Product::findByCategory - Entered method. Category ID: " . $categoryId); // ADDED LOG
-        // $logger = Registry::get('logger'); // Using error_log for now
-        // $logger->info('Product::findByCategory called.', ['categoryId' => $categoryId]);
+        $logger = Registry::get('logger');
+        $logger->info('Product::findByCategory called.', ['categoryId' => $categoryId]);
 
         $childCategoryIds = [];
         try {
-            error_log("[DEBUG] Product::findByCategory - Fetching child category IDs for parent: " . $categoryId); // ADDED LOG
             // Fetch IDs of direct subcategories
             $stmtChild = $this->db->prepare("SELECT category_id FROM categories WHERE parent_id = :parent_id");
             $stmtChild->bindParam(':parent_id', $categoryId, PDO::PARAM_INT);
             $stmtChild->execute();
             $childCategoryIds = $stmtChild->fetchAll(PDO::FETCH_COLUMN, 0); // Fetch only the category_id column
-            error_log("[DEBUG] Product::findByCategory - Fetched child IDs: " . implode(', ', $childCategoryIds ?: ['None'])); // ADDED LOG
-            // $logger->info('Fetched child category IDs.', ['parent_id' => $categoryId, 'child_ids' => $childCategoryIds]);
+            $logger->info('Fetched child category IDs.', ['parent_id' => $categoryId, 'child_ids' => $childCategoryIds]);
         } catch (\PDOException $e) {
-            error_log("[ERROR] Product::findByCategory - Failed to fetch child categories: " . $e->getMessage()); // ADDED LOG
-            // $logger->error('Failed to fetch child categories.', ['error' => $e->getMessage(), 'categoryId' => $categoryId]);
+            $logger->error('Failed to fetch child categories.', ['error' => $e->getMessage(), 'categoryId' => $categoryId]);
             // Decide whether to proceed without child categories or return empty
             // Proceeding without children might be acceptable depending on requirements.
         }
@@ -106,19 +101,16 @@ class Product
         // Combine parent and child IDs, ensuring uniqueness and integer type
         $allCategoryIds = array_merge([$categoryId], $childCategoryIds);
         $allCategoryIds = array_unique(array_map('intval', $allCategoryIds)); // Ensure unique integers
-        error_log("[DEBUG] Product::findByCategory - Combined category IDs for query: " . implode(', ', $allCategoryIds)); // ADDED LOG
-        // $logger->info('Combined category IDs for query.', ['allCategoryIds' => $allCategoryIds]);
+        $logger->info('Combined category IDs for query.', ['allCategoryIds' => $allCategoryIds]);
 
         // If no valid IDs (e.g., initial ID was invalid and no children found), return empty array
         if (empty($allCategoryIds)) {
-            error_log("[WARNING] Product::findByCategory - No valid category IDs found after combining parent and children. Original categoryId: " . $categoryId); // ADDED LOG
-            // $logger->warning('No valid category IDs found after combining parent and children.', ['original_categoryId' => $categoryId]);
+            $logger->warning('No valid category IDs found after combining parent and children.', ['original_categoryId' => $categoryId]);
             return [];
         }
 
         // Create placeholders for the IN clause (e.g., ?,?,?)
         $placeholders = implode(',', array_fill(0, count($allCategoryIds), '?'));
-        error_log("[DEBUG] Product::findByCategory - Placeholders created: " . $placeholders); // ADDED LOG
 
         // Prepare the main query to fetch products in the combined category list
         $sql = "SELECT p.*, c.category_name as category_name
@@ -126,36 +118,26 @@ class Product
                 JOIN categories c ON p.category_id = c.category_id
                 WHERE p.category_id IN ($placeholders)
                 ORDER BY p.name ASC";
-        error_log("[DEBUG] Product::findByCategory - Preparing SQL: " . $sql); // ADDED LOG
-        // $logger->info('Preparing SQL query for findByCategory.', ['sql' => $sql]);
+        $logger->info('Preparing SQL query for findByCategory.', ['sql' => $sql]);
 
-        try { // Wrap prepare, bind, execute in try-catch
-            $stmt = $this->db->prepare($sql);
-            error_log("[DEBUG] Product::findByCategory - SQL prepared."); // ADDED LOG
+        $stmt = $this->db->prepare($sql);
 
-            // Bind each category ID to the prepared statement placeholders
-            $paramIndex = 1; // PDO placeholders are 1-indexed when using ?
-            error_log("[DEBUG] Product::findByCategory - Binding parameters: " . implode(', ', $allCategoryIds)); // ADDED LOG
-            foreach ($allCategoryIds as $id) {
-                $stmt->bindValue($paramIndex++, $id, PDO::PARAM_INT);
-            }
-            // $logger->info('Binding parameters for findByCategory.', ['bound_category_ids' => $allCategoryIds]);
+        // Bind each category ID to the prepared statement placeholders
+        $paramIndex = 1; // PDO placeholders are 1-indexed when using ?
+        foreach ($allCategoryIds as $id) {
+            $stmt->bindValue($paramIndex++, $id, PDO::PARAM_INT);
+        }
+        $logger->info('Binding parameters for findByCategory.', ['bound_category_ids' => $allCategoryIds]);
 
-            // Execute the query and fetch results
-            error_log("[DEBUG] Product::findByCategory - Executing query."); // ADDED LOG
+        // Execute the query and fetch results
+        try {
             $stmt->execute();
-            error_log("[DEBUG] Product::findByCategory - Query executed. Fetching results."); // ADDED LOG
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            error_log("[DEBUG] Product::findByCategory - Fetched " . count($results) . " products."); // ADDED LOG
-            // $logger->info('Fetched products by category.', ['results_count' => count($results), 'categoryIds' => $allCategoryIds]);
+            $logger->info('Fetched products by category.', ['results_count' => count($results), 'categoryIds' => $allCategoryIds]);
             return $results;
         } catch (\PDOException $e) {
-            error_log("[ERROR] Product::findByCategory - PDOException during query execution: " . $e->getMessage() . "\nSQL: " . $sql . "\nParams: " . implode(', ', $allCategoryIds) . "\n" . $e->getTraceAsString()); // ADDED LOG
-            // $logger->error('Database error during findByCategory execution.', ['error' => $e->getMessage(), 'sql' => $sql, 'params' => $allCategoryIds]);
+            $logger->error('Database error during findByCategory execution.', ['error' => $e->getMessage(), 'sql' => $sql, 'params' => $allCategoryIds]);
             return []; // Return empty array on error
-        } catch (\Throwable $t) {
-             error_log("[ERROR] Product::findByCategory - Throwable during query execution: " . $t->getMessage() . "\n" . $t->getTraceAsString()); // ADDED LOG
-             throw $t; // Re-throw other errors
         }
     }
 
@@ -227,8 +209,7 @@ class Product
             return $stmt->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_UNIQUE);
         } catch (\PDOException $e) {
             // Log the error appropriately
-            // Registry::get('logger')->error("Error fetching multiple products by ID", ['exception' => $e, 'ids' => $ids]); // Use error_log for now
-            error_log("[ERROR] Product::findMultipleByIds - PDOException: " . $e->getMessage() . "\nIDs: " . implode(', ', $ids)); // ADDED LOG
+            Registry::get('logger')->error("Error fetching multiple products by ID", ['exception' => $e, 'ids' => $ids]);
             // error_log("Error fetching multiple products by ID: " . $e->getMessage()); // Keep original logging if desired
             return []; // Return empty array on error
         }
@@ -329,13 +310,12 @@ class Product
                 'pagination' => $pagination
             ];
         } catch (\PDOException $e) {
-            // Registry::get('logger')->error("Error fetching paginated products", [ // Use error_log for now
-            error_log("[ERROR] Product::getAllProductsPaginated - PDOException: " . $e->getMessage()); // ADDED LOG
-            //     'exception' => $e,
-            //     'page' => $page,
-            //     'perPage' => $perPage,
-            //     'filters' => $filters
-            // ]);
+            Registry::get('logger')->error("Error fetching paginated products", [
+                'exception' => $e,
+                'page' => $page,
+                'perPage' => $perPage,
+                'filters' => $filters
+            ]);
             // Return empty structure on error
             return [
                 'products' => [],
@@ -380,8 +360,7 @@ class Product
             ]);
             return (int) $this->db->lastInsertId(); // Return the new product ID
         } catch (\PDOException $e) {
-            // Registry::get('logger')->error("Error creating product", ['exception' => $e, 'data' => $data]); // Use error_log for now
-            error_log("[ERROR] Product::createProduct - PDOException: " . $e->getMessage()); // ADDED LOG
+            Registry::get('logger')->error("Error creating product", ['exception' => $e, 'data' => $data]);
             // error_log("Error creating product: " . $e->getMessage()); // Keep if needed
             return false;
         }
@@ -419,8 +398,7 @@ class Product
             // Return true only if execute succeeded AND at least one row was changed
             return $result && $stmt->rowCount() > 0;
         } catch (\PDOException $e) {
-            // Registry::get('logger')->error("Error updating product", ['exception' => $e, 'product_id' => $id, 'data' => $data]); // Use error_log for now
-            error_log("[ERROR] Product::updateProduct - PDOException: " . $e->getMessage()); // ADDED LOG
+            Registry::get('logger')->error("Error updating product", ['exception' => $e, 'product_id' => $id, 'data' => $data]);
             // error_log("Error updating product: " . $e->getMessage()); // Keep if needed
             return false;
         }
@@ -444,8 +422,7 @@ class Product
             // Ensure the query executed and exactly one row was affected
             return $result && $stmt->rowCount() > 0;
         } catch (\PDOException $e) {
-            // Registry::get('logger')->error("Error toggling product status", ['exception' => $e, 'product_id' => $id]); // Use error_log for now
-            error_log("[ERROR] Product::toggleProductActiveStatus - PDOException: " . $e->getMessage()); // ADDED LOG
+            Registry::get('logger')->error("Error toggling product status", ['exception' => $e, 'product_id' => $id]);
             // error_log("Error toggling product status: " . $e->getMessage()); // Keep if needed
             return false;
         }
@@ -468,8 +445,7 @@ class Product
             $stmt->execute();
             return (int) $stmt->fetchColumn();
         } catch (\PDOException $e) {
-            // Registry::get('logger')->error("Error counting low stock products", ['exception' => $e, 'threshold' => $threshold]); // Use error_log for now
-            error_log("[ERROR] Product::getLowStockProductCount - PDOException: " . $e->getMessage()); // ADDED LOG
+            Registry::get('logger')->error("Error counting low stock products", ['exception' => $e, 'threshold' => $threshold]);
             // error_log("Error counting low stock products: " . $e->getMessage()); // Keep if needed
             return 0; // Return 0 on error
         }
@@ -486,8 +462,7 @@ class Product
             $stmt = $this->db->query("SELECT COUNT(*) FROM products");
             return (int) $stmt->fetchColumn();
         } catch (\PDOException $e) {
-            // Registry::get('logger')->error("Error counting total products", ['exception' => $e]); // Use error_log for now
-            error_log("[ERROR] Product::getTotalProductCount - PDOException: " . $e->getMessage()); // ADDED LOG
+            Registry::get('logger')->error("Error counting total products", ['exception' => $e]);
             return 0; // Return 0 on error
         }
     }

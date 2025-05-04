@@ -21,7 +21,7 @@ Expected PHP Variables:
     <h2>Add New Category</h2>
     <!-- Action Button: Link back to the category list -->
     <div class="admin-content-actions">
-        <a href="<?= BASE_URL ?>admin/categories" class="btn btn-secondary">
+        <a href="/admin/categories" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to Categories
         </a>
     </div>
@@ -32,23 +32,23 @@ Expected PHP Variables:
 <?php // Display single general error message if set 
 ?>
 <?php if (isset($_SESSION['flash_error'])): ?>
-<div class="alert alert-danger">
-    <?php echo htmlspecialchars($_SESSION['flash_error']); // Escape output 
+    <div class="alert alert-danger">
+        <?php echo htmlspecialchars($_SESSION['flash_error']); // Escape output 
         ?>
-</div>
+    </div>
 <?php endif; ?>
 
 <?php // Display multiple validation error messages if set 
 ?>
 <?php if (isset($_SESSION['flash_errors']) && is_array($_SESSION['flash_errors'])): ?>
-<div class="alert alert-danger">
-    <ul class="mb-0">
-        <?php foreach ($_SESSION['flash_errors'] as $error): ?>
-        <li><?php echo htmlspecialchars($error); // Escape each error 
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            <?php foreach ($_SESSION['flash_errors'] as $error): ?>
+                <li><?php echo htmlspecialchars($error); // Escape each error 
                     ?></li>
-        <?php endforeach; ?>
-    </ul>
-</div>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 <?php endif; ?>
 <!-- /Flash Messages Area -->
 
@@ -56,7 +56,7 @@ Expected PHP Variables:
 <div class="card">
     <div class="card-body">
         <!-- Form submits to the category creation endpoint -->
-        <form action="<?= BASE_URL ?>admin/categories" method="POST">
+        <form action="/admin/categories" method="POST">
             <!-- CSRF Token: Essential for security -->
             <input type="hidden" name="csrf_token" value="<?php echo $csrf_token; ?>">
 
@@ -79,12 +79,12 @@ Expected PHP Variables:
                     <?php // Populate dropdown with existing categories 
                     ?>
                     <?php foreach ($categories as $category): ?>
-                    <option value="<?php echo $category['id']; ?>"
-                        <?php // Select the old parent ID if available
+                        <option value="<?php echo $category['id']; ?>"
+                            <?php // Select the old parent ID if available
                             echo (isset($_SESSION['flash_old']['parent_id']) && $_SESSION['flash_old']['parent_id'] == $category['id']) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($category['category_name']); // Display category name (escaped) 
+                            <?php echo htmlspecialchars($category['category_name']); // Display category name (escaped) 
                             ?>
-                    </option>
+                        </option>
                     <?php endforeach; ?>
                 </select>
                 <small class="form-text text-muted">Select a parent category if this is a subcategory, or leave as
@@ -98,7 +98,7 @@ Expected PHP Variables:
                     <i class="fas fa-save"></i> Save Category
                 </button>
                 <!-- Cancel button links back to the category list -->
-                <a href="<?= BASE_URL ?>admin/categories" class="btn btn-outline-secondary">Cancel</a>
+                <a href="/admin/categories" class="btn btn-outline-secondary">Cancel</a>
             </div>
             <!-- /Form Action Buttons -->
         </form>
@@ -108,43 +108,43 @@ Expected PHP Variables:
 
 <!-- Embedded CSS for View-Specific Styling -->
 <style>
-/* Body */
-body {
-    margin: 0;
-    padding: 0;
-}
+    /* Body */
+    body {
+        margin: 0;
+        padding: 0;
+    }
 
-/* Header styling: Title on left, Actions on right */
-.admin-content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-}
+    /* Header styling: Title on left, Actions on right */
+    .admin-content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
 
-/* Card styling for the form container */
-.card {
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
+    /* Card styling for the form container */
+    .card {
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
 
-.card-body {
-    padding: 1.5rem;
-}
+    .card-body {
+        padding: 1.5rem;
+    }
 
-/* Form label styling */
-.form-label {
-    font-weight: 500;
-}
+    /* Form label styling */
+    .form-label {
+        font-weight: 500;
+    }
 
-/* Style for required field indicator */
-.text-danger {
-    color: #dc3545;
-}
+    /* Style for required field indicator */
+    .text-danger {
+        color: #dc3545;
+    }
 
-/* Style for helper text below form fields */
-.form-text {
-    color: #6c757d;
-    font-size: 0.875rem;
-}
+    /* Style for helper text below form fields */
+    .form-text {
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
 </style>

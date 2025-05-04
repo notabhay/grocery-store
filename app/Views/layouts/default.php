@@ -1,7 +1,3 @@
-<?php
-
-use App\Core\Registry;
-?>
 <!--
  * Default Layout File
  *
@@ -42,13 +38,13 @@ use App\Core\Registry;
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Main application stylesheet -->
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
 
     <?php
     // Conditionally include additional CSS files if specified by the controller
     if (!empty($additional_css_files) && is_array($additional_css_files)):
         foreach ($additional_css_files as $css_file): ?>
-    <link rel="stylesheet" href="<?= BASE_URL ?><?php echo htmlspecialchars($css_file); ?>">
+            <link rel="stylesheet" href="<?php echo htmlspecialchars($css_file); ?>">
     <?php endforeach;
     endif;
     ?>
@@ -119,21 +115,6 @@ use App\Core\Registry;
             </div>
         </div>
     </div>
-
-    <!-- Pass BASE_URL to JavaScript -->
-    <script>
-    <?php
-        // Calculate the base path for JS, removing /public/ if present
-        $jsBaseUrl = BASE_URL; // Start with the full BASE_URL from public/index.php
-        $publicSuffix = '/public/';
-        if (substr($jsBaseUrl, -strlen($publicSuffix)) === $publicSuffix) {
-            $jsBaseUrl = substr($jsBaseUrl, 0, -strlen($publicSuffix)); // Remove /public/
-        }
-        // Ensure it ends with a slash for easy concatenation in JS
-        $jsBaseUrl = rtrim($jsBaseUrl, '/') . '/';
-        ?>
-    window.baseUrl = '<?= $jsBaseUrl ?>';
-    </script>
 
     <!-- Note: Global JavaScript files are likely included within navigation.php or header.php -->
     <!-- Specific page JS might be included via $additional_js_files in navigation.php -->

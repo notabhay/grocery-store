@@ -44,7 +44,6 @@ $router = new Router();
 
 // --- Public Page Routes ---
 $router->get('', [PageController::class, 'index']); // Homepage
-$router->get('public', [PageController::class, 'index']); // Handle direct access to public directory
 $router->get('about', [PageController::class, 'about']); // About page
 $router->get('contact', [PageController::class, 'contact']); // Contact page view
 $router->post('contact/submit', [PageController::class, 'submitContact']); // Contact form submission
@@ -80,7 +79,7 @@ $router->get('captcha', [CaptchaController::class, 'generate']); // Generate and
 // --- AJAX Routes ---
 $router->post('ajax/check-email', [UserController::class, 'checkEmail']); // Check if an email is already registered (used during registration)
 $router->get('ajax/products-by-category', [ProductController::class, 'getSubcategoriesAjax']); // Get subcategories/products for filtering (likely needs review/rename)
-$router->get('get_data/subcategories', [ProductController::class, 'ajaxGetSubcategories']); // Get subcategories based on a parent category ID
+$router->get('ajax/subcategories', [ProductController::class, 'ajaxGetSubcategories']); // Get subcategories based on a parent category ID
 
 // --- Cart API Routes (Typically called via JavaScript/AJAX) ---
 $router->post('api/cart/add', [CartApiController::class, 'add']); // Add an item to the cart

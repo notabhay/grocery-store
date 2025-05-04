@@ -83,26 +83,10 @@ class Category
      */
     public function getSubcategoriesByParentId(int $parentId): array
     {
-        error_log("[DEBUG] Category::getSubcategoriesByParentId - Entered method. Parent ID: " . $parentId); // ADDED LOG
-        try {
-            $sql = "SELECT * FROM categories WHERE parent_id = :parentId ORDER BY category_name ASC";
-            error_log("[DEBUG] Category::getSubcategoriesByParentId - Preparing SQL: " . $sql); // ADDED LOG
-            $stmt = $this->db->prepare($sql);
-            error_log("[DEBUG] Category::getSubcategoriesByParentId - Binding parentId: " . $parentId); // ADDED LOG
-            $stmt->bindParam(':parentId', $parentId, PDO::PARAM_INT);
-            error_log("[DEBUG] Category::getSubcategoriesByParentId - Executing query."); // ADDED LOG
-            $stmt->execute();
-            error_log("[DEBUG] Category::getSubcategoriesByParentId - Query executed. Fetching results."); // ADDED LOG
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            error_log("[DEBUG] Category::getSubcategoriesByParentId - Fetched " . count($results) . " subcategories."); // ADDED LOG
-            return $results;
-        } catch (\PDOException $e) {
-             error_log("[ERROR] Category::getSubcategoriesByParentId - PDOException: " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED LOG
-             throw $e; // Re-throw the exception to be caught by the controller
-        } catch (\Throwable $t) {
-             error_log("[ERROR] Category::getSubcategoriesByParentId - Throwable: " . $t->getMessage() . "\n" . $t->getTraceAsString()); // ADDED LOG
-             throw $t; // Re-throw
-        }
+        $stmt = $this->db->prepare("SELECT * FROM categories WHERE parent_id = :parentId ORDER BY category_name ASC");
+        $stmt->bindParam(':parentId', $parentId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -158,7 +142,7 @@ class Category
      *                    Expected keys: 'name' (string, required), 'parent_id' (int|null, optional).
      * @return int|bool The ID of the newly created category on success, or false on failure.
      */
-    public function createCategory(array $data) // Removed unsupported PHP 8 union type hint ": int|bool"
+    public function createCategory(array $data): int|bool
     {
         $stmt = $this->db->prepare("
             INSERT INTO categories (category_name, parent_id)
