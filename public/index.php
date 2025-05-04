@@ -107,32 +107,52 @@ SecurityHelper::setSecurityHeaders();
 // Bind the loaded configuration array to the Registry.
 // Makes configuration accessible throughout the application via Registry::get('config').
 Registry::bind('config', $config);
+error_log("[DEBUG] index.php - Config bound to Registry."); // ADDED DEBUG LOG
 
 // --- Core Services Initialization (Dependency Injection Setup) ---
+error_log("[DEBUG] index.php - Entering Core Services Initialization block."); // ADDED DEBUG LOG
 // This block sets up essential services and binds them to the Registry.
 // It's wrapped in a try-catch to handle critical initialization errors.
 try {
+    error_log("[DEBUG] index.php - Inside try block for Core Services."); // ADDED DEBUG LOG
     // --- Logger Setup ---
+    error_log("[DEBUG] index.php - Starting Logger Setup."); // ADDED DEBUG LOG
     // Define the path for the application log file.
     $logFilePath = BASE_PATH . '/logs/app.log';
+    error_log("[DEBUG] index.php - Log file path: " . $logFilePath); // ADDED DEBUG LOG
     // Get the directory path for the log file.
     $logDir = dirname($logFilePath);
+    error_log("[DEBUG] index.php - Log directory path: " . $logDir); // ADDED DEBUG LOG
     // Create the log directory if it doesn't exist.
     if (!is_dir($logDir)) {
+        error_log("[DEBUG] index.php - Log directory does not exist. Attempting mkdir."); // ADDED DEBUG LOG
         // Recursively create the directory with appropriate permissions (0775).
-        mkdir($logDir, 0775, true);
+        if (!mkdir($logDir, 0775, true) && !is_dir($logDir)) { // Check again after attempt
+             error_log("[FATAL] index.php - Failed to create log directory: " . $logDir);
+             throw new \RuntimeException(sprintf('Directory "%s" was not created', $logDir));
+        }
+         error_log("[DEBUG] index.php - mkdir finished or directory already exists."); // ADDED DEBUG LOG
+    } else {
+         error_log("[DEBUG] index.php - Log directory already exists."); // ADDED DEBUG LOG
     }
     // Instantiate the Logger. 'app' is the channel name.
     $logger = new Logger('app');
+    error_log("[DEBUG] index.php - Logger instantiated."); // ADDED DEBUG LOG
     // Determine the minimum logging level based on the debug mode setting in config.
     // Log everything (Debug level) if DEBUG_MODE is true, otherwise log Warnings and above.
     $logLevel = ($config['DEBUG_MODE'] ?? false) ? Logger::DEBUG : Logger::WARNING;
+    error_log("[DEBUG] index.php - Log level determined: " . $logLevel); // ADDED DEBUG LOG
     // Add a handler to write log records to the specified file with the determined level.
-    $logger->pushHandler(new StreamHandler($logFilePath, $logLevel));
+    $streamHandler = new StreamHandler($logFilePath, $logLevel);
+    error_log("[DEBUG] index.php - StreamHandler instantiated."); // ADDED DEBUG LOG
+    $logger->pushHandler($streamHandler);
+    error_log("[DEBUG] index.php - StreamHandler pushed to Logger."); // ADDED DEBUG LOG
     // Bind the logger instance to the Registry.
     Registry::bind('logger', $logger);
+    error_log("[DEBUG] index.php - Logger bound to Registry. Logger setup complete."); // ADDED DEBUG LOG
 
     // --- Database Setup ---
+    error_log("[DEBUG] index.php - Starting Database Setup."); // ADDED DEBUG LOG
     // Instantiate the Database connection handler using credentials from the config.
     $db = new Database(
         $config['DB_HOST'],
@@ -140,11 +160,16 @@ try {
         $config['DB_USER'],
         $config['DB_PASS']
     );
+    error_log("[DEBUG] index.php - Database wrapper instantiated."); // ADDED DEBUG LOG
     // Check if the database connection was successful.
-    if ($db->getConnection()) {
+    $pdoConnection = $db->getConnection(); // Attempt connection
+    error_log("[DEBUG] index.php - Attempted DB connection. Result: " . ($pdoConnection ? 'OK' : 'FAILED')); // ADDED DEBUG LOG
+    if ($pdoConnection) {
         // Bind the database instance to the Registry if connection is successful.
         Registry::bind('database', $db);
+        error_log("[DEBUG] index.php - Database bound to Registry."); // ADDED DEBUG LOG
     } else {
+        error_log("[FATAL] index.php - Database connection failed."); // ADDED ERROR LOG
         // Handle database connection failure gracefully.
         $errorMessage = "Database Connection Error: Sorry, we couldn't connect to the database. Please try again later.";
         // Log the critical error using the logger if available.
@@ -167,7 +192,9 @@ try {
         exit;
     }
 
+    error_log("[DEBUG] index.php - Database setup complete."); // ADDED DEBUG LOG
     // --- Session Setup ---
+    error_log("[DEBUG] index.php - Starting Session Setup."); // ADDED DEBUG LOG
     // Prepare session configuration options.
     $sessionConfig = [
         // Set session inactivity timeout from config (default: 1800 seconds / 30 minutes).
@@ -175,21 +202,31 @@ try {
     ];
     // Instantiate the Session manager with the configuration.
     $session = new Session($sessionConfig);
+    error_log("[DEBUG] index.php - Session instantiated."); // ADDED DEBUG LOG
     // Bind the session instance to the Registry.
     Registry::bind('session', $session);
+    error_log("[DEBUG] index.php - Session bound to Registry. Session setup complete."); // ADDED DEBUG LOG
 
     // --- CAPTCHA Helper Setup ---
+    error_log("[DEBUG] index.php - Starting CaptchaHelper Setup."); // ADDED DEBUG LOG
     // Instantiate the CaptchaHelper, passing the session instance for storing CAPTCHA codes.
     $captchaHelper = new CaptchaHelper($session);
+    error_log("[DEBUG] index.php - CaptchaHelper instantiated."); // ADDED DEBUG LOG
     // Bind the CaptchaHelper instance to the Registry.
     Registry::bind('captchaHelper', $captchaHelper);
+    error_log("[DEBUG] index.php - CaptchaHelper bound to Registry. Captcha setup complete."); // ADDED DEBUG LOG
 
     // --- Request Object Setup ---
+    error_log("[DEBUG] index.php - Starting Request Setup."); // ADDED DEBUG LOG
     // Instantiate the Request object, which encapsulates the current HTTP request data (URI, method, POST/GET data).
     $request = new Request();
+    error_log("[DEBUG] index.php - Request instantiated."); // ADDED DEBUG LOG
     // Bind the Request instance to the Registry.
     Registry::bind('request', $request);
-} catch (\Exception $e) {
+    error_log("[DEBUG] index.php - Request bound to Registry. Request setup complete."); // ADDED DEBUG LOG
+    error_log("[DEBUG] index.php - Exiting try block for Core Services successfully."); // ADDED DEBUG LOG
+} catch (\Throwable $e) { // Catch Throwable
+    error_log("[FATAL] index.php - Exception during Core Services Initialization: " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED ERROR LOG
     // --- Bootstrap Error Handling ---
     // Catch any exceptions that occur during the core service initialization phase.
     $errorMessage = "Bootstrap Error (DI Setup): " . $e->getMessage();
@@ -213,13 +250,19 @@ try {
     exit;
 }
 
+error_log("[DEBUG] index.php - Exited Core Services Initialization block."); // ADDED DEBUG LOG
 // --- Session Start & Validation ---
+error_log("[DEBUG] index.php - Starting Session Start & Validation."); // ADDED DEBUG LOG
 
 // Explicitly start or resume the session.
 // This must happen after core services (like the logger) are potentially available.
-if (!$session->start()) {
+error_log("[DEBUG] index.php - Calling session->start()."); // ADDED DEBUG LOG
+$sessionStartResult = $session->start();
+error_log("[DEBUG] index.php - session->start() returned: " . ($sessionStartResult ? 'true' : 'false')); // ADDED DEBUG LOG
+if (!$sessionStartResult) {
     // Log a critical error if the session fails to start.
-    Registry::get('logger')->critical("Failed to start session.");
+    // Registry::get('logger')->critical("Failed to start session."); // Logger might not be reliable if session failed
+    error_log("[FATAL] index.php - Failed to start session."); // ADDED ERROR LOG
     // Set a 500 Internal Server Error HTTP status code.
     http_response_code(500);
     // Display an error message.
@@ -228,19 +271,28 @@ if (!$session->start()) {
     exit;
 }
 
+error_log("[DEBUG] index.php - Session started successfully."); // ADDED DEBUG LOG
 // Validate the user's session activity (e.g., check for timeout).
 // This might regenerate the session ID or log the user out if inactive for too long.
+error_log("[DEBUG] index.php - Calling session->validateActivity()."); // ADDED DEBUG LOG
 $session->validateActivity();
+error_log("[DEBUG] index.php - session->validateActivity() completed."); // ADDED DEBUG LOG
+error_log("[DEBUG] index.php - Session Start & Validation complete."); // ADDED DEBUG LOG
 
 // --- Routing and Request Dispatching ---
 // This block handles the incoming request by routing it to the correct controller action.
+error_log("[DEBUG] index.php - Entering Routing and Request Dispatching block."); // ADDED DEBUG LOG
 try {
+    error_log("[DEBUG] index.php - Loading routes from " . BASE_PATH . '/app/routes.php'); // ADDED DEBUG LOG
     // Load the defined application routes from the routes file.
+    $router = Router::load(BASE_PATH . '/app/routes.php');
+    error_log("[DEBUG] index.php - Routes loaded. Calling router->direct()."); // ADDED DEBUG LOG
     // Then, direct the router to find a match for the current request URI and method.
     // The router will instantiate the controller and call the appropriate method.
-    Router::load(BASE_PATH . '/app/routes.php')
-        ->direct($request->uri(), $request->method());
-} catch (\Exception $e) {
+    $router->direct($request->uri(), $request->method());
+    error_log("[DEBUG] index.php - router->direct() completed successfully."); // ADDED DEBUG LOG
+} catch (\Throwable $e) { // Catch Throwable
+    error_log("[FATAL] index.php - Exception during Routing/Dispatching: " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED ERROR LOG
     // --- General Exception Handling ---
     // Catch any unhandled exceptions that occur during routing or controller execution.
     $logger = Registry::get('logger'); // Get the logger instance.
