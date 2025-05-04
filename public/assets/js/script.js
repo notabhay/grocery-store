@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Fetch sub-categories from the server
-        fetch(`${window.baseUrl}ajax/subcategories?parentId=${encodeURIComponent(categoryId)}`)
+        fetch(`${window.baseUrl}get_data/subcategories?parentId=${encodeURIComponent(categoryId)}`)
             .then(response => {
                 // Check for HTTP errors
                 if (!response.ok) {
