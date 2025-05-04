@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+</head>
+<body>
+    <h1>API Test</h1>
+    <button id="test-api">Test API</button>
+    <button id="test-api-direct">Test API Direct</button>
+    <button id="test-cart-count">Test Cart Count</button>
+    <button id="test-direct-cart-count">Test Direct Cart Count</button>
+    <pre id="result"></pre>
+
+    <script>
+        document.getElementById('test-api').addEventListener('click', async () => {
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = 'Fetching...';
+            
+            try {
+                const response = await fetch('api-test.php');
+                const contentType = response.headers.get("content-type");
+                
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    const data = await response.json();
+                    resultElement.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    const text = await response.text();
+                    resultElement.textContent = `Expected JSON, got: ${text}`;
+                }
+            } catch (error) {
+                resultElement.textContent = `Error: ${error.message}`;
+            }
+        });
+
+        document.getElementById('test-api-direct').addEventListener('click', async () => {
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = 'Fetching directly...';
+            
+            try {
+                // Use the full path to the API test file
+                const response = await fetch('https://teach.scam.keele.ac.uk/prin/y1d13/advanced-web-technologies/grocery-store/public/api-test.php');
+                const contentType = response.headers.get("content-type");
+                
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    const data = await response.json();
+                    resultElement.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    const text = await response.text();
+                    resultElement.textContent = `Expected JSON, got: ${text}`;
+                }
+            } catch (error) {
+                resultElement.textContent = `Error: ${error.message}`;
+            }
+        });
+
+        document.getElementById('test-cart-count').addEventListener('click', async () => {
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = 'Fetching cart count...';
+            
+            try {
+                // Try both with and without trailing slash
+                const baseUrl = 'https://teach.scam.keele.ac.uk/prin/y1d13/advanced-web-technologies/grocery-store';
+                const response = await fetch(`${baseUrl}/api/cart/count`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                resultElement.textContent += `\nStatus: ${response.status}`;
+                
+                const contentType = response.headers.get("content-type");
+                resultElement.textContent += `\nContent-Type: ${contentType}`;
+                
+                const text = await response.text();
+                resultElement.textContent += `\nResponse: ${text.substring(0, 500)}...`;
+            } catch (error) {
+                resultElement.textContent += `\nError: ${error.message}`;
+            }
+        });
+
+        document.getElementById('test-direct-cart-count').addEventListener('click', async () => {
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = 'Fetching direct cart count test...';
+            
+            try {
+                // Use the full path to the direct cart count test file
+                const response = await fetch('https://teach.scam.keele.ac.uk/prin/y1d13/advanced-web-technologies/grocery-store/public/api/cart-count-test.php');
+                const contentType = response.headers.get("content-type");
+                
+                resultElement.textContent += `\nStatus: ${response.status}`;
+                resultElement.textContent += `\nContent-Type: ${contentType}`;
+                
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    const data = await response.json();
+                    resultElement.textContent += `\nJSON Response: ${JSON.stringify(data, null, 2)}`;
+                } else {
+                    const text = await response.text();
+                    resultElement.textContent += `\nText Response: ${text.substring(0, 500)}...`;
+                }
+            } catch (error) {
+                resultElement.textContent += `\nError: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Count API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cart Count API Test</h1>
+    <p>This page tests different URL formats for the cart count API to help diagnose the issue.</p>
+    
+    <div>
+        <button id="test1">Test 1: Original URL</button>
+        <button id="test2">Test 2: With Slash</button>
+        <button id="test3">Test 3: Public in URL</button>
+        <button id="test4">Test 4: Direct PHP</button>
+        <button id="test5">Test 5: Direct Cart Count</button>
+    </div>
+    
+    <pre id="result">Click a button to run a test...</pre>
+    
+    <script src="cart-count-test.js"></script>
+</body>
+</html>

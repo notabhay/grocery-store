@@ -813,7 +813,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         // Send request to update cart API endpoint
-        fetch(`${window.baseUrl}/api/cart/update`, {
+        fetch(window.baseUrl + 'api/cart/update', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1057,10 +1057,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         try {
             // Log the exact URL being requested
-            console.log('Attempting to fetch cart count from URL:', `${window.baseUrl}/api/cart/count`);
+            console.log('Attempting to fetch cart count from URL:', `${window.baseUrl}api/cart/count`);
 
             // Fetch count from API
-            const response = await fetch(`${window.baseUrl}/api/cart/count`, {
+            const response = await fetch(`${window.baseUrl}api/cart/count`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'

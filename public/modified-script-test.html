@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modified Script Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .cart-badge {
+            display: inline-block;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        .visible {
+            display: inline-block;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Modified Script Test</h1>
+    <p>This page tests the modified script.js file that uses the direct cart count endpoint.</p>
+    
+    <div>
+        <button id="update-badge">Update Cart Badge</button>
+        <span>Cart <span id="cart-count-badge" class="cart-badge hidden">0</span></span>
+    </div>
+    
+    <pre id="result">Click the button to update the cart badge...</pre>
+    
+    <script>
+        // Set the base URL
+        window.baseUrl = 'https://teach.scam.keele.ac.uk/prin/y1d13/advanced-web-technologies/grocery-store/';
+        
+        // Get elements
+        const resultElement = document.getElementById('result');
+        const cartCountBadge = document.getElementById('cart-count-badge');
+        
+        // Modified fetchCartCount function from script-modified.js
+        async function fetchCartCount() {
+            resultElement.textContent = 'Fetching cart count...';
+            
+            // If badge element doesn't exist, no need to fetch
+            if (!cartCountBadge) {
+                return 0;
+            }
+            try {
+                // Log the exact URL being requested - using the direct endpoint
+                const directEndpointUrl = `${window.baseUrl}direct-cart-count.php`;
+                console.log('Attempting to fetch cart count from direct URL:', directEndpointUrl);
+                resultElement.textContent += `\nURL: ${directEndpointUrl}`;
+
+                // Fetch count from direct API endpoint
+                const response = await fetch(directEndpointUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                resultElement.textContent += `\nStatus: ${response.status}`;
+                
+                // Handle HTTP errors
+                if (!response.ok) {
+                    const errorText = await response.text().catch(() => 'Could not read error response body');
+                    resultElement.textContent += `\nError: ${errorText}`;
+                    throw new Error(`HTTP error! status: ${response.status}. ${errorText}`);
+                }
+                
+                // Check content type and parse JSON
+                const contentType = response.headers.get("content-type");
+                resultElement.textContent += `\nContent-Type: ${contentType}`;
+                
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    const text = await response.text();
+                    resultElement.textContent += `\nResponse: ${text}`;
+                    
+                    try {
+                        const data = JSON.parse(text);
+                        resultElement.textContent += `\nParsed JSON: ${JSON.stringify(data, null, 2)}`;
+                        
+                        // Validate the count received
+                        if (data && typeof data.count === 'number' && data.count >= 0) {
+                            return data.count;
+                        } else {
+                            console.error('Invalid cart count data format or negative count received:', data);
+                            resultElement.textContent += `\nInvalid cart count data format or negative count received.`;
+                            return 0; // Return 0 for invalid data
+                        }
+                    } catch (e) {
+                        resultElement.textContent += `\nFailed to parse JSON: ${e.message}`;
+                        return 0;
+                    }
+                } else {
+                    // Handle non-JSON responses
+                    const text = await response.text();
+                    resultElement.textContent += `\nNon-JSON response: ${text.substring(0, 500)}...`;
+                    throw new Error("Expected JSON response for cart count, got non-JSON: " + text);
+                }
+            } catch (error) {
+                // Handle fetch errors
+                console.error('Error fetching cart count:', error);
+                resultElement.textContent += `\nError: ${error.message}`;
+                return 0; // Return 0 on error
+            }
+        }
+        
+        // Update cart badge function
+        async function updateCartBadge() {
+            const count = await fetchCartCount();
+            resultElement.textContent += `\nCart count: ${count}`;
+            
+            if (count > 0) {
+                // If count is positive, show badge and set text
+                cartCountBadge.textContent = count;
+                cartCountBadge.classList.remove('hidden');
+                cartCountBadge.classList.add('visible');
+            } else {
+                // If count is 0 or less, hide badge and clear text
+                cartCountBadge.textContent = '';
+                cartCountBadge.classList.remove('visible');
+                cartCountBadge.classList.add('hidden');
+            }
+        }
+        
+        // Add event listener to the button
+        document.getElementById('update-badge').addEventListener('click', updateCartBadge);
+    </script>
+</body>
+</html>

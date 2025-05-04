@@ -1,0 +1,27 @@
+# API Directory .htaccess
+# This file attempts to fix the routing issue for API endpoints
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Set content type for all responses from this directory to JSON
+    <FilesMatch "\.php$">
+        Header set Content-Type "application/json"
+    </FilesMatch>
+    
+    # Prevent direct access to PHP files except for our test files
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteCond %{REQUEST_FILENAME} \.php$
+    RewriteCond %{REQUEST_FILENAME} !cart-count-test\.php$
+    RewriteRule ^ - [F]
+    
+    # If the request is for a directory that doesn't exist
+    RewriteCond %{REQUEST_FILENAME} !-d
+    # And the request is for a file that doesn't exist
+    RewriteCond %{REQUEST_FILENAME} !-f
+    # Route through the main index.php
+    RewriteRule ^ ../index.php [L]
+</IfModule>
+
+# Disable directory listing
+Options -Indexes
