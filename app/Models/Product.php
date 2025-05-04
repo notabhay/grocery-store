@@ -39,6 +39,12 @@ class Product
         } else {
             throw new \InvalidArgumentException("Invalid database connection provided.");
         }
+// --- BEGIN DEBUG CHECK ---
+        if (!($this->db instanceof PDO)) {
+            $type = is_object($this->db) ? get_class($this->db) : gettype($this->db);
+            die("FATAL ERROR in Product::__construct: Expected PDO instance, but received type: " . $type);
+        }
+        // --- END DEBUG CHECK ---
     }
 
     /**
