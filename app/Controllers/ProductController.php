@@ -59,21 +59,42 @@ class ProductController extends BaseController
      */
     public function __construct()
     {
-        $this->db = Registry::get('database');
-        $this->session = Registry::get('session');
-        $this->request = Registry::get('request');
-        $this->logger = Registry::get('logger');
-        $pdoConnection = $this->db->getConnection(); // Get the actual PDO connection
+        error_log("[DEBUG] ProductController::__construct - Entered constructor."); // ADDED DEBUG LOG
+        try { // Wrap constructor
+            $this->db = Registry::get('database');
+            error_log("[DEBUG] ProductController::__construct - Got database wrapper."); // ADDED DEBUG LOG
+            $this->session = Registry::get('session');
+            error_log("[DEBUG] ProductController::__construct - Got session."); // ADDED DEBUG LOG
+            $this->request = Registry::get('request');
+            error_log("[DEBUG] ProductController::__construct - Got request."); // ADDED DEBUG LOG
+            $this->logger = Registry::get('logger');
+            error_log("[DEBUG] ProductController::__construct - Got logger."); // ADDED DEBUG LOG
 
-        // Ensure PDO connection is valid before instantiating models
-        if ($pdoConnection) {
-            $this->categoryModel = new Category($pdoConnection);
-            $this->productModel = new Product($pdoConnection);
-        } else {
-            // Log critical error and stop if DB connection failed
-            $this->logger->critical("Database connection not available for ProductController.");
-            throw new \RuntimeException("Database connection not available for ProductController.");
+            if (!$this->db || !$this->db instanceof \App\Core\Database) {
+                error_log("[FATAL] ProductController::__construct - Invalid Database object from Registry.");
+                throw new \RuntimeException("Invalid Database object retrieved from Registry.");
+            }
+
+            $pdoConnection = $this->db->getConnection(); // Get the actual PDO connection
+            error_log("[DEBUG] ProductController::__construct - Got PDO connection: " . ($pdoConnection ? 'OK' : 'FAILED')); // ADDED DEBUG LOG
+
+            // Ensure PDO connection is valid before instantiating models
+            if ($pdoConnection) {
+                $this->categoryModel = new Category($pdoConnection);
+                error_log("[DEBUG] ProductController::__construct - Instantiated Category model."); // ADDED DEBUG LOG
+                $this->productModel = new Product($pdoConnection);
+                error_log("[DEBUG] ProductController::__construct - Instantiated Product model."); // ADDED DEBUG LOG
+            } else {
+                // Log critical error and stop if DB connection failed
+                error_log("[FATAL] ProductController::__construct - PDO connection is invalid."); // Use error_log
+                // $this->logger->critical("Database connection not available for ProductController."); // Logger might not be ready if DB failed early
+                throw new \RuntimeException("Database connection not available for ProductController.");
+            }
+        } catch (\Throwable $e) {
+            error_log("[FATAL] ProductController::__construct - Exception during construction: " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED ERROR LOG
+            throw $e; // Re-throw
         }
+        error_log("[DEBUG] ProductController::__construct - Exiting constructor successfully."); // ADDED DEBUG LOG
     }
 
     /**
@@ -85,58 +106,83 @@ class ProductController extends BaseController
      */
     public function showCategories(): void
     {
+        error_log("[DEBUG] ProductController::showCategories - Entered method."); // ADDED DEBUG LOG
         $logged_in = $this->session->isAuthenticated(); // Check login status
+        error_log("[DEBUG] ProductController::showCategories - Login status: " . ($logged_in ? 'true' : 'false')); // ADDED DEBUG LOG
         $categories = [];
         $initialProducts = [];
         $activeFilterForView = null; // To highlight the active filter in the view
 
         try {
+            error_log("[DEBUG] ProductController::showCategories - Entering try block."); // ADDED DEBUG LOG
             // Fetch all top-level categories for display
+            error_log("[DEBUG] ProductController::showCategories - Calling categoryModel->getAllTopLevel()."); // ADDED DEBUG LOG
             $categories = $this->categoryModel->getAllTopLevel();
+            error_log("[DEBUG] ProductController::showCategories - Got categories: " . count($categories) . " items."); // ADDED DEBUG LOG
 
             // Check if a category filter is applied via query parameter (e.g., /categories?filter=Fruits+%26+Veggies)
             $categoryFilter = $this->request->get('filter'); // Get 'filter' query parameter
+            error_log("[DEBUG] ProductController::showCategories - Category filter from request: " . ($categoryFilter ?: 'None')); // ADDED DEBUG LOG
 
             if ($categoryFilter) {
-                $this->logger->info("Category filter applied", ['filter' => $categoryFilter]);
+                // $this->logger->info("Category filter applied", ['filter' => $categoryFilter]); // Use error_log for now
+                error_log("[DEBUG] ProductController::showCategories - Filter applied: " . $categoryFilter); // ADDED DEBUG LOG
                 $activeFilterForView = $categoryFilter; // Pass the filter name to the view
 
                 // Find the category ID corresponding to the filter name
+                error_log("[DEBUG] ProductController::showCategories - Calling getCategoryIdByName for filter: " . $categoryFilter); // ADDED DEBUG LOG
                 $categoryId = $this->getCategoryIdByName($categoryFilter);
+                error_log("[DEBUG] ProductController::showCategories - Category ID found: " . ($categoryId ?: 'None')); // ADDED DEBUG LOG
 
                 if ($categoryId) {
                     // Fetch products belonging to the specified category
+                    error_log("[DEBUG] ProductController::showCategories - Calling productModel->findByCategory for ID: " . $categoryId); // ADDED DEBUG LOG
                     $initialProducts = $this->productModel->findByCategory($categoryId);
+                    error_log("[DEBUG] ProductController::showCategories - Got filtered products: " . count($initialProducts) . " items."); // ADDED DEBUG LOG
                 } else {
                     // If category name doesn't match, log a warning and show all products as fallback
-                    $this->logger->warning("Category not found for filter, showing all products.", ['filter' => $categoryFilter]);
+                    // $this->logger->warning("Category not found for filter, showing all products.", ['filter' => $categoryFilter]); // Use error_log
+                    error_log("[WARNING] ProductController::showCategories - Category not found for filter '" . $categoryFilter . "', showing all products."); // ADDED DEBUG LOG
+                    error_log("[DEBUG] ProductController::showCategories - Calling productModel->getAll() as fallback."); // ADDED DEBUG LOG
                     $initialProducts = $this->productModel->getAll();
+                    error_log("[DEBUG] ProductController::showCategories - Got all products: " . count($initialProducts) . " items."); // ADDED DEBUG LOG
                     $activeFilterForView = null; // Reset active filter as it was invalid
                 }
             } else {
                 // If no filter is applied, fetch all products initially
+                error_log("[DEBUG] ProductController::showCategories - No filter, calling productModel->getAll()."); // ADDED DEBUG LOG
                 $initialProducts = $this->productModel->getAll();
+                error_log("[DEBUG] ProductController::showCategories - Got all products: " . count($initialProducts) . " items."); // ADDED DEBUG LOG
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) { // Catch Throwable for broader error catching
             // Log error if fetching categories or products fails
-            $this->logger->error("Error fetching categories or products for display.", ['exception' => $e]);
+            // $this->logger->error("Error fetching categories or products for display.", ['exception' => $e]); // Use error_log
+            error_log("[ERROR] ProductController::showCategories - Exception in try block: " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED ERROR LOG
             $this->session->flash('error', 'Could not load product categories or products. Please try again later.');
             // Ensure variables are arrays even on error
             $categories = $categories ?: [];
             $initialProducts = $initialProducts ?: [];
         }
+        error_log("[DEBUG] ProductController::showCategories - Preparing data for view."); // ADDED DEBUG LOG
 
         // Prepare data for the view
-        $this->view('pages/categories', [
-            'categories' => $categories,
-            'products' => $initialProducts, // Products to display initially
-            'activeFilter' => $activeFilterForView, // Name of the active filter, if any
-            'page_title' => 'Browse Products',
-            'meta_description' => 'Browse our wide selection of fresh groceries by category.',
-            'meta_keywords' => 'products, categories, grocery, online shopping',
-            'additional_css_files' => ['assets/css/categories.css'], // Specific CSS
-            'logged_in' => $logged_in // Pass login status
-        ]);
+        try {
+            $this->view('pages/categories', [
+                'categories' => $categories,
+                'products' => $initialProducts, // Products to display initially
+                'activeFilter' => $activeFilterForView, // Name of the active filter, if any
+                'page_title' => 'Browse Products',
+                'meta_description' => 'Browse our wide selection of fresh groceries by category.',
+                'meta_keywords' => 'products, categories, grocery, online shopping',
+                'additional_css_files' => ['assets/css/categories.css'], // Specific CSS
+                'logged_in' => $logged_in // Pass login status
+            ]);
+            error_log("[DEBUG] ProductController::showCategories - View rendered successfully."); // ADDED DEBUG LOG
+        } catch (\Throwable $e) {
+             error_log("[ERROR] ProductController::showCategories - Exception during view rendering: " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED ERROR LOG
+             // Optionally re-throw or handle differently
+             throw $e;
+        }
     }
 
     /**

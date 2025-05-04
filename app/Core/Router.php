@@ -459,11 +459,25 @@ class Router
                     }
                 }
             }
+            error_log("[DEBUG] Router::callAction - Attempting to instantiate {$controllerClass} with dependencies: " . print_r($dependencies, true)); // ADDED DEBUG LOG
             // Instantiate the controller with the resolved dependencies.
-            $controllerInstance = $reflection->newInstanceArgs($dependencies);
+            try {
+                $controllerInstance = $reflection->newInstanceArgs($dependencies);
+                error_log("[DEBUG] Router::callAction - Instantiated {$controllerClass} via constructor with args."); // ADDED DEBUG LOG
+            } catch (\Throwable $e) {
+                error_log("[FATAL] Router::callAction - Failed to instantiate {$controllerClass} via constructor: " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED ERROR LOG
+                throw $e; // Re-throw the exception
+            }
         } else {
             // If no constructor, simply instantiate the controller directly.
-            $controllerInstance = new $controllerClass;
+            error_log("[DEBUG] Router::callAction - Attempting to instantiate {$controllerClass} directly (no constructor)."); // ADDED DEBUG LOG
+            try {
+                $controllerInstance = new $controllerClass;
+                error_log("[DEBUG] Router::callAction - Instantiated {$controllerClass} directly."); // ADDED DEBUG LOG
+            } catch (\Throwable $e) {
+                error_log("[FATAL] Router::callAction - Failed to instantiate {$controllerClass} directly: " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED ERROR LOG
+                throw $e; // Re-throw the exception
+            }
         }
 
         // Check if the action method exists in the controller instance.
