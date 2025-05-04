@@ -67,6 +67,7 @@ define('BASE_URL', $scheme . '://' . $host . $base_path_url);
 // Include the Composer autoloader.
 // This makes all Composer-managed libraries and application classes (following PSR-4) available.
 require_once BASE_PATH . '/vendor/autoload.php';
+error_log("[DEBUG] index.php - Composer autoload included successfully."); // ADDED LOG
 
 
 // --- Check for required PHP extensions ---
