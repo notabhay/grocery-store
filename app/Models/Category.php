@@ -142,7 +142,7 @@ class Category
      *                    Expected keys: 'name' (string, required), 'parent_id' (int|null, optional).
      * @return int|bool The ID of the newly created category on success, or false on failure.
      */
-    public function createCategory(array $data): int|bool
+    public function createCategory(array $data) // Removed unsupported PHP 8 union type hint ": int|bool"
     {
         $stmt = $this->db->prepare("
             INSERT INTO categories (category_name, parent_id)
