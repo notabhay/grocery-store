@@ -157,6 +157,7 @@ try {
     // Bind the logger instance to the Registry.
     Registry::bind('logger', $logger);
     error_log("[DEBUG] index.php - Logger bound to Registry. Logger setup complete."); // ADDED DEBUG LOG
+error_log("DEBUG: Point 7 - After Logger Setup\n", 3, BASE_PATH . '/logs/app.log');
 
     // --- Database Setup ---
     error_log("[DEBUG] index.php - Starting Database Setup."); // ADDED DEBUG LOG
@@ -199,6 +200,7 @@ try {
         exit;
     }
 
+error_log("DEBUG: Point 8 - After Database Setup\n", 3, BASE_PATH . '/logs/app.log');
     error_log("[DEBUG] index.php - Database setup complete."); // ADDED DEBUG LOG
     // --- Session Setup ---
     error_log("[DEBUG] index.php - Starting Session Setup."); // ADDED DEBUG LOG
@@ -211,6 +213,7 @@ try {
     $session = new Session($sessionConfig);
     error_log("[DEBUG] index.php - Session instantiated."); // ADDED DEBUG LOG
     // Bind the session instance to the Registry.
+error_log("DEBUG: Point 9 - After Session Setup\n", 3, BASE_PATH . '/logs/app.log');
     Registry::bind('session', $session);
     error_log("[DEBUG] index.php - Session bound to Registry. Session setup complete."); // ADDED DEBUG LOG
 
@@ -219,6 +222,7 @@ try {
     // Instantiate the CaptchaHelper, passing the session instance for storing CAPTCHA codes.
     $captchaHelper = new CaptchaHelper($session);
     error_log("[DEBUG] index.php - CaptchaHelper instantiated."); // ADDED DEBUG LOG
+error_log("DEBUG: Point 10 - After CaptchaHelper Setup\n", 3, BASE_PATH . '/logs/app.log');
     // Bind the CaptchaHelper instance to the Registry.
     Registry::bind('captchaHelper', $captchaHelper);
     error_log("[DEBUG] index.php - CaptchaHelper bound to Registry. Captcha setup complete."); // ADDED DEBUG LOG
@@ -227,6 +231,7 @@ try {
     error_log("[DEBUG] index.php - Starting Request Setup."); // ADDED DEBUG LOG
     // Instantiate the Request object, which encapsulates the current HTTP request data (URI, method, POST/GET data).
     $request = new Request();
+error_log("DEBUG: Point 11 - After Request Setup\n", 3, BASE_PATH . '/logs/app.log');
     error_log("[DEBUG] index.php - Request instantiated."); // ADDED DEBUG LOG
     // Bind the Request instance to the Registry.
     Registry::bind('request', $request);
@@ -251,6 +256,7 @@ try {
     echo "<p>An error occurred during application setup. Please try again later.</p>";
     // Display detailed error information if debug mode is enabled.
     if ($config['DEBUG_MODE'] ?? false) {
+error_log("DEBUG: Point 12 - After Core Services Try/Catch\n", 3, BASE_PATH . '/logs/app.log');
         echo "<p>Error details: " . htmlspecialchars($e->getMessage()) . "</p>";
     }
     // Terminate script execution as a critical component failed to initialize.
@@ -273,23 +279,29 @@ if (!$sessionStartResult) {
     // Set a 500 Internal Server Error HTTP status code.
     http_response_code(500);
     // Display an error message.
+error_log("DEBUG: Point 13 - After Session Start\n", 3, BASE_PATH . '/logs/app.log');
     echo "<h1>Session Error</h1><p>Could not start session. Please check server configuration.</p>";
     // Terminate script execution.
     exit;
 }
 
+error_log("DEBUG: Point 14 - After Session Validation\n", 3, BASE_PATH . '/logs/app.log');
 error_log("[DEBUG] index.php - Session started successfully."); // ADDED DEBUG LOG
 // Validate the user's session activity (e.g., check for timeout).
 // This might regenerate the session ID or log the user out if inactive for too long.
 error_log("[DEBUG] index.php - Calling session->validateActivity()."); // ADDED DEBUG LOG
 $session->validateActivity();
+error_log("DEBUG: Point 15 - Before Router Load\n", 3, BASE_PATH . '/logs/app.log');
 error_log("[DEBUG] index.php - session->validateActivity() completed."); // ADDED DEBUG LOG
 error_log("[DEBUG] index.php - Session Start & Validation complete."); // ADDED DEBUG LOG
+error_log("DEBUG: Point 16 - After Router Load\n", 3, BASE_PATH . '/logs/app.log');
 
 // --- Routing and Request Dispatching ---
 // This block handles the incoming request by routing it to the correct controller action.
+error_log("DEBUG: Point 17 - Before Router Direct\n", 3, BASE_PATH . '/logs/app.log');
 error_log("[DEBUG] index.php - Entering Routing and Request Dispatching block."); // ADDED DEBUG LOG
 try {
+error_log("DEBUG: Point 18 - After Router Direct (Success)\n", 3, BASE_PATH . '/logs/app.log');
     error_log("[DEBUG] index.php - Loading routes from " . BASE_PATH . '/app/routes.php'); // ADDED DEBUG LOG
     // Load the defined application routes from the routes file.
     $router = Router::load(BASE_PATH . '/app/routes.php');
