@@ -8,8 +8,8 @@ use App\Core\Session;
 use App\Models\Product;
 use App\Core\Registry;
 use App\Helpers\CartHelper;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
+// use Monolog\Logger; // Commented out
+// use Monolog\Handler\StreamHandler; // Commented out
 
 /**
  * Cart API Controller
@@ -38,7 +38,7 @@ class CartApiController extends BaseController
     /**
      * @var Logger Instance of the Monolog logger.
      */
-    private $logger;
+    // private $logger; // Commented out
 
     /**
      * Constructor for CartApiController.
@@ -52,7 +52,8 @@ class CartApiController extends BaseController
         $this->db = Registry::get('database');
         $this->cartHelper = new CartHelper($this->session, Registry::get('database'));
 
-        // Initialize Logger
+        // Initialize Logger - COMMENTED OUT BLOCK
+        /*
         $this->logger = new Logger('cart_api');
         $logFilePath = BASE_PATH . '/logs/app.log'; // Use BASE_PATH constant
         $logDir = dirname($logFilePath);
@@ -62,6 +63,7 @@ class CartApiController extends BaseController
         }
         // Add a handler to log messages to the application log file
         $this->logger->pushHandler(new StreamHandler($logFilePath, Logger::DEBUG));
+        */
     }
 
     /**
@@ -491,39 +493,39 @@ class CartApiController extends BaseController
      */
     public function removeItem($params)
     {
-        $this->logger->info('Received request to delete item from cart via URL parameter.', ['params_received' => $params]);
+        // $this->logger->info('Received request to delete item from cart via URL parameter.', ['params_received' => $params]); // Commented out
 
         // Although the route might imply DELETE, web forms often use POST for this.
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->logger->warning('Invalid request method for removeItem.', ['method' => $_SERVER['REQUEST_METHOD']]);
+            // $this->logger->warning('Invalid request method for removeItem.', ['method' => $_SERVER['REQUEST_METHOD']]); // Commented out
             $this->jsonResponse(['error' => 'Invalid request method. Only POST is allowed for this action.'], 405);
             return;
         }
 
         // Check authentication
         if (!$this->session->isAuthenticated()) {
-            $this->logger->warning('Authentication required for removeItem.', ['params_received' => $params]);
+            // $this->logger->warning('Authentication required for removeItem.', ['params_received' => $params]); // Commented out
             $this->jsonResponse(['error' => 'Authentication required.'], 401);
             return;
         }
 
         // Validate the product ID from the route parameters
         if (!isset($params['product_id']) || !is_numeric($params['product_id']) || (int)$params['product_id'] <= 0) {
-            $this->logger->warning('Invalid or missing product ID received for removeItem.', ['params_received' => $params]);
+            // $this->logger->warning('Invalid or missing product ID received for removeItem.', ['params_received' => $params]); // Commented out
             $this->jsonResponse(['success' => false, 'error' => 'Invalid product ID.'], 400);
             return;
         }
 
         $actualProductId = (int) $params['product_id'];
-        $this->logger->info('Validated product ID.', ['productId' => $actualProductId]);
+        // $this->logger->info('Validated product ID.', ['productId' => $actualProductId]); // Commented out
 
         // Attempt to remove the item using CartHelper
-        $this->logger->info('Attempting to remove item from session/cart helper.', ['productId' => $actualProductId]);
+        // $this->logger->info('Attempting to remove item from session/cart helper.', ['productId' => $actualProductId]); // Commented out
         $result = $this->cartHelper->removeCartItem($actualProductId);
 
         // Prepare response based on the result
         if ($result['success']) {
-            $this->logger->info('Successfully removed item from cart.', ['productId' => $actualProductId, 'result' => $result]);
+            // $this->logger->info('Successfully removed item from cart.', ['productId' => $actualProductId, 'result' => $result]); // Commented out
             $responseData = [
                 'success' => true,
                 'message' => $result['message'] ?? 'Item removed from cart.',
@@ -534,7 +536,7 @@ class CartApiController extends BaseController
             ];
             $statusCode = 200;
         } else {
-            $this->logger->warning('Failed to remove item from cart (item might not exist?).', ['productId' => $actualProductId, 'result' => $result]);
+            // $this->logger->warning('Failed to remove item from cart (item might not exist?).', ['productId' => $actualProductId, 'result' => $result]); // Commented out
             // Determine status code: 404 if specifically "not found", 400 otherwise
             $statusCode = ($result['message'] === 'Item not found in cart.') ? 404 : 400;
             $responseData = [
@@ -543,7 +545,7 @@ class CartApiController extends BaseController
             ];
         }
 
-        $this->logger->info('Sending JSON response for delete request.', ['response' => $responseData, 'statusCode' => $statusCode]);
+        // $this->logger->info('Sending JSON response for delete request.', ['response' => $responseData, 'statusCode' => $statusCode]); // Commented out
         $this->jsonResponse($responseData, $statusCode);
     }
 
