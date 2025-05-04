@@ -67,8 +67,10 @@ class Router
      */
     public static function load(string $file): self
     {
+        error_log("[DEBUG] Router::load - Loading routes from: " . $file); // ADDED LOG
         $router = new static; // Create a new instance of the current class (Router or a subclass).
         require $file; // Include the routes file, which should interact with $router.
+        error_log("[DEBUG] Router::load - Routes loaded successfully."); // ADDED LOG
         return $router; // Return the configured router instance.
     }
 
@@ -124,14 +126,17 @@ class Router
      */
     public static function group(string $prefix, callable $callback): void
     {
+        error_log("[DEBUG] Router::group - Entering group with prefix: " . $prefix); // ADDED LOG
         // Store the previous prefix to restore it after the group.
         $previousPrefix = self::$routePrefix ?? '';
         // Append the new prefix, ensuring correct slash handling.
         self::$routePrefix = $previousPrefix . '/' . trim($prefix, '/');
+        error_log("[DEBUG] Router::group - New prefix set: " . self::$routePrefix); // ADDED LOG
         // Execute the callback, which defines the routes within this group's context.
         $callback();
         // Restore the previous prefix, allowing subsequent routes or groups to be defined correctly.
         self::$routePrefix = $previousPrefix;
+        error_log("[DEBUG] Router::group - Exiting group. Restored prefix: " . self::$routePrefix); // ADDED LOG
     }
 
 
@@ -149,14 +154,17 @@ class Router
      */
     protected function addRoute(string $method, string $uri, array $action): void
     {
+        error_log("[DEBUG] Router::addRoute - Adding route: [{$method}] {$uri} -> " . implode('::', $action) . " with prefix: " . self::$routePrefix); // ADDED LOG
         // Construct the full URI by prepending the current prefix and trimming slashes.
         $fullUri = trim(self::$routePrefix . '/' . trim($uri, '/'), '/');
         // Handle the root URI case.
         if ($fullUri === '')
             $fullUri = '/';
+        error_log("[DEBUG] Router::addRoute - Full URI: " . $fullUri); // ADDED LOG
 
         // Validate the action format: must be a two-element array of strings.
         if (count($action) !== 2 || !is_string($action[0]) || !is_string($action[1])) {
+            error_log("[ERROR] Router::addRoute - Invalid action format for [{$method}] {$fullUri}. Expected [Controller::class, 'method']. Action: " . print_r($action, true)); // ADDED LOG
             throw new Exception("Invalid action format for route [{$method}] {$fullUri}. Expected [Controller::class, 'method'].");
         }
 
@@ -173,9 +181,11 @@ class Router
             // Case-insensitive matching (#i).
             $pattern = '#^' . preg_replace('/\{([a-z_]+)\}/', '(?P<\1>[^/]+)', $fullUri) . '$#i';
         }
+        error_log("[DEBUG] Router::addRoute - Generated pattern: " . $pattern); // ADDED LOG
 
         // Store the route information keyed by the regex pattern under the specific HTTP method.
         $this->routes[$method][$pattern] = ['controller' => $controllerClass, 'action' => $methodName];
+        error_log("[DEBUG] Router::addRoute - Route stored successfully."); // ADDED LOG
     }
 
     /**
@@ -191,8 +201,10 @@ class Router
      */
     protected function match(string $uri, string $requestType): bool
     {
+        error_log("[DEBUG] Router::match - Attempting to match URI: '{$uri}' with method: {$requestType}"); // ADDED LOG
         // Check if any routes are defined for this request method.
         if (!isset($this->routes[$requestType])) {
+            error_log("[DEBUG] Router::match - No routes defined for method: {$requestType}"); // ADDED LOG
             return false;
         }
 
@@ -201,11 +213,15 @@ class Router
         // Handle the root URI case.
         if ($uri === '')
             $uri = '/';
+        error_log("[DEBUG] Router::match - Normalized URI for matching: '{$uri}'"); // ADDED LOG
 
         // Iterate through the patterns defined for the request type.
+        error_log("[DEBUG] Router::match - Checking patterns for {$requestType}: " . implode(', ', array_keys($this->routes[$requestType]))); // ADDED LOG
         foreach ($this->routes[$requestType] as $pattern => $routeInfo) {
+            error_log("[DEBUG] Router::match - Testing pattern: {$pattern}"); // ADDED LOG
             // Attempt to match the URI against the pattern.
             if (preg_match($pattern, $uri, $matches)) {
+                error_log("[DEBUG] Router::match - MATCH FOUND! Pattern: {$pattern}"); // ADDED LOG
                 // Clear previous params.
                 $this->params = [];
                 // Extract named capture groups (route parameters) from the matches.
@@ -215,13 +231,18 @@ class Router
                         $this->params[$key] = is_numeric($match) ? (int) $match : $match;
                     }
                 }
+                error_log("[DEBUG] Router::match - Extracted params: " . print_r($this->params, true)); // ADDED LOG
                 // Store the matched controller/action info and the pattern.
                 $this->matchedController = $routeInfo;
                 $this->matchedPattern = $pattern;
+                error_log("[DEBUG] Router::match - Matched Controller: " . $this->matchedController['controller'] . "::" . $this->matchedController['action']); // ADDED LOG
                 return true; // Match found.
+            } else {
+                 error_log("[DEBUG] Router::match - No match for pattern: {$pattern}"); // ADDED LOG
             }
         }
 
+        error_log("[DEBUG] Router::match - No match found for URI: '{$uri}'"); // ADDED LOG
         return false; // No match found.
     }
 
@@ -239,15 +260,19 @@ class Router
      */
     public function direct(string $uri, string $requestType)
     {
+        error_log("[DEBUG] Router::direct - Entered. URI: {$uri}, Method: {$requestType}"); // ADDED LOG
         // Extract and clean the path component of the URI.
         $requestUriPath = parse_url($uri, PHP_URL_PATH) ?: '/';
+        error_log("[DEBUG] Router::direct - Parsed request URI path: {$requestUriPath}"); // ADDED LOG
 
         // Get the base URL path from the BASE_URL constant
         $baseUrlPath = defined('BASE_URL') ? parse_url(BASE_URL, PHP_URL_PATH) : '';
+        error_log("[DEBUG] Router::direct - Parsed BASE_URL path: {$baseUrlPath}"); // ADDED LOG
 
         // Normalize paths (remove leading/trailing slashes for comparison)
         $requestPathClean = trim($requestUriPath, '/');
         $basePathClean = trim($baseUrlPath, '/');
+        error_log("[DEBUG] Router::direct - Cleaned request path: '{$requestPathClean}', Cleaned base path: '{$basePathClean}'"); // ADDED LOG
 
         // Calculate the application-relative path
         $appPath = '/'; // Default to root
@@ -255,27 +280,35 @@ class Router
             // Remove base path prefix
             $appPathSegment = substr($requestPathClean, strlen($basePathClean));
             $appPath = '/' . ltrim($appPathSegment, '/'); // Ensure leading slash, remove potential double slash
+            error_log("[DEBUG] Router::direct - Calculated app path segment (sub dir): '{$appPathSegment}' -> '{$appPath}'"); // ADDED LOG
         } elseif (empty($basePathClean) && !empty($requestPathClean)) {
             // Handle case where base path is root ('/')
             $appPath = '/' . $requestPathClean;
+            error_log("[DEBUG] Router::direct - Calculated app path (root dir): '{$appPath}'"); // ADDED LOG
+        } else {
+             error_log("[DEBUG] Router::direct - App path calculation resulted in default '/'"); // ADDED LOG
         }
 
         // Ensure $appPath always has at least a single slash if empty
         if (empty(trim($appPath, '/'))) {
             $appPath = '/';
         }
+        error_log("[DEBUG] Router::direct - Final application path: '{$appPath}'"); // ADDED LOG
 
         // Store the cleaned path for logging and debugging
         $uriPathClean = trim($appPath, '/');
         if ($uriPathClean === '') {
             $uriPathClean = '/'; // Handle root path
         }
+        error_log("[DEBUG] Router::direct - Cleaned URI path for auth check: '{$uriPathClean}'"); // ADDED LOG
 
         // Trim the leading slash from the application path before matching
         $pathForMatching = ltrim($appPath, '/');
+        error_log("[DEBUG] Router::direct - Path for matching: '{$pathForMatching}'"); // ADDED LOG
 
         // Attempt to match the route using the application-relative path (without leading slash)
         if ($this->match($pathForMatching, $requestType) && $this->matchedController) {
+            error_log("[DEBUG] Router::direct - Route matched. Matched pattern: " . $this->matchedPattern); // ADDED LOG
 
             // --- Hardcoded Authentication Check ---
             // Define patterns for routes that require authentication.
@@ -294,12 +327,15 @@ class Router
             // Check if the matched pattern is directly in the list.
             if ($this->matchedPattern && in_array($this->matchedPattern, $protectedRoutePatterns, true)) {
                 $isProtectedRoute = true;
+                error_log("[DEBUG] Router::direct - Matched pattern is in protected list."); // ADDED LOG
             }
             // Fallback check: Match the cleaned URI path against the patterns (less precise but covers cases without direct pattern match).
             if (!$isProtectedRoute) {
+                error_log("[DEBUG] Router::direct - Matched pattern not directly in list, checking path '{$uriPathClean}' against patterns."); // ADDED LOG
                 foreach ($protectedRoutePatterns as $pattern) {
                     if (preg_match($pattern, $uriPathClean)) {
                         $isProtectedRoute = true;
+                        error_log("[DEBUG] Router::direct - Path '{$uriPathClean}' matched protected pattern: {$pattern}"); // ADDED LOG
                         break;
                     }
                 }
@@ -307,31 +343,37 @@ class Router
 
             // If it's a protected route and the user is not authenticated...
             if ($isProtectedRoute && !Registry::get('session')->isAuthenticated()) {
+                error_log("[WARNING] Router::direct - Access denied to protected route '{$uriPathClean}'. User not authenticated."); // ADDED LOG
                 // Handle API requests with a JSON 401 response.
                 if (strpos($uriPathClean, 'api/') === 0) {
+                    error_log("[DEBUG] Router::direct - Handling as API 401 response."); // ADDED LOG
                     header('Content-Type: application/json');
                     http_response_code(401);
                     echo json_encode(['error' => 'Authentication required.']);
                     exit();
                 } else {
                     // Handle web requests by flashing a message and redirecting to login.
+                    error_log("[DEBUG] Router::direct - Handling as web redirect to /login."); // ADDED LOG
                     Registry::get('session')->flash('error', 'Please log in to access that page.');
                     Redirect::to('/login');
                     exit(); // exit() is called within Redirect::to()
                 }
             }
+            error_log("[DEBUG] Router::direct - Authentication check passed or route is not protected."); // ADDED LOG
             // --- End Hardcoded Authentication Check ---
 
 
             // Get the controller class and action method from the matched route.
             $controllerClass = $this->matchedController['controller'];
             $action = $this->matchedController['action'];
+            error_log("[DEBUG] Router::direct - Preparing to call action: {$controllerClass}::{$action}"); // ADDED LOG
 
             // Call the action method on an instance of the controller.
             return $this->callAction($controllerClass, $action, $this->params);
         }
 
         // If no route matched, log detailed information and throw a 404 exception.
+        error_log("[ERROR] Router::direct - No route matched after calling match()."); // ADDED LOG
         $logger = Registry::has('logger') ? Registry::get('logger') : null;
 
         // Log all defined routes for the current request type to help with debugging
@@ -387,38 +429,50 @@ class Router
      */
     protected function callAction(string $controllerClass, string $action, array $params = [])
     {
+        error_log("[DEBUG] Router::callAction - Entered. Controller: {$controllerClass}, Action: {$action}, Params: " . print_r($params, true)); // ADDED LOG
         // Check if the controller class exists.
         if (!class_exists($controllerClass)) {
+            error_log("[ERROR] Router::callAction - Controller class {$controllerClass} not found."); // ADDED LOG
             throw new Exception("Controller class {$controllerClass} not found.");
         }
+        error_log("[DEBUG] Router::callAction - Controller class {$controllerClass} exists."); // ADDED LOG
 
         // Use Reflection to analyze the controller class.
         $reflection = new ReflectionClass($controllerClass);
         $constructor = $reflection->getConstructor(); // Get the constructor method.
         $dependencies = []; // Array to hold resolved dependencies.
+        error_log("[DEBUG] Router::callAction - Reflection created. Checking constructor."); // ADDED LOG
 
         // If the controller has a constructor, resolve its dependencies.
         if ($constructor) {
+            error_log("[DEBUG] Router::callAction - Constructor found. Resolving dependencies."); // ADDED LOG
             $constructorParams = $constructor->getParameters(); // Get constructor parameters.
+            error_log("[DEBUG] Router::callAction - Constructor params: " . count($constructorParams)); // ADDED LOG
             foreach ($constructorParams as $param) {
                 $paramType = $param->getType(); // Get the type hint of the parameter.
                 $resolved = false; // Flag to track if dependency was resolved.
+                $paramName = $param->getName();
+                error_log("[DEBUG] Router::callAction - Processing constructor param: \${$paramName}"); // ADDED LOG
 
                 // Check if the parameter has a non-builtin type hint (i.e., it's a class/interface).
                 if ($paramType && !$paramType->isBuiltin() && $paramType instanceof \ReflectionNamedType) {
                     $dependencyClassName = $paramType->getName(); // Get the class/interface name.
+                    error_log("[DEBUG] Router::callAction - Param \${$paramName} has type hint: {$dependencyClassName}"); // ADDED LOG
 
                     // --- Dependency Resolution Logic ---
                     // Attempt to resolve known core dependencies directly from the Registry.
                     if ($dependencyClassName === Database::class && Registry::has('database')) {
                         $dependencies[] = Registry::get('database');
                         $resolved = true;
+                        error_log("[DEBUG] Router::callAction - Resolved dependency '{$dependencyClassName}' from Registry (specific check)."); // ADDED LOG
                     } elseif ($dependencyClassName === Session::class && Registry::has('session')) {
                         $dependencies[] = Registry::get('session');
                         $resolved = true;
+                        error_log("[DEBUG] Router::callAction - Resolved dependency '{$dependencyClassName}' from Registry (specific check)."); // ADDED LOG
                     } elseif ($dependencyClassName === CaptchaHelper::class && Registry::has('captchaHelper')) {
                         $dependencies[] = Registry::get('captchaHelper');
                         $resolved = true;
+                        error_log("[DEBUG] Router::callAction - Resolved dependency '{$dependencyClassName}' from Registry (specific check)."); // ADDED LOG
                     }
                     // Add more specific core dependencies here if needed.
 
@@ -426,11 +480,13 @@ class Router
                     if (!$resolved && Registry::has($dependencyClassName)) {
                         $dependencies[] = Registry::get($dependencyClassName);
                         $resolved = true;
+                        error_log("[DEBUG] Router::callAction - Resolved dependency '{$dependencyClassName}' from Registry (class name key)."); // ADDED LOG
                     }
                     // If still not resolved, try getting from Registry using the parameter name (lowercase) as key.
                     elseif (!$resolved && Registry::has(strtolower($param->getName()))) {
                         $dependencies[] = Registry::get(strtolower($param->getName()));
                         $resolved = true;
+                        error_log("[DEBUG] Router::callAction - Resolved dependency '{$dependencyClassName}' from Registry (param name key: " . strtolower($param->getName()) . ")."); // ADDED LOG
                     }
                     // If still not resolved, check if the parameter has a default value or is optional.
                     elseif (!$resolved) {
@@ -438,8 +494,10 @@ class Router
                             // Use default value if available, otherwise null for optional params.
                             $dependencies[] = $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null;
                             $resolved = true;
+                            error_log("[DEBUG] Router::callAction - Resolved dependency '{$dependencyClassName}' using optional/default value."); // ADDED LOG
                         } else {
                             // If it's a required dependency and couldn't be resolved, throw an error.
+                            error_log("[ERROR] Router::callAction - Cannot resolve required dependency '{$dependencyClassName}' for {$controllerClass} constructor."); // ADDED LOG
                             throw new Exception("Cannot resolve dependency '{$dependencyClassName}' for {$controllerClass} constructor.");
                         }
                     }
@@ -447,19 +505,23 @@ class Router
 
                 } else {
                     // Handle built-in types or parameters without type hints.
+                    error_log("[DEBUG] Router::callAction - Param \${$paramName} is built-in or has no type hint."); // ADDED LOG
                     if ($param->isDefaultValueAvailable()) {
                         $dependencies[] = $param->getDefaultValue(); // Use default value.
+                        error_log("[DEBUG] Router::callAction - Using default value for \${$paramName}."); // ADDED LOG
                     } elseif ($param->isOptional()) {
                         $dependencies[] = null; // Use null for optional parameters without defaults.
+                        error_log("[DEBUG] Router::callAction - Using null for optional \${$paramName}."); // ADDED LOG
                     } else {
                         // This case might indicate an issue (required scalar without default),
                         // but we'll pass null for now. Consider throwing an error if stricter handling is needed.
+                        error_log("[WARNING] Router::callAction - Required scalar parameter '\${$paramName}' in {$controllerClass} constructor has no default value. Passing null."); // ADDED LOG
                         // Log warning maybe? "Required scalar parameter '{$param->getName()}' in {$controllerClass} constructor has no default value."
                         $dependencies[] = null;
                     }
                 }
             }
-            error_log("[DEBUG] Router::callAction - Attempting to instantiate {$controllerClass} with dependencies: " . print_r($dependencies, true)); // ADDED DEBUG LOG
+            error_log("[DEBUG] Router::callAction - Attempting to instantiate {$controllerClass} with dependencies: " . count($dependencies) . " args."); // ADDED DEBUG LOG
             // Instantiate the controller with the resolved dependencies.
             try {
                 $controllerInstance = $reflection->newInstanceArgs($dependencies);
@@ -470,7 +532,7 @@ class Router
             }
         } else {
             // If no constructor, simply instantiate the controller directly.
-            error_log("[DEBUG] Router::callAction - Attempting to instantiate {$controllerClass} directly (no constructor)."); // ADDED DEBUG LOG
+            error_log("[DEBUG] Router::callAction - No constructor found for {$controllerClass}. Instantiating directly."); // ADDED DEBUG LOG
             try {
                 $controllerInstance = new $controllerClass;
                 error_log("[DEBUG] Router::callAction - Instantiated {$controllerClass} directly."); // ADDED DEBUG LOG
@@ -482,13 +544,23 @@ class Router
 
         // Check if the action method exists in the controller instance.
         if (!method_exists($controllerInstance, $action)) {
+            error_log("[ERROR] Router::callAction - Action method '{$action}' not found in controller {$controllerClass}."); // ADDED LOG
             throw new Exception(
                 "{$controllerClass} does not respond to the {$action} action."
             );
         }
+        error_log("[DEBUG] Router::callAction - Action method '{$action}' exists in {$controllerClass}."); // ADDED LOG
 
         // Call the action method on the controller instance, passing the route parameters.
         // The controller action receives the $params array containing matched route segments.
-        return $controllerInstance->$action($params);
+        error_log("[DEBUG] Router::callAction - Calling action '{$action}' on {$controllerClass} instance."); // ADDED LOG
+        try {
+            $result = $controllerInstance->$action($params);
+            error_log("[DEBUG] Router::callAction - Action '{$action}' executed successfully."); // ADDED LOG
+            return $result;
+        } catch (\Throwable $e) {
+             error_log("[ERROR] Router::callAction - Exception during action execution '{$controllerClass}::{$action}': " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED LOG
+             throw $e; // Re-throw exception from action
+        }
     }
 }
