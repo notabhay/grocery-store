@@ -635,18 +635,22 @@ class CartApiController extends BaseController
      */
     public function getCartCount()
     {
+        error_log("[DEBUG] CartApiController::getCartCount - Entered method."); // ADDED DEBUG LOG
+
         // Log entry to the method with detailed request information
-        $this->logger->info(date('[Y-m-d H:i:s] ') . "CartApiController::getCartCount - Entered method.", [
-            'request_uri' => $_SERVER['REQUEST_URI'] ?? 'unknown',
-            'request_method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown',
-            'base_url' => BASE_URL ?? 'unknown'
-        ]);
+        // $this->logger->info(date('[Y-m-d H:i:s] ') . "CartApiController::getCartCount - Entered method.", [
+        //     'request_uri' => $_SERVER['REQUEST_URI'] ?? 'unknown',
+        //     'request_method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown',
+        //     'base_url' => BASE_URL ?? 'unknown'
+        // ]); // COMMENTED OUT MONOLOG
 
         // Ensure GET request
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            error_log("[DEBUG] CartApiController::getCartCount - Invalid method: " . ($_SERVER['REQUEST_METHOD'] ?? 'unknown')); // ADDED DEBUG LOG
             $this->jsonResponse(['error' => 'Invalid request method. Only GET is allowed.'], 405);
             return;
         }
+        error_log("[DEBUG] CartApiController::getCartCount - Method check passed."); // ADDED DEBUG LOG
 
         // Note: Depending on requirements, this might not strictly need authentication
         // if the cart count is displayed even for logged-out users (session-based cart).
@@ -657,18 +661,30 @@ class CartApiController extends BaseController
         // }
 
         // Retrieve cart data using the helper
-        $cartData = $this->cartHelper->getCartData();
+        error_log("[DEBUG] CartApiController::getCartCount - Calling cartHelper->getCartData()."); // ADDED DEBUG LOG
+        try {
+            $cartData = $this->cartHelper->getCartData();
+            error_log("[DEBUG] CartApiController::getCartCount - cartHelper->getCartData() returned: " . print_r($cartData, true)); // ADDED DEBUG LOG
+        } catch (\Throwable $e) {
+            error_log("[ERROR] CartApiController::getCartCount - Exception during getCartData(): " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED ERROR LOG
+            $this->jsonResponse(['error' => 'Failed to retrieve cart data.'], 500);
+            return;
+        }
+
 
         // Get the count value
         $count = $cartData['total_items'] ?? 0; // Default to 0 if cart is empty/not set
 
         // Log the count being returned
-        $this->logger->info(date('[Y-m-d H:i:s] ') . "CartApiController::getCartCount - Returning count: " . $count);
+        // $this->logger->info(date('[Y-m-d H:i:s] ') . "CartApiController::getCartCount - Returning count: " . $count); // COMMENTED OUT MONOLOG
+        error_log("[DEBUG] CartApiController::getCartCount - Calculated count: " . $count); // ADDED DEBUG LOG
 
         // Respond with just the count
+        error_log("[DEBUG] CartApiController::getCartCount - Sending JSON response."); // ADDED DEBUG LOG
         $this->jsonResponse([
             'count' => $count
         ], 200);
+        error_log("[DEBUG] CartApiController::getCartCount - JSON response sent."); // ADDED DEBUG LOG
     }
 
     /**
