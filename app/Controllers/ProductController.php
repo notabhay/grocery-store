@@ -194,35 +194,40 @@ class ProductController extends BaseController
      */
     private function getCategoryIdByName($categoryName): ?int
     {
+        error_log("[DEBUG] ProductController::getCategoryIdByName - Entered. Searching for: " . $categoryName); // ADDED LOG
         try {
             // --- Debugging for names with ampersands ---
             // This helps check if the name received matches what's in the DB,
             // especially if URL encoding/decoding issues occur with '&'.
             if (strpos($categoryName, '&') !== false) {
                 $likeName = str_replace('&', '%', $categoryName); // Create a LIKE pattern
+                error_log("[DEBUG] ProductController::getCategoryIdByName - Ampersand detected. LIKE pattern: " . $likeName); // ADDED LOG
                 $debugStmt = $this->db->getConnection()->prepare("SELECT category_name FROM categories WHERE category_name LIKE :likeName LIMIT 5");
                 $debugStmt->bindParam(':likeName', $likeName, PDO::PARAM_STR);
                 $debugStmt->execute();
                 $potentialMatches = $debugStmt->fetchAll(PDO::FETCH_COLUMN);
-                if ($potentialMatches) {
-                    $this->logger->info("Potential category name matches in DB (debug)", ['search_term' => $categoryName, 'like_pattern' => $likeName, 'matches' => $potentialMatches]);
-                } else {
-                    $this->logger->info("No similar category names found in DB (debug)", ['search_term' => $categoryName, 'like_pattern' => $likeName]);
-                }
+                error_log("[DEBUG] ProductController::getCategoryIdByName - Potential matches from DB: " . implode(', ', $potentialMatches ?: ['None'])); // ADDED LOG
+                // $this->logger->info("Potential category name matches in DB (debug)", ['search_term' => $categoryName, 'like_pattern' => $likeName, 'matches' => $potentialMatches]);
             }
             // --- End Debugging ---
 
             // Prepare and execute query to find category ID by exact name match
+            error_log("[DEBUG] ProductController::getCategoryIdByName - Preparing exact match query."); // ADDED LOG
             $stmt = $this->db->getConnection()->prepare("SELECT category_id FROM categories WHERE category_name = :name");
             $stmt->bindParam(':name', $categoryName, PDO::PARAM_STR);
+            error_log("[DEBUG] ProductController::getCategoryIdByName - Executing query with name: " . $categoryName); // ADDED LOG
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            error_log("[DEBUG] ProductController::getCategoryIdByName - Query executed. Result: " . ($result ? print_r($result, true) : 'false')); // ADDED LOG
 
             // Return the category ID as an integer if found, otherwise null
-            return $result ? (int) $result['category_id'] : null;
+            $categoryId = $result ? (int) $result['category_id'] : null;
+            error_log("[DEBUG] ProductController::getCategoryIdByName - Returning category ID: " . ($categoryId ?? 'null')); // ADDED LOG
+            return $categoryId;
         } catch (\Exception $e) {
             // Log any errors during the database query
-            $this->logger->error("Error finding category by name", ['name' => $categoryName, 'error' => $e->getMessage()]);
+            error_log("[ERROR] ProductController::getCategoryIdByName - Exception: " . $e->getMessage()); // ADDED LOG
+            // $this->logger->error("Error finding category by name", ['name' => $categoryName, 'error' => $e->getMessage()]);
             return null; // Return null on error
         }
     }
@@ -240,28 +245,37 @@ class ProductController extends BaseController
      */
     public function getSubcategoriesAjax(): void
     {
+        error_log("[DEBUG] ProductController::getSubcategoriesAjax - Entered method."); // ADDED LOG
         // Get category ID from GET request
         $categoryId = $this->request->get('categoryId');
-        $this->logger->info('AJAX: getSubcategoriesAjax called (fetches products).', ['categoryId' => $categoryId]);
+        error_log("[DEBUG] ProductController::getSubcategoriesAjax - Received categoryId: " . ($categoryId ?? 'null')); // ADDED LOG
+        // $this->logger->info('AJAX: getSubcategoriesAjax called (fetches products).', ['categoryId' => $categoryId]);
 
         // Validate the category ID
         if (!filter_var($categoryId, FILTER_VALIDATE_INT)) {
+            error_log("[WARNING] ProductController::getSubcategoriesAjax - Invalid categoryId: " . $categoryId); // ADDED LOG
             $this->jsonResponse(['error' => 'Invalid Category ID provided.'], 400); // Bad Request
             return;
         }
         $categoryId = (int) $categoryId; // Cast to integer
+        error_log("[DEBUG] ProductController::getSubcategoriesAjax - Validated categoryId: " . $categoryId); // ADDED LOG
 
         try {
             // Fetch products using the Product model
-            $this->logger->info('AJAX: Calling productModel->findByCategory.', ['categoryId' => $categoryId]);
+            error_log("[DEBUG] ProductController::getSubcategoriesAjax - Calling productModel->findByCategory for ID: " . $categoryId); // ADDED LOG
+            // $this->logger->info('AJAX: Calling productModel->findByCategory.', ['categoryId' => $categoryId]);
             $products = $this->productModel->findByCategory($categoryId);
-            $this->logger->info('AJAX: Received products from model.', ['products_count' => count($products)]); // Avoid logging full data unless debugging
+            error_log("[DEBUG] ProductController::getSubcategoriesAjax - productModel->findByCategory returned " . count($products) . " products."); // ADDED LOG
+            // $this->logger->info('AJAX: Received products from model.', ['products_count' => count($products)]); // Avoid logging full data unless debugging
 
             // Send successful JSON response with the products
+            error_log("[DEBUG] ProductController::getSubcategoriesAjax - Sending JSON response."); // ADDED LOG
             $this->jsonResponse(['products' => $products]);
+            error_log("[DEBUG] ProductController::getSubcategoriesAjax - JSON response sent."); // ADDED LOG
         } catch (\Exception $e) {
             // Log error and send error response
-            $this->logger->error("AJAX: Error fetching products for category.", ['categoryId' => $categoryId, 'exception' => $e]);
+            error_log("[ERROR] ProductController::getSubcategoriesAjax - Exception: " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED LOG
+            // $this->logger->error("AJAX: Error fetching products for category.", ['categoryId' => $categoryId, 'exception' => $e]);
             $this->jsonResponse(['error' => 'Could not load products for this category.'], 500); // Internal Server Error
         }
     }
@@ -276,29 +290,38 @@ class ProductController extends BaseController
      */
     public function ajaxGetSubcategories(): void
     {
+        error_log("[DEBUG] ProductController::ajaxGetSubcategories - Entered method."); // ADDED LOG
         // Get parent category ID from GET request
         $parentId = $this->request->get('parentId');
-        $this->logger->info('AJAX: ajaxGetSubcategories called.', ['parentId' => $parentId]);
+        error_log("[DEBUG] ProductController::ajaxGetSubcategories - Received parentId: " . ($parentId ?? 'null')); // ADDED LOG
+        // $this->logger->info('AJAX: ajaxGetSubcategories called.', ['parentId' => $parentId]);
 
         // Validate the parent ID (must be a positive integer)
         if (!filter_var($parentId, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]])) {
-            $this->logger->warning('AJAX: Invalid parentId received.', ['parentId' => $parentId]);
+            error_log("[WARNING] ProductController::ajaxGetSubcategories - Invalid parentId: " . $parentId); // ADDED LOG
+            // $this->logger->warning('AJAX: Invalid parentId received.', ['parentId' => $parentId]);
             $this->jsonResponse(['error' => 'Invalid Parent Category ID provided.'], 400); // Bad Request
             return;
         }
         $parentId = (int) $parentId; // Cast to integer
+        error_log("[DEBUG] ProductController::ajaxGetSubcategories - Validated parentId: " . $parentId); // ADDED LOG
 
         try {
             // Fetch subcategories using the Category model
-            $this->logger->info('AJAX: Calling categoryModel->getSubcategoriesByParentId.', ['parentId' => $parentId]);
+            error_log("[DEBUG] ProductController::ajaxGetSubcategories - Calling categoryModel->getSubcategoriesByParentId for parent ID: " . $parentId); // ADDED LOG
+            // $this->logger->info('AJAX: Calling categoryModel->getSubcategoriesByParentId.', ['parentId' => $parentId]);
             $subcategories = $this->categoryModel->getSubcategoriesByParentId($parentId);
-            $this->logger->info('AJAX: Received subcategories from model.', ['subcategories_count' => count($subcategories)]);
+            error_log("[DEBUG] ProductController::ajaxGetSubcategories - categoryModel->getSubcategoriesByParentId returned " . count($subcategories) . " subcategories."); // ADDED LOG
+            // $this->logger->info('AJAX: Received subcategories from model.', ['subcategories_count' => count($subcategories)]);
 
             // Send successful JSON response with the subcategories
+            error_log("[DEBUG] ProductController::ajaxGetSubcategories - Sending JSON response."); // ADDED LOG
             $this->jsonResponse(['subcategories' => $subcategories]);
+            error_log("[DEBUG] ProductController::ajaxGetSubcategories - JSON response sent."); // ADDED LOG
         } catch (\Exception $e) {
             // Log error and send error response (return empty array as per original logic)
-            $this->logger->error("AJAX: Error fetching subcategories.", ['parentId' => $parentId, 'exception' => $e]);
+            error_log("[ERROR] ProductController::ajaxGetSubcategories - Exception: " . $e->getMessage() . "\n" . $e->getTraceAsString()); // ADDED LOG
+            // $this->logger->error("AJAX: Error fetching subcategories.", ['parentId' => $parentId, 'exception' => $e]);
             // Consider sending a 500 error instead of empty array for clearer error handling client-side
             $this->jsonResponse(['subcategories' => []]); // Original logic returned empty array on error
         }
@@ -315,16 +338,21 @@ class ProductController extends BaseController
      */
     protected function jsonResponse($data, int $statusCode = 200): void
     {
+        error_log("[DEBUG] ProductController::jsonResponse - Preparing JSON response. Status: " . $statusCode); // ADDED LOG
         // Check if headers have already been sent to prevent warnings/errors
         if (!headers_sent()) {
             header('Content-Type: application/json');
             http_response_code($statusCode); // Set the HTTP status code
+            error_log("[DEBUG] ProductController::jsonResponse - Headers set."); // ADDED LOG
         } else {
             // Log an error if headers are already sent, as we can't set them again
-            $this->logger->error("Headers already sent, cannot set JSON response headers.", ['status_code' => $statusCode]);
+            error_log("[ERROR] ProductController::jsonResponse - Headers already sent, cannot set JSON response headers."); // ADDED LOG
+            // $this->logger->error("Headers already sent, cannot set JSON response headers.", ['status_code' => $statusCode]);
         }
         // Encode the data to JSON and output it
-        echo json_encode($data);
+        $jsonData = json_encode($data);
+        error_log("[DEBUG] ProductController::jsonResponse - JSON encoded. Outputting: " . substr($jsonData, 0, 200) . (strlen($jsonData) > 200 ? '...' : '')); // ADDED LOG (Truncated)
+        echo $jsonData;
         // Note: exit() is not called here, allowing potential further script execution if needed,
         // though typically AJAX handlers terminate after sending the response.
     }
