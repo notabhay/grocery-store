@@ -107,16 +107,19 @@ use App\Helpers\SecurityHelper; // Helper for setting security-related HTTP head
 // Apply essential security headers to HTTP responses.
 // Helps mitigate common web vulnerabilities like XSS, clickjacking, etc.
 SecurityHelper::setSecurityHeaders();
+error_log("DEBUG: Point 4 - After Security Headers\n", 3, BASE_PATH . '/logs/app.log');
 
 // Bind the loaded configuration array to the Registry.
 // Makes configuration accessible throughout the application via Registry::get('config').
 Registry::bind('config', $config);
+error_log("DEBUG: Point 5 - After Config Bind\n", 3, BASE_PATH . '/logs/app.log');
 error_log("[DEBUG] index.php - Config bound to Registry."); // ADDED DEBUG LOG
 
 // --- Core Services Initialization (Dependency Injection Setup) ---
 error_log("[DEBUG] index.php - Entering Core Services Initialization block."); // ADDED DEBUG LOG
 // This block sets up essential services and binds them to the Registry.
 // It's wrapped in a try-catch to handle critical initialization errors.
+error_log("DEBUG: Point 6 - Inside Core Services Try Block\n", 3, BASE_PATH . '/logs/app.log');
 try {
     error_log("[DEBUG] index.php - Inside try block for Core Services."); // ADDED DEBUG LOG
     // --- Logger Setup ---
